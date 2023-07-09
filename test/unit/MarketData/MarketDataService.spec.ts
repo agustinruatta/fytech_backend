@@ -1,4 +1,4 @@
-import { MarketDataService } from './MarketDataService';
+import { MarketDataService } from '../../../src/MarketData/MarketDataService';
 
 describe('MarketDataService', () => {
   let service: MarketDataService;
