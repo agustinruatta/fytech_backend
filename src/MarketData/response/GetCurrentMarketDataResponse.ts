@@ -1,10 +1,18 @@
 export class GetCurrentMarketDataResponse {
-  private value: number;
+  private readonly value: number;
 
-  private date: Date;
+  private readonly date: Date;
 
   constructor(value: number, date: Date) {
     this.value = value;
     this.date = date;
+  }
+
+  getValue(): number {
+    return this.value;
+  }
+
+  getDate(): Date {
+    return this.date;
   }
 }
