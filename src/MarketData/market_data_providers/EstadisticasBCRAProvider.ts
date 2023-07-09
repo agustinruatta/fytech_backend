@@ -12,7 +12,6 @@ export class EstadisticasBCRAProvider implements MarketDataProvider {
   async getCurrentMarketData(
     code: string,
   ): Promise<GetCurrentMarketDataResponse> {
-    console.log(this.configService);
     const response = this.httpService.get(
       'https://api.estadisticasbcra.com/uva',
       {
