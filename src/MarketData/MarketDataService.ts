@@ -1,34 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { GetCurrentMarketDataResponse } from './response/GetCurrentMarketDataResponse';
-import axios from 'axios';
-import { ConfigService } from '@nestjs/config';
+import { MarketDataProvider } from './market_data_providers/MarketDataProvider';
 
 @Injectable()
 export class MarketDataService {
-  private configService: ConfigService;
-
-  constructor(configService: ConfigService) {
-    this.configService = configService;
+  constructor(private readonly marketDataProviders: MarketDataProvider[]) {
+    this.marketDataProviders = marketDataProviders;
   }
 
   async getCurrentMarketData(
     code: string,
   ): Promise<GetCurrentMarketDataResponse> {
-    if (code !== 'uva_ar') {
-      throw new Error('Invalid code');
+    for (const provider of this.marketDataProviders) {
+      if (provider.doesSupportCode(code)) {
+        return provider.getCurrentMarketData(code);
+      }
     }
 
-    const response: { d: string; v: number }[] = (
-      await axios.get('https://api.estadisticasbcra.com/uva', {
-        headers: {
-          Authorization:
-            'Bearer ' + this.configService.get('ESTADISTICAS_BCRA_API_KEY'),
-        },
-      })
-    ).data;
-
-    const lastData = response[response.length - 1];
-
-    return new GetCurrentMarketDataResponse(lastData.v, new Date(lastData.d));
+    throw new Error('Invalid code');
   }
 }
