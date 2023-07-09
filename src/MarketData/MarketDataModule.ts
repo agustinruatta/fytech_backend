@@ -13,7 +13,6 @@ import { MarketDataProvider } from './market_data_providers/MarketDataProvider';
     {
       provide: MarketDataService,
       useFactory: (...params: MarketDataProvider[]) => {
-        console.log(params);
         return new MarketDataService(params);
       },
       inject: [EstadisticasBCRAProvider],
