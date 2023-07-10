@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { MarketDataModule } from '../../src/MarketData/MarketDataModule';
+import * as nock from 'nock';
 
 describe('MarketData (e2e)', () => {
   let app: INestApplication;
@@ -16,6 +17,10 @@ describe('MarketData (e2e)', () => {
   });
 
   it('get UVA current market data', () => {
+    nock('https://api.estadisticasbcra.com')
+      .get('/uva')
+      .reply(200, [{ v: 278.28, d: '2023-07-09' }]);
+
     return request(app.getHttpServer())
       .get('/market-data/current/uva_ar')
       .expect(200)
