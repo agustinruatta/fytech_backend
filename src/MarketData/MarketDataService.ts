@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GetCurrentMarketDataResponse } from './response/GetCurrentMarketDataResponse';
+import { GetCurrentMarketDataResponse } from './dto/GetCurrentMarketDataResponse';
 import { MarketDataProvider } from './market_data_providers/MarketDataProvider';
 
 @Injectable()

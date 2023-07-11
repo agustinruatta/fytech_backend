@@ -1,7 +1,7 @@
 import { MarketDataService } from '../../../src/MarketData/MarketDataService';
 import { Test } from '@nestjs/testing';
 import { MarketDataProvider } from '../../../src/MarketData/market_data_providers/MarketDataProvider';
-import { GetCurrentMarketDataResponse } from '../../../src/MarketData/response/GetCurrentMarketDataResponse';
+import { GetCurrentMarketDataResponse } from '../../../src/MarketData/dto/GetCurrentMarketDataResponse';
 
 describe('MarketDataService', () => {
   let marketDataService: MarketDataService;

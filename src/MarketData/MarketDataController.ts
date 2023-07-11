@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { MarketDataService } from './MarketDataService';
-import { GetCurrentMarketDataResponse } from './response/GetCurrentMarketDataResponse';
+import { GetCurrentMarketDataResponse } from './dto/GetCurrentMarketDataResponse';
 
 @Controller('market-data')
 export class MarketDataController {

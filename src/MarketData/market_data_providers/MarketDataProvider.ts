@@ -1,4 +1,4 @@
-import { GetCurrentMarketDataResponse } from '../response/GetCurrentMarketDataResponse';
+import { GetCurrentMarketDataResponse } from '../dto/GetCurrentMarketDataResponse';
 
 export interface MarketDataProvider {
   getCurrentMarketData(code: string): Promise<GetCurrentMarketDataResponse>;
