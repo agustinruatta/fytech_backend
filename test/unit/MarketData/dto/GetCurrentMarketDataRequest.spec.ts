@@ -17,7 +17,7 @@ describe('GetCurrentMarketDataRequest', () => {
 
   it('should modify code to uppercase in constructor', () => {
     const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      new GetCurrentMarketDataRequest('uva_ar');
+      new GetCurrentMarketDataRequest('UVA_AR');
 
     expect(getCurrentMarketDataRequest.code).toBe('UVA_AR');
   });

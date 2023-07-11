@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GetCurrentMarketDataResponse } from './dto/GetCurrentMarketDataResponse';
 import { MarketDataProvider } from './market_data_providers/MarketDataProvider';
+import GetCurrentMarketDataRequest from './dto/GetCurrentMarketDataRequest';
 
 @Injectable()
 export class MarketDataService {
@@ -9,11 +10,11 @@ export class MarketDataService {
   }
 
   async getCurrentMarketData(
-    code: string,
+    request: GetCurrentMarketDataRequest,
   ): Promise<GetCurrentMarketDataResponse> {
     for (const provider of this.marketDataProviders) {
-      if (provider.doesSupportCode(code)) {
-        return provider.getCurrentMarketData(code);
+      if (provider.doesSupportCode(request)) {
+        return provider.getCurrentMarketData(request);
       }
     }
 

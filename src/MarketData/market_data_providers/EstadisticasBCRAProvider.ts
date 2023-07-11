@@ -3,6 +3,7 @@ import { GetCurrentMarketDataResponse } from '../dto/GetCurrentMarketDataRespons
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import GetCurrentMarketDataRequest from '../dto/GetCurrentMarketDataRequest';
 
 @Injectable()
 export class EstadisticasBCRAProvider implements MarketDataProvider {
@@ -12,7 +13,7 @@ export class EstadisticasBCRAProvider implements MarketDataProvider {
   ) {}
 
   async getCurrentMarketData(
-    code: string,
+    request: GetCurrentMarketDataRequest,
   ): Promise<GetCurrentMarketDataResponse> {
     const data: { v: number; d: string }[] = (
       await this.httpService.axiosRef.get(
@@ -31,7 +32,7 @@ export class EstadisticasBCRAProvider implements MarketDataProvider {
     return new GetCurrentMarketDataResponse(lastData.v, new Date(lastData.d));
   }
 
-  doesSupportCode(code: string): boolean {
-    return code === 'uva_ar';
+  doesSupportCode(request: GetCurrentMarketDataRequest): boolean {
+    return request.code === 'UVA_AR';
   }
 }
