@@ -15,6 +15,21 @@ describe('GetCurrentMarketDataRequest', () => {
     expect(getCurrentMarketDataRequest.code).toBe('UVA_AR');
   });
 
+  it('should set code using new()', () => {
+    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
+      GetCurrentMarketDataRequest.new('UVA_AR');
+
+    expect(getCurrentMarketDataRequest.code).toBe('UVA_AR');
+  });
+
+  it('should set currency using withCurrency()', () => {
+    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
+      GetCurrentMarketDataRequest.new('UVA_AR').withCurrency('ARS');
+
+    expect(getCurrentMarketDataRequest.code).toBe('UVA_AR');
+    expect(getCurrentMarketDataRequest.currency).toBe('ARS');
+  });
+
   it('should modify code to uppercase in constructor', () => {
     const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
       new GetCurrentMarketDataRequest('UVA_AR');

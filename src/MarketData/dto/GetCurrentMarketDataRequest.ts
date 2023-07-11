@@ -7,6 +7,17 @@ export default class GetCurrentMarketDataRequest {
     this._code = code.toLocaleUpperCase();
   }
 
+  public static new(code: string): GetCurrentMarketDataRequest {
+    return new GetCurrentMarketDataRequest(code);
+  }
+
+  public withCurrency(
+    currency: string | undefined,
+  ): GetCurrentMarketDataRequest {
+    this.currency = currency;
+    return this;
+  }
+
   get code(): string {
     return this._code;
   }

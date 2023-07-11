@@ -12,6 +12,10 @@ export default class ArgentinianCryptoPricesProvider
   }
 
   doesSupportCode(request: GetCurrentMarketDataRequest): boolean {
-    return false;
+    const supportedCryptosCodes = ['BTC', 'USDC', 'USDT', 'DAI'];
+
+    return (
+      supportedCryptosCodes.includes(request.code) && request.currency === 'ARS'
+    );
   }
 }
