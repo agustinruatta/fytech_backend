@@ -8,4 +8,8 @@ export class GetCurrentMarketDataResponse {
     this.bid = bid;
     this.date = date;
   }
+
+  get midPrice() {
+    return (this.ask + this.bid) / 2;
+  }
 }
