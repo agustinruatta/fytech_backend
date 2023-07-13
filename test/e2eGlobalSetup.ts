@@ -1,5 +1,7 @@
 import * as nock from 'nock';
 
 module.exports = async function () {
-  //nock.disableNetConnect();
+  if (!process.env.GITHUB_ACTIONS) {
+    nock.disableNetConnect();
+  }
 };
