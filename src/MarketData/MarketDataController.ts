@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Param, Query, UseInterceptors } from "@nestjs/common";
 import { MarketDataService } from './MarketDataService';
 import { GetCurrentMarketDataResponse } from './dto/GetCurrentMarketDataResponse';
 import GetCurrentMarketDataRequest from './dto/GetCurrentMarketDataRequest';
@@ -7,6 +7,7 @@ import GetCurrentMarketDataRequest from './dto/GetCurrentMarketDataRequest';
 export class MarketDataController {
   constructor(private readonly marketDataService: MarketDataService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/current/:code')
   findOne(
     @Param('code') code: string,
