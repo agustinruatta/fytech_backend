@@ -42,9 +42,9 @@ describe('MarketDataService', () => {
       new GetCurrentMarketDataRequest('UVA_AR'),
     );
 
-    expect(response.ask).toBe(100);
-    expect(response.bid).toBe(100);
-    expect(response.date).toBe(now);
+    expect(response).toStrictEqual(
+      new GetCurrentMarketDataResponse(100, 100, now),
+    );
   });
 
   it('should thrown an error if code is not found', async () => {
