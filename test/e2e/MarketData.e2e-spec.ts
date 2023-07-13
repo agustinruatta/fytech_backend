@@ -24,6 +24,6 @@ describe('MarketData (e2e)', () => {
     return request(app.getHttpServer())
       .get('/market-data/current/UVA_AR')
       .expect(200)
-      .expect({ value: 278.28, date: '2023-07-09T00:00:00.000Z' });
+      .expect({ ask: 278.28, bid: 278.28, date: '2023-07-09T00:00:00.000Z' });
   });
 });

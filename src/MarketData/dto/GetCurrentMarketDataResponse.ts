@@ -1,18 +1,23 @@
 export class GetCurrentMarketDataResponse {
-  private readonly value: number;
+  private readonly _ask: number;
+  private readonly _bid: number;
+  private readonly _date: Date;
 
-  private readonly date: Date;
-
-  constructor(value: number, date: Date) {
-    this.value = value;
-    this.date = date;
+  constructor(ask: number, bid: number, date: Date) {
+    this._ask = ask;
+    this._bid = bid;
+    this._date = date;
   }
 
-  getValue(): number {
-    return this.value;
+  get ask(): number {
+    return this._ask;
   }
 
-  getDate(): Date {
-    return this.date;
+  get bid(): number {
+    return this._bid;
+  }
+
+  get date(): Date {
+    return this._date;
   }
 }

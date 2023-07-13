@@ -10,7 +10,7 @@ describe('MarketDataService', () => {
 
   const marketDataProvider: MarketDataProvider = {
     getCurrentMarketData(): Promise<GetCurrentMarketDataResponse> {
-      return Promise.resolve(new GetCurrentMarketDataResponse(100, now));
+      return Promise.resolve(new GetCurrentMarketDataResponse(100, 100, now));
     },
 
     doesSupportCode(request: GetCurrentMarketDataRequest): boolean {
@@ -42,8 +42,9 @@ describe('MarketDataService', () => {
       new GetCurrentMarketDataRequest('UVA_AR'),
     );
 
-    expect(response.getValue()).toBe(100);
-    expect(response.getDate()).toBe(now);
+    expect(response.ask).toBe(100);
+    expect(response.bid).toBe(100);
+    expect(response.date).toBe(now);
   });
 
   it('should thrown an error if code is not found', async () => {

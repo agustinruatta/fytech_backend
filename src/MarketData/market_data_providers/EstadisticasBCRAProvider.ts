@@ -29,7 +29,11 @@ export class EstadisticasBCRAProvider implements MarketDataProvider {
 
     const lastData = data[data.length - 1];
 
-    return new GetCurrentMarketDataResponse(lastData.v, new Date(lastData.d));
+    return new GetCurrentMarketDataResponse(
+      lastData.v,
+      lastData.v,
+      new Date(lastData.d),
+    );
   }
 
   doesSupportCode(request: GetCurrentMarketDataRequest): boolean {
