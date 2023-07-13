@@ -31,4 +31,24 @@ describe('MarketData (e2e)', () => {
         date: '2023-07-09T00:00:00.000Z',
       });
   });
+
+  it('get Argentinian USDC current market data', () => {
+    nock('https://criptoya.com/').get('/api/satoshitango/usdc/ars').reply(200, {
+      ask: 534.02,
+      totalAsk: 539.36,
+      bid: 511.43,
+      totalBid: 506.31,
+      time: 1689195600,
+    });
+
+    return request(app.getHttpServer())
+      .get('/market-data/current/usdc?currency=ars')
+      .expect(200)
+      .expect({
+        ask: 539.36,
+        bid: 506.31,
+        mid_price: 522.835,
+        date: '2023-07-12T21:00:00.000Z',
+      });
+  });
 });

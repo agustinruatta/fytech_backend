@@ -2,7 +2,9 @@ import { MarketDataProvider } from './MarketDataProvider';
 import { GetCurrentMarketDataResponse } from '../dto/GetCurrentMarketDataResponse';
 import GetCurrentMarketDataRequest from '../dto/GetCurrentMarketDataRequest';
 import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export default class ArgentinianCryptoPricesProvider
   implements MarketDataProvider
 {
@@ -19,7 +21,7 @@ export default class ArgentinianCryptoPricesProvider
       time: number;
     } = (
       await this.httpService.axiosRef.get(
-        `https://criptoya.com/api/satoshitango/${request}/ars/`,
+        `https://criptoya.com/api/satoshitango/${request.code.toLocaleLowerCase()}/ars`,
       )
     ).data;
 
