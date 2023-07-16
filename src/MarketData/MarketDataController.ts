@@ -9,12 +9,13 @@ import {
 import { MarketDataService } from './MarketDataService';
 import { GetCurrentMarketDataResponse } from './dto/GetCurrentMarketDataResponse';
 import GetCurrentMarketDataRequest from './dto/GetCurrentMarketDataRequest';
+import { CustomSerializationInterceptor } from '../Shared/CustomSerializationInterceptor';
 
 @Controller('market-data')
 export class MarketDataController {
   constructor(private readonly marketDataService: MarketDataService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(CustomSerializationInterceptor)
   @Get('/current/:code')
   findOne(
     @Param('code') code: string,
