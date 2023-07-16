@@ -3,6 +3,7 @@ import { GetCurrentMarketDataResponse } from '../dto/GetCurrentMarketDataRespons
 import GetCurrentMarketDataRequest from '../dto/GetCurrentMarketDataRequest';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import Money from '../../Money/Money';
 
 @Injectable()
 export default class ArgentinianCryptoPricesProvider
@@ -25,9 +26,9 @@ export default class ArgentinianCryptoPricesProvider
       )
     ).data;
 
-    return new GetCurrentMarketDataResponse(
-      data.totalAsk,
-      data.totalBid,
+    return GetCurrentMarketDataResponse.newWithMoney(
+      Money.newFromString(data.totalAsk.toString(), request.currency),
+      Money.newFromString(data.totalBid.toString(), request.currency),
       new Date(data.time * 1000),
     );
   }

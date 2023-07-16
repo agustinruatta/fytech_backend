@@ -10,7 +10,9 @@ describe('MarketDataService', () => {
 
   const marketDataProvider: MarketDataProvider = {
     getCurrentMarketData(): Promise<GetCurrentMarketDataResponse> {
-      return Promise.resolve(new GetCurrentMarketDataResponse(100, 100, now));
+      return Promise.resolve(
+        GetCurrentMarketDataResponse.newWithValue(100, now),
+      );
     },
 
     doesSupportCode(request: GetCurrentMarketDataRequest): boolean {
@@ -43,7 +45,7 @@ describe('MarketDataService', () => {
     );
 
     expect(response).toStrictEqual(
-      new GetCurrentMarketDataResponse(100, 100, now),
+      GetCurrentMarketDataResponse.newWithValue(100, now),
     );
   });
 
