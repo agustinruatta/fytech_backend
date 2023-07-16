@@ -30,6 +30,7 @@
     "@nestjs/swagger": "^7.1.1",
     "axios": "^1.4.0",
     "class-transformer": "^0.5.1",
+    "currency.js": "^2.0.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
