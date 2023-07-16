@@ -27,7 +27,7 @@ export default class Money {
   }
 
   public static newFromString(amount: string, currencySymbol: string): Money {
-    const money = currency(amount, { errorOnInvalid: true, precision: 2});
+    const money = currency(amount, { errorOnInvalid: true, precision: 2 });
     if (isNaN(money.value)) {
       throw new Error('Invalid amount');
     }
@@ -40,6 +40,10 @@ export default class Money {
     }
 
     return new Money(this.internalMoney.add(other.internalMoney), 'USD');
+  }
+
+  divide(number: number): Money {
+    return new Money(this.internalMoney.divide(number), this.currency);
   }
 
   serialize(): {

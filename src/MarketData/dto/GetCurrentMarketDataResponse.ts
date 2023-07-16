@@ -32,7 +32,7 @@ export class GetCurrentMarketDataResponse implements Serializable {
   }
 
   private getMidPrice() {
-    return this.ask.add(this.bid);
+    return this.ask.add(this.bid).divide(2);
   }
 
   serialize(): object {

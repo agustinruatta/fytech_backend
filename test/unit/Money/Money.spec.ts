@@ -47,6 +47,20 @@ describe('Money', () => {
     });
   });
 
+  describe('divide', () => {
+    let initialMoney: Money;
+
+    beforeEach(() => {
+      initialMoney = Money.newFromString('100', 'USD');
+    });
+
+    it('divide by two', () => {
+      const result = initialMoney.divide(2);
+
+      expect(result).toStrictEqual(Money.newFromString('50', 'USD'));
+    });
+  });
+
   describe('serialize', () => {
     it('serializes correctly', () => {
       expect(Money.newFromString('200', 'USD').serialize()).toStrictEqual({
