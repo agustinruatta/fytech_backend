@@ -27,6 +27,16 @@ export default class Money {
   }
 
   public static newFromString(amount: string, currencySymbol: string): Money {
+    //TODO: If amount is "USD" it does not throw an error
+
+    if (currencySymbol.trim() === '') {
+      throw new Error('Currency must not be empty');
+    }
+
+    if (amount.trim() === '') {
+      throw new Error('Amount must not be an empty string');
+    }
+
     const money = currency(amount, { errorOnInvalid: true, precision: 2 });
     if (isNaN(money.value)) {
       throw new Error('Invalid amount');
@@ -36,13 +46,17 @@ export default class Money {
 
   add(other: Money): Money {
     if (this.currency !== other.currency) {
-      throw new Error("Parameter's currency must be USD");
+      throw new Error(`Parameter's currency must be ${this.currency}`);
     }
 
-    return new Money(this.internalMoney.add(other.internalMoney), 'USD');
+    return new Money(
+      this.internalMoney.add(other.internalMoney),
+      this.currency,
+    );
   }
 
   divide(number: number): Money {
+    //TODO: there's some problems when you divide 5/2, because it rounds
     return new Money(this.internalMoney.divide(number), this.currency);
   }
 

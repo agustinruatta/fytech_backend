@@ -3,6 +3,7 @@ import ArgentinianCryptoPricesProvider from '../../../../src/MarketData/market_d
 import GetCurrentMarketDataRequest from '../../../../src/MarketData/dto/GetCurrentMarketDataRequest';
 import { HttpService } from '@nestjs/axios';
 import { GetCurrentMarketDataResponse } from '../../../../src/MarketData/dto/GetCurrentMarketDataResponse';
+import Money from "../../../../src/Money/Money";
 
 describe('ArgentinianCryptoPricesProvider', () => {
   let argentinianCryptoPricesProvider: ArgentinianCryptoPricesProvider;
@@ -71,9 +72,9 @@ describe('ArgentinianCryptoPricesProvider', () => {
         GetCurrentMarketDataRequest.new('USDC').withCurrency('ARS'),
       ),
     ).toStrictEqual(
-      new GetCurrentMarketDataResponse(
-        539.3602,
-        506.3157,
+      GetCurrentMarketDataResponse.newWithMoney(
+        Money.newFromString('539.3602', 'ARS'),
+        Money.newFromString('506.3157', 'ARS'),
         new Date('2023-07-12 21:00:00Z'),
       ),
     );

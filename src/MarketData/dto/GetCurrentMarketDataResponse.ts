@@ -31,16 +31,23 @@ export class GetCurrentMarketDataResponse implements Serializable {
     return new GetCurrentMarketDataResponse(undefined, undefined, value, date);
   }
 
-  private getMidPrice() {
+  private getMidPrice(): Money {
     return this.ask.add(this.bid).divide(2);
   }
 
   serialize(): object {
-    return {
-      ask: this.ask,
-      bid: this.bid,
-      mid_price: this.getMidPrice(),
-      date: this.date,
-    };
+    if (this.ask) {
+      return {
+        ask: this.ask.serialize(),
+        bid: this.bid.serialize(),
+        mid_price: this.getMidPrice().serialize(),
+        date: this.date,
+      };
+    } else {
+      return {
+        value: this.value,
+        date: this.date,
+      };
+    }
   }
 }

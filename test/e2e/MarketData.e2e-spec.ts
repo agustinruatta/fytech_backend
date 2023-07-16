@@ -29,9 +29,7 @@ describe('MarketData (e2e)', () => {
       .get('/market-data/current/UVA_AR')
       .expect(200)
       .expect({
-        ask: 278.28,
-        bid: 278.28,
-        mid_price: 278.28,
+        value: 278.28,
         date: '2023-07-09T00:00:00.000Z',
       });
   });
@@ -49,9 +47,21 @@ describe('MarketData (e2e)', () => {
       .get('/market-data/current/usdc?currency=ars')
       .expect(200)
       .expect({
-        ask: 539.36,
-        bid: 506.31,
-        mid_price: 522.835,
+        ask: {
+          cents: 53936,
+          currency: 'ARS',
+          floatValue: 539.36,
+        },
+        bid: {
+          cents: 50631,
+          currency: 'ARS',
+          floatValue: 506.31,
+        },
+        mid_price: {
+          cents: 52284,
+          currency: 'ARS',
+          floatValue: 522.84,
+        },
         date: '2023-07-12T21:00:00.000Z',
       });
   });
