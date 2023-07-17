@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: fytech_backend
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    volumes:
+      - ./../:/usr/src/nest_project
+    working_dir: /usr/src/nest_project
+    command: 'npm run start:dev'
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - '${BACKEND_PORT}:${BACKEND_PORT}'
+      - '3100:3100'
+      - '9229:9229'
+
+  postgres:
+    image: postgres
+    container_name: postgres_db
+    #    command: ["postgres", "-c", "log_statement=all"]
+    restart: always
+    ports:
+      - '${DB_PORT}:5432'
+    environment:
+      DATABASE_HOST: ${DB_HOST}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./postgresql-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    volumes:
+      - ./redis-data:/var/lib/redis/data
+    ports:
+      - '${REDIS_PORT}:6379'
+
+volumes:
+  redis-data:
+    driver: local
