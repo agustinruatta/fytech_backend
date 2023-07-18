@@ -1,4 +1,4 @@
-FROM node:18.12-alpine
+FROM node:20.4-alpine
 
 USER node
 
@@ -11,7 +11,7 @@ COPY --chown=node:node package*.json ./
 
 RUN npm install
 
-COPY --chown=node:node . .
+COPY --chown=node:node .. .
 
 EXPOSE 3100
 EXPOSE 3030

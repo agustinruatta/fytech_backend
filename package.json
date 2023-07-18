@@ -7,9 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "docker:up": "cd docker && docker-compose --env-file ./../.env up -d && cd ../",
-    "docker:down": "cd docker && docker-compose --env-file ./../.env down && cd ../",
-    "docker:ps": "cd docker && docker-compose --env-file ./../.env ps && cd ../",
+    "up": "cd docker && docker-compose --env-file ./../.env up -d && cd ../",
+    "down": "cd docker && docker-compose --env-file ./../.env down && cd ../",
+    "ps": "cd docker && docker-compose --env-file ./../.env ps && cd ../",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

@@ -4,7 +4,6 @@ services:
   backend:
     container_name: fytech_backend
     build:
-      context: ../
       dockerfile: Dockerfile
     volumes:
       - ./../:/usr/src/nest_project
