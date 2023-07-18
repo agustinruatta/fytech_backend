@@ -4,9 +4,17 @@ import { MarketDataModule } from './MarketData/MarketDataModule';
 import { SharedModule } from './Shared/SharedModule';
 import { AuthModule } from './Auth/AuthModule';
 import { UsersModule } from './Users/UsersModule';
+import { typeOrmAsyncConfig } from './Shared/database/TypeORMConfig';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [MarketDataModule, SharedModule, AuthModule, UsersModule],
+  imports: [
+    MarketDataModule,
+    SharedModule,
+    AuthModule,
+    UsersModule,
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+  ],
   controllers: [AppController],
 })
 export class AppModule {}
