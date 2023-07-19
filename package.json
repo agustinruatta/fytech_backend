@@ -10,6 +10,7 @@
     "up": "cd docker && docker-compose --env-file ./../.env up -d && cd ../",
     "down": "cd docker && docker-compose --env-file ./../.env down && cd ../",
     "ps": "cd docker && docker-compose --env-file ./../.env ps && cd ../",
+    "sh": "docker exec -it fytech_backend /bin/sh",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "migration:generate": "npm run typeorm migration:generate -d src/Shared/database/MigrationsDataSource.mjs",
     "migration:create": "npm run typeorm migration:create -d src/Shared/database/MigrationsDataSource.mjs",
