@@ -1,4 +1,4 @@
-import Serializable from '../../Shared/serialization/Serializable';
+import Serializable from '../../Shared/Serialization/Serializable';
 import Money from '../../Money/Money';
 
 export class GetCurrentMarketDataResponse implements Serializable {

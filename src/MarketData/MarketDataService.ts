@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { GetCurrentMarketDataResponse } from './dto/GetCurrentMarketDataResponse';
-import { MarketDataProvider } from './market_data_providers/MarketDataProvider';
-import GetCurrentMarketDataRequest from './dto/GetCurrentMarketDataRequest';
+import { GetCurrentMarketDataResponse } from './DTO/GetCurrentMarketDataResponse';
+import { MarketDataProvider } from './MarketDataProviders/MarketDataProvider';
+import GetCurrentMarketDataRequest from './DTO/GetCurrentMarketDataRequest';
 
 @Injectable()
 export class MarketDataService {

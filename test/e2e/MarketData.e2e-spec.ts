@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { MarketDataModule } from '../../src/MarketData/MarketDataModule';
 import * as nock from 'nock';
-import { CustomSerializationInterceptor } from '../../src/Shared/serialization/CustomSerializationInterceptor';
+import { CustomSerializationInterceptor } from '../../src/Shared/Serialization/CustomSerializationInterceptor';
 
 describe('MarketData (e2e)', () => {
   let app: INestApplication;

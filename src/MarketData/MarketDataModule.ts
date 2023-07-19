@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { MarketDataService } from './MarketDataService';
 import { MarketDataController } from './MarketDataController';
 import { ConfigModule } from '@nestjs/config';
-import { EstadisticasBCRAProvider } from './market_data_providers/EstadisticasBCRAProvider';
+import { EstadisticasBCRAProvider } from './MarketDataProviders/EstadisticasBCRAProvider';
 import { HttpModule } from '@nestjs/axios';
-import { MarketDataProvider } from './market_data_providers/MarketDataProvider';
-import ArgentinianCryptoPricesProvider from './market_data_providers/ArgentinianCryptoPricesProvider';
+import { MarketDataProvider } from './MarketDataProviders/MarketDataProvider';
+import ArgentinianCryptoPricesProvider from './MarketDataProviders/ArgentinianCryptoPricesProvider';
 
 @Module({
   controllers: [MarketDataController],

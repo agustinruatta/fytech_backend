@@ -1,4 +1,4 @@
-import GetCurrentMarketDataRequest from '../../../../src/MarketData/dto/GetCurrentMarketDataRequest';
+import GetCurrentMarketDataRequest from '../../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
 
 describe('GetCurrentMarketDataRequest', () => {
   it('should be defined', () => {

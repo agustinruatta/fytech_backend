@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
-import ArgentinianCryptoPricesProvider from '../../../../src/MarketData/market_data_providers/ArgentinianCryptoPricesProvider';
-import GetCurrentMarketDataRequest from '../../../../src/MarketData/dto/GetCurrentMarketDataRequest';
+import ArgentinianCryptoPricesProvider from '../../../../src/MarketData/MarketDataProviders/ArgentinianCryptoPricesProvider';
+import GetCurrentMarketDataRequest from '../../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
 import { HttpService } from '@nestjs/axios';
-import { GetCurrentMarketDataResponse } from '../../../../src/MarketData/dto/GetCurrentMarketDataResponse';
+import { GetCurrentMarketDataResponse } from '../../../../src/MarketData/DTO/GetCurrentMarketDataResponse';
 import Money from "../../../../src/Money/Money";
 
 describe('ArgentinianCryptoPricesProvider', () => {

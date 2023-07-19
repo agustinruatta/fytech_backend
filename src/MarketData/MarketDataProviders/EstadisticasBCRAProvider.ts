@@ -1,9 +1,9 @@
 import { MarketDataProvider } from './MarketDataProvider';
-import { GetCurrentMarketDataResponse } from '../dto/GetCurrentMarketDataResponse';
+import { GetCurrentMarketDataResponse } from '../DTO/GetCurrentMarketDataResponse';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import GetCurrentMarketDataRequest from '../dto/GetCurrentMarketDataRequest';
+import GetCurrentMarketDataRequest from '../DTO/GetCurrentMarketDataRequest';
 
 @Injectable()
 export class EstadisticasBCRAProvider implements MarketDataProvider {

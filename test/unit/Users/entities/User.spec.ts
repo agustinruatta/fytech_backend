@@ -1,4 +1,4 @@
-import { User } from '../../../../src/Users/entities/User';
+import { User } from '../../../../src/Users/Entities/User';
 
 describe('User', () => {
   describe('constructor', () => {

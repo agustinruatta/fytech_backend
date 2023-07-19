@@ -1,5 +1,5 @@
-import { GetCurrentMarketDataResponse } from '../dto/GetCurrentMarketDataResponse';
-import GetCurrentMarketDataRequest from '../dto/GetCurrentMarketDataRequest';
+import { GetCurrentMarketDataResponse } from '../DTO/GetCurrentMarketDataResponse';
+import GetCurrentMarketDataRequest from '../DTO/GetCurrentMarketDataRequest';
 
 export interface MarketDataProvider {
   getCurrentMarketData(
