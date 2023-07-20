@@ -14,7 +14,10 @@ describe('UsersService', () => {
         {
           provide: UsersService,
           useFactory: () => {
-            userRepository = null;
+            userRepository =
+              jest.createMockFromModule<Repository<User>>('typeorm');
+            userRepository.save = jest.fn();
+
             return new UsersService(userRepository);
           },
         },
@@ -33,6 +36,11 @@ describe('UsersService', () => {
       expect(() => usersService.createUser('invalid', 'password')).toThrow(
         new InvalidArgumentException('Invalid email'),
       );
+    });
+
+    it('creates user', () => {
+      usersService.createUser('email@gmail.com', 'password');
+      expect(userRepository.save).toBeCalledTimes(1);
     });
   });
 });
