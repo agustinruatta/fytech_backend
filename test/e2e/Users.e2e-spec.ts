@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { CustomSerializationInterceptor } from '../../src/Shared/Serialization/CustomSerializationInterceptor';
-import { UsersModule } from '../../src/Users/UsersModule';
-import { AppModule } from "../../src/app.module";
+import { AppModule } from '../../src/app.module';
 
 describe('Users (e2e)', () => {
   let app: INestApplication;
@@ -15,6 +14,7 @@ describe('Users (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
 
+    app.useGlobalPipes(new ValidationPipe());
     app.useGlobalInterceptors(new CustomSerializationInterceptor());
 
     await app.init();
@@ -26,8 +26,9 @@ describe('Users (e2e)', () => {
       .send({ email: 'invalid', password: 'password' })
       .expect(400)
       .expect({
-        value: 278.28,
-        date: '2023-07-09T00:00:00.000Z',
+        message: ['email must be an email'],
+        error: 'Bad Request',
+        statusCode: 400,
       });
   });
 });
