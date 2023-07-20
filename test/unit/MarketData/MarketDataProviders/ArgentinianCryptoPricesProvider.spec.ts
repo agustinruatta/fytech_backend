@@ -3,7 +3,7 @@ import ArgentinianCryptoPricesProvider from '../../../../src/MarketData/MarketDa
 import GetCurrentMarketDataRequest from '../../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
 import { HttpService } from '@nestjs/axios';
 import { GetCurrentMarketDataResponse } from '../../../../src/MarketData/DTO/GetCurrentMarketDataResponse';
-import Money from "../../../../src/Money/Money";
+import Money from '../../../../src/Money/Money';
 
 describe('ArgentinianCryptoPricesProvider', () => {
   let argentinianCryptoPricesProvider: ArgentinianCryptoPricesProvider;

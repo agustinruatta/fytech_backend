@@ -1,18 +1,38 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../../../src/Users/UsersService';
+import { Repository } from 'typeorm';
+import { User } from '../../../src/Users/Entities/User';
+import { InvalidArgumentException } from '../../../src/Shared/Exceptions/InvalidArgumentException';
 
 describe('UsersService', () => {
-  let service: UsersService;
+  let usersService: UsersService;
+  let userRepository: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService],
+      providers: [
+        {
+          provide: UsersService,
+          useFactory: () => {
+            userRepository = null;
+            return new UsersService(userRepository);
+          },
+        },
+      ],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
+    usersService = module.get<UsersService>(UsersService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(usersService).toBeDefined();
+  });
+
+  describe('createUser', () => {
+    it('fails if email is invalid', () => {
+      expect(() => usersService.createUser('invalid', 'password')).toThrow(
+        new InvalidArgumentException('Invalid email'),
+      );
+    });
   });
 });
