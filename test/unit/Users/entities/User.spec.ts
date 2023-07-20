@@ -1,4 +1,5 @@
 import { User } from '../../../../src/Users/Entities/User';
+import { InvalidArgumentException } from '../../../../src/Shared/Exceptions/InvalidArgumentException';
 
 describe('User', () => {
   describe('constructor', () => {
@@ -25,6 +26,14 @@ describe('User', () => {
       const user = new User('test@gmail.com', 'password');
 
       expect(user.isValidPassword('invalid')).toBe(false);
+    });
+  });
+
+  describe('isValidEmail', () => {
+    it('throws an exception if email is invalid', () => {
+      expect(() => new User('invalid', 'password')).toThrow(
+        new InvalidArgumentException('Invalid email'),
+      );
     });
   });
 });

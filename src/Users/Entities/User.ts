@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 
 import * as bcrypt from 'bcrypt';
+import { InvalidArgumentException } from '../../Shared/Exceptions/InvalidArgumentException';
 
 @Entity({ name: 'users' })
 export class User {
@@ -16,7 +17,7 @@ export class User {
   private id: string | undefined;
 
   @Column({ name: 'email' })
-  private readonly email: string;
+  private email: string;
 
   @Column({ name: 'hashed_password' })
   private hashedPassword: string;
@@ -28,9 +29,17 @@ export class User {
   private updatedAt: Date | undefined;
 
   constructor(email: string, password: string) {
-    this.email = email;
-
+    this.setEmail(email);
     this.setPassword(password);
+  }
+
+  private setEmail(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new InvalidArgumentException('Invalid email');
+    }
+
+    this.email = email;
   }
 
   private setPassword(password: string) {
