@@ -10,6 +10,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     url: configService.get('DB_URL'),
     //autoLoadEntities: true,
     entities: [User],
+    entitySkipConstructor: true,
     synchronize: false,
   }),
 };
