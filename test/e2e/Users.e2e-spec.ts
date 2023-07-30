@@ -31,4 +31,14 @@ describe('Users (e2e)', () => {
         statusCode: 400,
       });
   });
+
+  it('creates new user', () => {
+    return request(app.getHttpServer())
+      .post('/users')
+      .send({ email: 'user@gmail.com', password: 'password' })
+      .expect(201)
+      .expect({});
+
+    //TODO: check user is created
+  });
 });

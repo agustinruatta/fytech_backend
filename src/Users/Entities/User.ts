@@ -8,9 +8,10 @@ import {
 
 import * as bcrypt from 'bcrypt';
 import { InvalidArgumentException } from '../../Shared/Exceptions/InvalidArgumentException';
+import Serializable from '../../Shared/Serialization/Serializable';
 
 @Entity({ name: 'users' })
-export class User {
+export class User implements Serializable {
   private readonly SALT_ROUNDS = 10;
 
   @PrimaryGeneratedColumn('uuid')
@@ -56,5 +57,11 @@ export class User {
 
   public getEmail(): string {
     return this.email;
+  }
+
+  serialize(): object {
+    return {
+      email: this.email,
+    };
   }
 }

@@ -36,4 +36,12 @@ describe('User', () => {
       );
     });
   });
+
+  describe('serialize', () => {
+    it('serializes an user object', () => {
+      const user = new User('test@gmail.com', 'password');
+
+      expect(user.serialize()).toStrictEqual({ email: 'test@gmail.com' });
+    });
+  });
 });
