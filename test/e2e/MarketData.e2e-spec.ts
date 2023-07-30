@@ -8,7 +8,7 @@ import { CustomSerializationInterceptor } from '../../src/Shared/Serialization/C
 describe('MarketData (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [MarketDataModule],
     }).compile();
