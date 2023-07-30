@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { MarketDataModule } from '../../src/MarketData/MarketDataModule';
 import * as nock from 'nock';
 import { CustomSerializationInterceptor } from '../../src/Shared/Serialization/CustomSerializationInterceptor';
+import { AppModule } from '../../src/app.module';
 
 describe('MarketData (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [MarketDataModule],
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
