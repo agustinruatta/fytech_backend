@@ -1,23 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { CustomSerializationInterceptor } from '../../src/Shared/Serialization/CustomSerializationInterceptor';
-import { AppModule } from '../../src/app.module';
+import createAppToTest from './config/e2e-app-creator';
 
 describe('Users (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-
-    app.useGlobalPipes(new ValidationPipe());
-    app.useGlobalInterceptors(new CustomSerializationInterceptor());
-
-    await app.init();
+    app = await createAppToTest();
   });
 
   it('fails if email is invalid', () => {
@@ -37,7 +26,7 @@ describe('Users (e2e)', () => {
       .post('/users')
       .send({ email: 'user@gmail.com', password: 'password' })
       .expect(201)
-      .expect({});
+      .expect({ email: 'user@gmail.com' });
 
     //TODO: check user is created
   });
