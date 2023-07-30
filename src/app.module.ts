@@ -6,10 +6,15 @@ import { AuthModule } from './Auth/AuthModule';
 import { UsersModule } from './Users/UsersModule';
 import { typeOrmAsyncConfig } from './Shared/Database/TypeORMConfig';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+    ConfigModule.forRoot({
+      envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+      isGlobal: true,
+    }),
     MarketDataModule,
     SharedModule,
     AuthModule,
