@@ -1,23 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import * as nock from 'nock';
-import { CustomSerializationInterceptor } from '../../src/Shared/Serialization/CustomSerializationInterceptor';
-import { AppModule } from '../../src/app.module';
+import createAppToTest from './config/e2e-app-creator';
 
 describe('MarketData (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-
-    app.useGlobalInterceptors(new CustomSerializationInterceptor());
-
-    await app.init();
+    app = await createAppToTest();
   });
 
   it('get UVA current market data', () => {
