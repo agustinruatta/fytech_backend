@@ -22,5 +22,5 @@ lerna-debug.log*
 .env
 
 # Docker data
-./docker/postgresql-data
-./docker/redis-data
+/docker/redis-data
+/docker/postgresql-data/
