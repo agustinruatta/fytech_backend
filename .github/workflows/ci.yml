@@ -47,5 +47,6 @@ jobs:
     - run: ls
     - run: ls ./src/Shared/Database/
     - run: npm ci
-    - run: npm run build --if-present
+    - run: npm run build
+    - run: npm run migrations:run:test
     - run: npm test
