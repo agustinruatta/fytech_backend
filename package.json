@@ -18,7 +18,7 @@
     "migrations:create": "npm run typeorm -- migration:create src/Shared/Database/Migrations/$npm_config_name",
     "migrations:revert": "npm run typeorm -- -d src/Shared/Database/MigrationsDataSource.ts migration:revert",
     "migrations:drop": "npm run typeorm -- -d src/Shared/Database/MigrationsDataSource.ts schema:drop",
-    "migrations:run:test": "npm run typeorm migration:run -- -d src/Shared/Database/TestingMigrationsDataSource.js",
+    "migrations:run:test": "npm run typeorm migration:run -- -d src/Shared/Database/TestingMigrationsDataSource.ts",
     "migrations:drop:test": "npm run typeorm -- -d src/Shared/Database/TestingMigrationsDataSource.ts schema:drop",
     "start": "nest start",
     "start:dev": "nest start --watch",
