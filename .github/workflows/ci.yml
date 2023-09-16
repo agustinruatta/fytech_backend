@@ -44,8 +44,6 @@ jobs:
     - run: npm run build
     - run: sed -i 's/err.message/err.toString()/g' ./node_modules/typeorm/commands/CommandUtils.js
     - run: sudo apt-get install -y postgresql-client
-    - run: psql postgresql://fytech_test:test@localhost:5433/fytech_test
-    - run: SELECT table_name FROM information_schema.tables;
-    - run: exit
+    - run: pg_isready -h localhost -d fytech_test -p 5433 -U fytech_test
     - run: npm run migrations:run:test
     - run: npm test
