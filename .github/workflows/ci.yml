@@ -16,20 +16,17 @@ jobs:
     services:
       postgres:
         image: postgres
-
         env:
-          DATABASE_HOST: postgres_test
           POSTGRES_DB: fytech_test
           POSTGRES_USER: fytech_test
           POSTGRES_PASSWORD: test
-
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 5433:5432
 
     strategy:
       matrix:
@@ -43,14 +40,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: pwd
-    - run: ls
-    - run: ls ./src/Shared/Database/
     - run: npm ci
     - run: npm run build
     - run: sed -i 's/err.message/err.toString()/g' ./node_modules/typeorm/commands/CommandUtils.js
-    - run: sudo apt-get install -y postgresql-client
-    - run: psql postgresql://fytech_test:test@postgres_test:5433/fytech_test
-    - run: exit
     - run: npm run migrations:run:test
     - run: npm test

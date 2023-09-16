@@ -24,7 +24,6 @@ services:
     ports:
       - '${DB_PORT}:5432'
     environment:
-      DATABASE_HOST: ${DB_HOST}
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -38,7 +37,6 @@ services:
     ports:
       - '5433:5432'
     environment:
-      DATABASE_HOST: postgres_test
       POSTGRES_DB: fytech_test
       POSTGRES_USER: fytech_test
       POSTGRES_PASSWORD: test
