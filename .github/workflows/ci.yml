@@ -42,7 +42,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build
-    - run: sed -i 's/err.message/err.toString()/g' ./node_modules/typeorm/commands/CommandUtils.js
+    - run: sed -i 's/err.message/err.toString() + dataSourceFilePath/g' ./node_modules/typeorm/commands/CommandUtils.js
     - run: sudo apt-get install -y postgresql-client
     - run: pg_isready -h localhost -d fytech_test -p 5433 -U fytech_test
     - run: npm run migrations:run:test
