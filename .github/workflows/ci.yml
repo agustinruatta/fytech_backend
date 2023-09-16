@@ -45,7 +45,7 @@ jobs:
     - run: sed -i 's/throw new Error(`Unable/console.log(`BEFORE SECOND CATCH`);console.log(err);console.trace(err);throw new Error(`Unable/g' ./node_modules/typeorm/commands/CommandUtils.js
     - run: sed -i 's/PlatformTools_1.PlatformTools/console.log(`BEFORE ERROR CATCH`);console.log(err);console.log(typeof err);PlatformTools_1.PlatformTools/g' ./node_modules/typeorm/commands/MigrationRunCommand.js
     - run: sed -i 's/await dataSource.runMigrations(options);/console.log(`BEFORE RUN MIGRATIONS`);await dataSource.runMigrations(options);/g' ./node_modules/typeorm/commands/MigrationRunCommand.js
-        - run: sed -i 's/await dataSource.initialize();/console.log(`BEFORE INITIALIZE`);await dataSource.initialize();console.log(`AFTER INITIALIZE`);/g' ./node_modules/typeorm/commands/MigrationRunCommand.js
+    - run: sed -i 's/await dataSource.initialize();/console.log(`BEFORE INITIALIZE`);await dataSource.initialize();console.log(`AFTER INITIALIZE`);/g' ./node_modules/typeorm/commands/MigrationRunCommand.js
     - run: sudo apt-get install -y postgresql-client
     - run: pg_isready -h localhost -d fytech_test -p 5433 -U fytech_test
     - run: npm run migrations:run:test
