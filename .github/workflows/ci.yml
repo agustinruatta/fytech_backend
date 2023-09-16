@@ -42,7 +42,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build
-    - run: sed -i 's/throw new Error(`Unable/console.log(err);console.trace(err);throw new Error(`Unable/g' ./node_modules/typeorm/commands/CommandUtils.js
+    - run: sed -i 's/throw new Error(`Unable/console.log('BEFORE SECOND CATCH');console.log(err);console.trace(err);throw new Error(`Unable/g' ./node_modules/typeorm/commands/CommandUtils.js
     - run: sed -i 's/PlatformTools_1.PlatformTools/console.log('BEFORE ERROR CATCH');console.log(err);console.log(typeof err);PlatformTools_1.PlatformTools/g' ./node_modules/typeorm/commands/MigrationRunCommand.js
     - run: sed -i 's/await dataSource.runMigrations(options);/console.log('BEFORE RUN MIGRATIONS');await dataSource.runMigrations(options);/g' ./node_modules/typeorm/commands/MigrationRunCommand.js
     - run: sudo apt-get install -y postgresql-client
