@@ -10,7 +10,7 @@
     "up": "cp package.json docker/ && cp package-lock.json docker && cd docker && docker-compose --env-file ./../.env up -d && cd ../",
     "down": "cd docker && docker-compose --env-file ./../.env down && cd ../",
     "ps": "cd docker && docker-compose --env-file ./../.env ps && cd ../",
-    "sh": "docker exec -it fytech_backend /bin/sh",
+    "sh": "docker exec -it fytech_backend /bin/bash",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "migrations:run": "npm run typeorm migration:run -- -d src/Shared/Database/MigrationsDataSource.ts",
