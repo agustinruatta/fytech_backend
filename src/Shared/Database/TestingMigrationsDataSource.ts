@@ -6,7 +6,7 @@ import { DataSource } from 'typeorm';
 
 const databaseUrl = 'postgresql://fytech_test:test@localhost:5433/fytech_test';
 
-const a = new DataSource({
+export default new DataSource({
   type: 'postgres',
   url: databaseUrl,
   migrationsRun: true,
@@ -14,8 +14,3 @@ const a = new DataSource({
   migrations: dataSource.options.migrations,
   synchronize: false,
 });
-
-console.log('DATASOURCE TEST');
-console.log(a);
-
-export default a;

@@ -6,10 +6,10 @@ config();
 const databaseUrl = process.env.DB_URL;
 
 if (!databaseUrl) {
-  throw 'Invalid database URL';
+  throw new Error('Invalid database URL');
 }
 
-const b = new DataSource({
+export default new DataSource({
   type: 'postgres',
   url: databaseUrl,
   migrationsRun: true,
@@ -17,8 +17,3 @@ const b = new DataSource({
   migrations: [CreateUser1689808924143],
   synchronize: false,
 });
-
-console.log('DATASOURCE NO TEST');
-console.log(b);
-
-export default b;
