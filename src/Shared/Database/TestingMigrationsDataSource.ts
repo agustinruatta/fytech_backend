@@ -15,6 +15,7 @@ const a = new DataSource({
   synchronize: false,
 });
 
+console.log('DATASOURCE TEST');
 console.log(a);
 
 export default a;

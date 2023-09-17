@@ -9,7 +9,7 @@ if (!databaseUrl) {
   throw 'Invalid database URL';
 }
 
-export default new DataSource({
+const b = new DataSource({
   type: 'postgres',
   url: databaseUrl,
   migrationsRun: true,
@@ -17,3 +17,8 @@ export default new DataSource({
   migrations: [CreateUser1689808924143],
   synchronize: false,
 });
+
+console.log('DATASOURCE NO TEST');
+console.log(b);
+
+export default b;
