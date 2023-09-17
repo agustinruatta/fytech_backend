@@ -5,7 +5,7 @@ const databaseUrl = 'postgresql://fytech_test:test@localhost:5433/fytech_test';
 
 console.log('ENTERING TESTING DATA SOURCE');
 
-export default new DataSource({
+const a = new DataSource({
   type: 'postgres',
   url: databaseUrl,
   migrationsRun: true,
@@ -13,3 +13,7 @@ export default new DataSource({
   migrations: dataSource.options.migrations,
   synchronize: false,
 });
+
+console.log(a);
+
+export default a;
