@@ -6,8 +6,8 @@ services:
     build:
       dockerfile: Dockerfile
     volumes:
-      - ./../:/usr/src/app
-    working_dir: /usr/src/app
+      - ./../:/home/node/app
+    working_dir: /home/node/app
     command: 'npm run start:dev'
     depends_on:
       - postgres

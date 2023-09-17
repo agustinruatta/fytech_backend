@@ -2,7 +2,9 @@ FROM node:20.6
 
 USER node
 
-WORKDIR /usr/src/app
+RUN mkdir /home/node/app
+
+WORKDIR /home/node/app
 
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH=$PATH:/home/node/.npm-global/bin
