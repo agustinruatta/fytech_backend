@@ -6,7 +6,7 @@ config();
 const databaseUrl = process.env.DB_URL;
 
 if (!databaseUrl) {
-  throw new Error('Invalid database URL');
+  throw new Error('DATABASE URL NOT FOUND IN ENVIRONMENT');
 }
 
 export default new DataSource({

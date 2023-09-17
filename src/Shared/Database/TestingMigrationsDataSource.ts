@@ -1,6 +1,3 @@
-console.log('ENTERING TESTING DATA SOURCE');
-console.log(process.env.NODE_ENV);
-
 import dataSource from './MigrationsDataSource';
 import { DataSource } from 'typeorm';
 
