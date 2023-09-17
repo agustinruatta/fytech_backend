@@ -8,8 +8,6 @@ import { typeOrmAsyncConfig } from './Shared/Database/TypeORMConfig';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
-console.log('ENV ' + process.env.NODE_ENV);
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
