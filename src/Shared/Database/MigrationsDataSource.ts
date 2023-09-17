@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { config } from 'dotenv';
+import { config } from 'dotenv-flow';
 import { CreateUser1689808924143 } from './Migrations/1689808924143-CreateUser';
 
 config();
