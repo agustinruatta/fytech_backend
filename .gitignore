@@ -24,3 +24,5 @@ lerna-debug.log*
 # Docker data
 /docker/redis-data
 /docker/postgresql-data/
+/docker/package.json
+/docker/package-lock.json

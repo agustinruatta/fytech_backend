@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "up": "cd docker && docker-compose --env-file ./../.env up -d && cd ../",
+    "up": "cp package.json docker/ && cp package-lock.json docker && cd docker && docker-compose --env-file ./../.env up -d && cd ../",
     "down": "cd docker && docker-compose --env-file ./../.env down && cd ../",
     "ps": "cd docker && docker-compose --env-file ./../.env ps && cd ../",
     "sh": "docker exec -it fytech_backend /bin/sh",
