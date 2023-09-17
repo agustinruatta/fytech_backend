@@ -36,6 +36,7 @@ jobs:
     env:
       NODE_ENV: test
       DB_URL: postgres://fytech_test:test@localhost:5433/fytech_test
+      TERM: dumb
 
     steps:
     - uses: actions/checkout@v3
