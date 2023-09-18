@@ -38,6 +38,18 @@ describe('UsersService', () => {
       );
     });
 
+    it('fails if there is a previous user with provided email', () => {
+      userRepository.countBy = () => Promise.resolve(1);
+
+      expect(() =>
+        usersService.createUser('existent_user@gmail.com', 'password'),
+      ).rejects.toThrow(
+        new InvalidArgumentException(
+          'This email is already associated with another account',
+        ),
+      );
+    });
+
     it('creates user', () => {
       usersService.createUser('email@gmail.com', 'password');
       expect(userRepository.save).toBeCalledTimes(1);

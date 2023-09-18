@@ -37,4 +37,21 @@ describe('Users (e2e)', () => {
 
     expect(users[users.length - 1].getEmail()).toBe('user@gmail.com');
   });
+
+  it('fails if user has registered previously', async () => {
+    //Creates user for first time
+    await request(app.getHttpServer())
+      .post('/users')
+      .send({ email: 'user@gmail.com', password: 'password' });
+
+    await request(app.getHttpServer())
+      .post('/users')
+      .send({ email: 'user@gmail.com', password: 'anotherPassword' })
+      .expect(400)
+      .expect({
+        message: ['This email is already associated with another account'],
+        error: 'Bad Request',
+        statusCode: 400,
+      });
+  });
 });

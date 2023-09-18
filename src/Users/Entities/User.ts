@@ -18,7 +18,7 @@ export class User implements Serializable {
   private id: string | undefined;
 
   @Column({ name: 'email' })
-  private email: string;
+  public email: string;
 
   @Column({ name: 'hashed_password' })
   private hashedPassword: string;
