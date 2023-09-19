@@ -27,15 +27,21 @@ describe('UsersService', () => {
     usersService = module.get<UsersService>(UsersService);
   });
 
+  function withNoPreviousUser() {
+    userRepository.countBy = () => Promise.resolve(0);
+  }
+
   it('should be defined', () => {
     expect(usersService).toBeDefined();
   });
 
   describe('createUser', () => {
     it('fails if email is invalid', () => {
-      expect(() => usersService.createUser('invalid', 'password')).toThrow(
-        new InvalidArgumentException('Invalid email'),
-      );
+      withNoPreviousUser();
+
+      expect(() =>
+        usersService.createUser('invalid', 'password'),
+      ).rejects.toThrow(new InvalidArgumentException('Invalid email'));
     });
 
     it('fails if there is a previous user with provided email', () => {
@@ -50,8 +56,10 @@ describe('UsersService', () => {
       );
     });
 
-    it('creates user', () => {
-      usersService.createUser('email@gmail.com', 'password');
+    it('calls repository when user is created', async () => {
+      withNoPreviousUser();
+
+      await usersService.createUser('email@gmail.com', 'password');
       expect(userRepository.save).toBeCalledTimes(1);
     });
   });
