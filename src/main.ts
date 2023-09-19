@@ -3,7 +3,8 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { CustomSerializationInterceptor } from './Shared/Serialization/CustomSerializationInterceptor';
-import { ValidationPipe } from "@nestjs/common";
+import { ValidationPipe } from '@nestjs/common';
+import { HTTPSerializableInterceptor } from './Shared/Exceptions/HTTPSerializableInterceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,7 @@ async function bootstrap() {
   }
 
   app.useGlobalInterceptors(new CustomSerializationInterceptor());
+  app.useGlobalInterceptors(new HTTPSerializableInterceptor());
   app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(3000);

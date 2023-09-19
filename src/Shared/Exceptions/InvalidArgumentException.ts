@@ -1,6 +1,8 @@
+import HTTPSerializableException from './HTTPSerializableException';
+
 export class InvalidArgumentException
   extends Error
-  implements HTTPSerializable
+  implements HTTPSerializableException
 {
   private readonly friendlyMessage: string;
 

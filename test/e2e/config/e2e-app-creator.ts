@@ -3,6 +3,7 @@ import { AppModule } from '../../../src/app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { CustomSerializationInterceptor } from '../../../src/Shared/Serialization/CustomSerializationInterceptor';
 import { Connection, EntityManager } from 'typeorm';
+import { HTTPSerializableInterceptor } from "../../../src/Shared/Exceptions/HTTPSerializableInterceptor";
 
 export default async function createAppToTest() {
   const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -11,8 +12,10 @@ export default async function createAppToTest() {
 
   const app = moduleFixture.createNestApplication();
 
+  //TODO: import from production app
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new CustomSerializationInterceptor());
+  app.useGlobalInterceptors(new HTTPSerializableInterceptor());
 
   await app.init();
 

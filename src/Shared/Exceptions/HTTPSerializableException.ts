@@ -1,4 +1,4 @@
-interface HTTPSerializable {
+export default interface HTTPSerializableException {
   getHttpCode(): number;
 
   getErrorMessages(): string[];
