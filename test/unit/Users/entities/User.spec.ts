@@ -32,7 +32,7 @@ describe('User', () => {
   describe('isValidEmail', () => {
     it('throws an exception if email is invalid', () => {
       expect(() => new User('invalid', 'password')).toThrow(
-        new InvalidArgumentException('Invalid email'),
+        new InvalidArgumentException('Invalid email', 'Invalid email'),
       );
     });
   });
