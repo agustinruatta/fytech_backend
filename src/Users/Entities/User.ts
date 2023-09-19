@@ -37,7 +37,7 @@ export class User implements Serializable {
   private setEmail(email: string) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      throw new InvalidArgumentException('Invalid email');
+      throw new InvalidArgumentException('Invalid email', 'Invalid email');
     }
 
     this.email = email;

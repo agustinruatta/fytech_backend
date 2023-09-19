@@ -15,6 +15,7 @@ export class UsersService {
     if ((await this.userRepository.countBy({ email: email })) > 0) {
       throw new InvalidArgumentException(
         'This email is already associated with another account',
+        'This email is already associated with another account',
       );
     }
 
