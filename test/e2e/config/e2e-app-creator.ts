@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../../../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { Connection, EntityManager } from 'typeorm';
-import { globalInterceptors, globalPipes } from '../../../src/main';
+import { globalPipes } from '../../../src/Shared/Config/GlobalPipesList';
+import { globalInterceptors } from '../../../src/Shared/Config/GlobalInterceptorsList';
 
 export default async function createAppToTest() {
   const moduleFixture: TestingModule = await Test.createTestingModule({
