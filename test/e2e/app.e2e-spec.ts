@@ -15,4 +15,18 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect({ status: 'OK' });
   });
+
+  it('does a ping', () => {
+    return request(app.getHttpServer())
+      .get('/ping')
+      .expect(200)
+      .expect({ status: 'OK' });
+  });
+
+  it('does a logged in ping', () => {
+    return request(app.getHttpServer())
+      .get('/logged-in-ping')
+      .expect(200)
+      .expect({ status: 'OK' });
+  });
 });
