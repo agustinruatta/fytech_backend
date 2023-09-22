@@ -22,6 +22,22 @@ describe('Auth (e2e)', () => {
         });
     });
 
+    it('fails because emails and password are missing', async () => {
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({})
+        .expect(400)
+        .expect({
+          message: [
+            'email must be an email',
+            'email should not be empty',
+            'password should not be empty',
+          ],
+          error: 'Bad Request',
+          statusCode: 400,
+        });
+    });
+
     it('signs in because password credentials are correct', async () => {
       await request(app.getHttpServer())
         .post('/users')
