@@ -36,20 +36,20 @@ describe('UsersService', () => {
   });
 
   describe('createUser', () => {
-    it('fails if email is invalid', () => {
+    it('fails if email is invalid', async () => {
       withNoPreviousUser();
 
-      expect(() =>
+      await expect(() =>
         usersService.createUser('invalid', 'password'),
       ).rejects.toThrow(
         new InvalidArgumentException('Invalid email', 'Invalid email'),
       );
     });
 
-    it('fails if there is a previous user with provided email', () => {
+    it('fails if there is a previous user with provided email', async () => {
       userRepository.countBy = () => Promise.resolve(1);
 
-      expect(() =>
+      await expect(() =>
         usersService.createUser('existent_user@gmail.com', 'password'),
       ).rejects.toThrow(
         new InvalidArgumentException(
