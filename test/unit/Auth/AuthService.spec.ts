@@ -2,12 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../../../src/Auth/AuthService';
 import { Repository } from 'typeorm';
 import { User } from '../../../src/Users/Entities/User';
-import { InvalidArgumentException } from '../../../src/Shared/Exceptions/InvalidArgumentException';
 import InvalidCredentialsException from '../../../src/Shared/Exceptions/InvalidCredentialsException';
+import { JwtService } from '@nestjs/jwt';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let userRepository: Repository<User>;
+  let jwtService: JwtService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -18,8 +19,9 @@ describe('AuthService', () => {
             userRepository =
               jest.createMockFromModule<Repository<User>>('typeorm');
             userRepository.save = jest.fn();
+            jwtService = jest.createMockFromModule<JwtService>('@nestjs/jwt');
 
-            return new AuthService(userRepository);
+            return new AuthService(userRepository, jwtService);
           },
         },
       ],
@@ -50,13 +52,17 @@ describe('AuthService', () => {
       ).rejects.toThrow(new InvalidCredentialsException());
     });
 
-    it('returns user if password is correct', async () => {
+    it('returns access token if password is correct', async () => {
       const user = new User('email@email.com', 'password');
-      userRepository.findOneBy = () => Promise.resolve(user);
 
-      expect(await authService.signIn('email@email.com', 'password')).toBe(
-        user,
-      );
+      userRepository.findOneBy = () => Promise.resolve(user);
+      jwtService.sign = () => 'token_123';
+
+      expect(
+        await authService.signIn('email@email.com', 'password'),
+      ).toStrictEqual({
+        accessToken: 'token_123',
+      });
     });
   });
 });

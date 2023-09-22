@@ -34,6 +34,10 @@ export class User implements Serializable {
     this.setPassword(password);
   }
 
+  public getId(): string | undefined {
+    return this.id;
+  }
+
   private setEmail(email: string) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {

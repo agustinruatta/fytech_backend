@@ -13,6 +13,10 @@ describe('User', () => {
       expect(user['hashedPassword']).not.toBe('password');
       expect(typeof user['hashedPassword']).toBe('string');
     });
+
+    it('returns the id', () => {
+      expect(user.getId()).toBeUndefined();
+    });
   });
 
   describe('isValidPassword', () => {
