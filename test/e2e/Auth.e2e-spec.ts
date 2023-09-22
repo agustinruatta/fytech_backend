@@ -48,7 +48,8 @@ describe('Auth (e2e)', () => {
         .send({ email: 'user@gmail.com', password: 'password' })
         .expect(200)
         .expect({
-          email: 'user@gmail.com',
+          access_token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwiaWF0IjoxNjk1MzUyMTAwLCJleHAiOjE2OTU5NTY5MDB9.LN4z_O1AQV9rChVEYIZ8WE8liGygEvY5X7KFo69V3xM',
         });
     });
   });
