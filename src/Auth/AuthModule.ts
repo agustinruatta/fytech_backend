@@ -6,6 +6,11 @@ import { User } from '../Users/Entities/User';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './AuthGuard';
 import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+function throwNoJwtKeyException(): any {
+  throw new Error('JWT_KEY environment variable not found');
+}
 
 @Module({
   controllers: [AuthController],
@@ -18,10 +23,15 @@ import { APP_GUARD } from '@nestjs/core';
   ],
   imports: [
     TypeOrmModule.forFeature([User]),
-    JwtModule.register({
-      global: true,
-      secret: 'TODO_CHANGE',
-      signOptions: { expiresIn: '60s' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        global: true,
+        secret:
+          configService.get<string>('JWT_SECRET') || throwNoJwtKeyException(),
+        signOptions: { expiresIn: '7 day' },
+      }),
+      inject: [ConfigService],
     }),
   ],
 })
