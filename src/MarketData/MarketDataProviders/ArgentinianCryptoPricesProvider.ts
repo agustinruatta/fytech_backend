@@ -1,6 +1,6 @@
 import { MarketDataProvider } from './MarketDataProvider';
-import { GetCurrentMarketDataResponse } from '../dto/GetCurrentMarketDataResponse';
-import GetCurrentMarketDataRequest from '../dto/GetCurrentMarketDataRequest';
+import { GetCurrentMarketDataResponse } from '../DTO/GetCurrentMarketDataResponse';
+import GetCurrentMarketDataRequest from '../DTO/GetCurrentMarketDataRequest';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import Money from '../../Money/Money';
