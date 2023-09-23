@@ -43,14 +43,12 @@ describe('Auth (e2e)', () => {
         .post('/users')
         .send({ email: 'user@gmail.com', password: 'password' });
 
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({ email: 'user@gmail.com', password: 'password' })
-        .expect(200)
-        .expect({
-          access_token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwiaWF0IjoxNjk1MzUyMTAwLCJleHAiOjE2OTU5NTY5MDB9.LN4z_O1AQV9rChVEYIZ8WE8liGygEvY5X7KFo69V3xM',
-        });
+        .expect(200);
+
+      expect(typeof response.body.access_token).toBe('string');
     });
   });
 });
