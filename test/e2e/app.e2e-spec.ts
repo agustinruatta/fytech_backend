@@ -23,9 +23,27 @@ describe('AppController (e2e)', () => {
       .expect({ status: 'OK' });
   });
 
-  it('does a logged in ping', () => {
+  it('fails if is trying to access protected route without authentication', () => {
     return request(app.getHttpServer())
       .get('/logged-in-ping')
+      .expect(401)
+      .expect({ message: 'Unauthorized', statusCode: 401 });
+  });
+
+  it('does a logged in ping', async () => {
+    //Create user
+    await request(app.getHttpServer())
+      .post('/users')
+      .send({ email: 'user@gmail.com', password: 'password' });
+
+    //SignIn
+    const response = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: 'user@gmail.com', password: 'password' });
+
+    return request(app.getHttpServer())
+      .get('/logged-in-ping')
+      .auth(response.body.access_token, { type: 'bearer' })
       .expect(200)
       .expect({ status: 'OK' });
   });
