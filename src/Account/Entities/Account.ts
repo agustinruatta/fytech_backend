@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -8,6 +9,7 @@ import {
 import Serializable from '../../Shared/Serialization/Serializable';
 import { User } from '../../Users/Entities/User';
 
+@Entity({ name: 'accounts' })
 export class Account implements Serializable {
   @PrimaryGeneratedColumn('uuid')
   private id: string | undefined;
