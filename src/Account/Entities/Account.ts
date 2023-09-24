@@ -1,10 +1,12 @@
 import {
   Column,
   CreateDateColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import Serializable from '../../Shared/Serialization/Serializable';
+import { User } from '../../Users/Entities/User';
 
 export class Account implements Serializable {
   @PrimaryGeneratedColumn('uuid')
@@ -15,6 +17,9 @@ export class Account implements Serializable {
    */
   @Column({ name: 'name' })
   public name: string;
+
+  @ManyToOne(() => User, (user) => user.accounts)
+  user: User;
 
   @CreateDateColumn({ name: 'created_at' })
   private createdAt: Date | undefined;

@@ -4,11 +4,13 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 import * as bcrypt from 'bcrypt';
 import { InvalidArgumentException } from '../../Shared/Exceptions/InvalidArgumentException';
 import Serializable from '../../Shared/Serialization/Serializable';
+import { Account } from '../../Account/Entities/Account';
 
 @Entity({ name: 'users' })
 export class User implements Serializable {
@@ -22,6 +24,9 @@ export class User implements Serializable {
 
   @Column({ name: 'hashed_password' })
   private hashedPassword: string;
+
+  @OneToMany(() => Account, (account) => account.user)
+  accounts: Account[] = [];
 
   @CreateDateColumn({ name: 'created_at' })
   private createdAt: Date | undefined;
@@ -57,6 +62,10 @@ export class User implements Serializable {
 
   public isValidPassword(password: string): Promise<boolean> {
     return bcrypt.compareSync(password, this.hashedPassword);
+  }
+
+  public addAccount(account: Account) {
+    this.accounts.push(account);
   }
 
   public getEmail(): string {
