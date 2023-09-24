@@ -7,7 +7,7 @@ import { UsersModule } from './Users/UsersModule';
 import { typeOrmAsyncConfig } from './Shared/Database/TypeORMConfig';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { AccountModule } from './Account/account.module';
+import { AccountModule } from './Account/AccountModule';
 
 @Module({
   imports: [

@@ -14,10 +14,26 @@ describe('Users (e2e)', () => {
     userRepository = app.get<Repository<User>>(getRepositoryToken(User));
   });
 
+  it('fails if body is empty', () => {
+    return request(app.getHttpServer())
+      .post('/users')
+      .send({})
+      .expect(400)
+      .expect({
+        message: ['email must be an email'],
+        error: 'Bad Request',
+        statusCode: 400,
+      });
+  });
+
   it('fails if email is invalid', () => {
     return request(app.getHttpServer())
       .post('/users')
-      .send({ email: 'invalid', password: 'password' })
+      .send({
+        email: 'invalid',
+        password: 'password',
+        'default-account-name': 'John Williams',
+      })
       .expect(400)
       .expect({
         message: ['email must be an email'],

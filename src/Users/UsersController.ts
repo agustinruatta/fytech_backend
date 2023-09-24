@@ -13,6 +13,7 @@ export class UsersController {
     return this.userService.createUser(
       createUserDTO.email,
       createUserDTO.password,
+      createUserDTO.defaultAccountName,
     );
   }
 }
