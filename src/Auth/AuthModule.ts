@@ -9,7 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 function throwNoJwtKeyException(): any {
-  throw new Error('JWT_KEY environment variable not found');
+  throw new Error('JWT_SECRET environment variable not found');
 }
 
 @Module({
