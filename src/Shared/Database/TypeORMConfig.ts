@@ -1,6 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { User } from '../../Users/Entities/User';
+import { Account } from '../../Account/Entities/Account';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -8,8 +9,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   useFactory: (configService: ConfigService) => ({
     type: 'postgres',
     url: configService.get('DB_URL'),
-    //autoLoadEntities: true,
-    entities: [User],
+    entities: [User, Account],
     entitySkipConstructor: true,
     synchronize: false,
   }),
