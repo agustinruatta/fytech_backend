@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import createAppToTest from './config/e2e-app-creator';
+import Helpers from './Helpers';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -32,18 +33,11 @@ describe('AppController (e2e)', () => {
 
   it('does a logged in ping', async () => {
     //Create user
-    await request(app.getHttpServer())
-      .post('/users')
-      .send({ email: 'user@gmail.com', password: 'password' });
-
-    //SignIn
-    const response = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({ email: 'user@gmail.com', password: 'password' });
+    const accessToken = await Helpers.signIn(app);
 
     return request(app.getHttpServer())
       .get('/logged-in-ping')
-      .auth(response.body.access_token, { type: 'bearer' })
+      .auth(accessToken, { type: 'bearer' })
       .expect(200)
       .expect({ status: 'OK' });
   });

@@ -4,6 +4,7 @@ import createAppToTest from './config/e2e-app-creator';
 import { Repository } from 'typeorm';
 import { User } from '../../src/Users/Entities/User';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import Helpers from "./Helpers";
 
 describe('Users (e2e)', () => {
   let app: INestApplication;
@@ -48,15 +49,7 @@ describe('Users (e2e)', () => {
   });
 
   it('creates new user', async () => {
-    await request(app.getHttpServer())
-      .post('/users')
-      .send({
-        email: 'user@gmail.com',
-        password: 'password',
-        defaultAccountName: 'John Williams',
-      })
-      .expect(201)
-      .expect({ email: 'user@gmail.com' });
+    await Helpers.registerUser(app);
 
     const users = await userRepository.find();
 
@@ -65,11 +58,7 @@ describe('Users (e2e)', () => {
 
   it('fails if user has registered previously', async () => {
     //Creates user for first time
-    await request(app.getHttpServer()).post('/users').send({
-      email: 'user@gmail.com',
-      password: 'password',
-      defaultAccountName: 'John Williams',
-    });
+    await Helpers.registerUser(app);
 
     await request(app.getHttpServer())
       .post('/users')
