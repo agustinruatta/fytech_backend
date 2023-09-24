@@ -20,7 +20,12 @@ describe('Users (e2e)', () => {
       .send({})
       .expect(400)
       .expect({
-        message: ['email must be an email'],
+        message: [
+          'email must be an email',
+          'email should not be empty',
+          'password should not be empty',
+          'defaultAccountName should not be empty',
+        ],
         error: 'Bad Request',
         statusCode: 400,
       });
@@ -32,7 +37,7 @@ describe('Users (e2e)', () => {
       .send({
         email: 'invalid',
         password: 'password',
-        'default-account-name': 'John Williams',
+        defaultAccountName: 'John Williams',
       })
       .expect(400)
       .expect({
@@ -45,7 +50,11 @@ describe('Users (e2e)', () => {
   it('creates new user', async () => {
     await request(app.getHttpServer())
       .post('/users')
-      .send({ email: 'user@gmail.com', password: 'password' })
+      .send({
+        email: 'user@gmail.com',
+        password: 'password',
+        defaultAccountName: 'John Williams',
+      })
       .expect(201)
       .expect({ email: 'user@gmail.com' });
 
@@ -56,13 +65,19 @@ describe('Users (e2e)', () => {
 
   it('fails if user has registered previously', async () => {
     //Creates user for first time
-    await request(app.getHttpServer())
-      .post('/users')
-      .send({ email: 'user@gmail.com', password: 'password' });
+    await request(app.getHttpServer()).post('/users').send({
+      email: 'user@gmail.com',
+      password: 'password',
+      defaultAccountName: 'John Williams',
+    });
 
     await request(app.getHttpServer())
       .post('/users')
-      .send({ email: 'user@gmail.com', password: 'anotherPassword' })
+      .send({
+        email: 'user@gmail.com',
+        password: 'anotherPassword',
+        defaultAccountName: 'John Williams',
+      })
       .expect(400)
       .expect({
         message: ['This email is already associated with another account'],
