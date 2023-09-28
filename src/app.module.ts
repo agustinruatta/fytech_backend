@@ -8,6 +8,7 @@ import { typeOrmAsyncConfig } from './Shared/Database/TypeORMConfig';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './Account/AccountModule';
+import { TransactionModule } from './Transaction/transaction.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AccountModule } from './Account/AccountModule';
     AuthModule,
     UsersModule,
     AccountModule,
+    TransactionModule,
   ],
   controllers: [AppController],
 })
