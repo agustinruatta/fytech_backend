@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { InvalidArgumentException } from '../../Shared/Exceptions/InvalidArgumentException';
 
 export abstract class InvestmentTransaction implements Serializable {
   @PrimaryGeneratedColumn('uuid')
@@ -17,10 +18,10 @@ export abstract class InvestmentTransaction implements Serializable {
   account: Account;
 
   @Column({ name: 'code' })
-  private readonly code: string;
+  private code: string;
 
   @Column({ name: 'amount' })
-  private readonly amount: number;
+  private amount: number;
 
   @Column({ name: 'money' })
   private money: Money;
@@ -42,10 +43,30 @@ export abstract class InvestmentTransaction implements Serializable {
     datetime: Date,
   ) {
     this.account = account;
-    this.code = code;
-    this.amount = amount;
+    this.setCode(code);
+    this.setAmount(amount);
     this.money = money;
     this.datetime = datetime;
+  }
+
+  private setCode(code: string) {
+    if (code.trim() === '') {
+      throw new InvalidArgumentException(
+        'Code must not be empty',
+        'Code must not be empty',
+      );
+    }
+
+    this.code = code;
+  }
+
+  private setAmount(amount: number) {
+    if (amount < 0) {
+      throw new InvalidArgumentException(
+        'Amount must be greater or equal than 0',
+        'Amount must be greater or equal than 0',
+      );
+    }
   }
 
   serialize(): object {

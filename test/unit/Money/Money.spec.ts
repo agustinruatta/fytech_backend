@@ -8,20 +8,20 @@ describe('Money', () => {
       expect(money).toBeDefined();
     });
 
-    it('raises exception if invalid string because has two decimal points', async () => {
-      await expect(() => Money.newFromString('255.365.6', 'USD')).toThrow(
+    it('raises exception if invalid string because has two decimal points', () => {
+      expect(() => Money.newFromString('255.365.6', 'USD')).toThrow(
         new Error('Invalid amount'),
       );
     });
 
-    it('raises exception if empty string', async () => {
-      await expect(() => Money.newFromString('', 'USD')).toThrow(
+    it('raises exception if empty string', () => {
+      expect(() => Money.newFromString('', 'USD')).toThrow(
         new Error('Amount must not be an empty string'),
       );
     });
 
-    it('raises exception if empty currency', async () => {
-      await expect(() => Money.newFromString('100', '')).toThrow(
+    it('raises exception if empty currency', () => {
+      expect(() => Money.newFromString('100', '')).toThrow(
         new Error('Currency must not be empty'),
       );
     });
