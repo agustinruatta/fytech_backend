@@ -52,10 +52,13 @@ describe('Users (e2e)', () => {
     await Helpers.registerUser(app);
 
     const users = await userRepository.find();
+    const lastUser = users[users.length - 1];
 
-    expect(users[users.length - 1].getEmail()).toBe('user@gmail.com');
+    //Check user is saved
+    expect(lastUser.getEmail()).toBe('user@gmail.com');
+
     //Check if account is saved
-    expect(false).toBe(true);
+    expect(lastUser.accounts[0].getName()).toBe('John Williams');
   });
 
   it('fails if user has registered previously', async () => {
