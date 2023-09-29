@@ -69,6 +69,8 @@ export abstract class InvestmentTransaction implements Serializable {
         'Amount must be greater or equal than 0',
       );
     }
+
+    this.amount = amount;
   }
 
   serialize(): object {
