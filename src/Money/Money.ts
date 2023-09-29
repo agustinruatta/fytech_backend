@@ -41,6 +41,11 @@ export default class Money {
     if (isNaN(money.value)) {
       throw new Error('Invalid amount');
     }
+
+    if (money.value < 0) {
+      throw new Error('Amount must not be negative');
+    }
+
     return new Money(money, currencySymbol);
   }
 

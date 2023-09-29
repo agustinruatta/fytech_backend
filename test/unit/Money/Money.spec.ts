@@ -25,6 +25,12 @@ describe('Money', () => {
         new Error('Currency must not be empty'),
       );
     });
+
+    it('raises exception if amount is negative', () => {
+      expect(() => Money.newFromString('-100', 'USD')).toThrow(
+        new Error('Amount must not be negative'),
+      );
+    });
   });
 
   describe('add', () => {
