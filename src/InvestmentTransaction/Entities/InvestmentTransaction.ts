@@ -1,17 +1,38 @@
 import { Account } from '../../Account/Entities/Account';
 import Money from '../../Money/Money';
 import Serializable from '../../Shared/Serialization/Serializable';
+import {
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export abstract class InvestmentTransaction implements Serializable {
-  private account: Account;
+  @PrimaryGeneratedColumn('uuid')
+  private id: string | undefined;
 
-  private code: string;
+  @ManyToOne(() => Account, (account) => account.investmentTransactions)
+  account: Account;
 
-  private amount: number;
+  @Column({ name: 'code' })
+  private readonly code: string;
 
+  @Column({ name: 'amount' })
+  private readonly amount: number;
+
+  @Column({ name: 'money' })
   private money: Money;
 
-  private datetime: Date;
+  @Column({ name: 'datetime' })
+  private readonly datetime: Date;
+
+  @CreateDateColumn({ name: 'created_at' })
+  private createdAt: Date | undefined;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  private updatedAt: Date | undefined;
 
   protected constructor(
     account: Account,

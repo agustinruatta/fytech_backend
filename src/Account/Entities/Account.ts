@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import Serializable from '../../Shared/Serialization/Serializable';
 import { User } from '../../Users/Entities/User';
+import { InvestmentTransaction } from '../../InvestmentTransaction/Entities/InvestmentTransaction';
 
 @Entity({ name: 'accounts' })
 export class Account implements Serializable {
@@ -22,6 +24,12 @@ export class Account implements Serializable {
 
   @ManyToOne(() => User, (user) => user.accounts)
   user: User;
+
+  @OneToMany(
+    () => InvestmentTransaction,
+    (investmentTransaction) => investmentTransaction.account,
+  )
+  investmentTransactions: InvestmentTransaction[] = [];
 
   @CreateDateColumn({ name: 'created_at' })
   private createdAt: Date | undefined;
