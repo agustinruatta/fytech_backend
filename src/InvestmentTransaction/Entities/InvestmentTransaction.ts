@@ -4,12 +4,14 @@ import Serializable from '../../Shared/Serialization/Serializable';
 import {
   Column,
   CreateDateColumn,
+  Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { InvalidArgumentException } from '../../Shared/Exceptions/InvalidArgumentException';
 
+@Entity({ name: 'investment_transactions' })
 export abstract class InvestmentTransaction implements Serializable {
   @PrimaryGeneratedColumn('uuid')
   private id: string | undefined;
@@ -23,7 +25,7 @@ export abstract class InvestmentTransaction implements Serializable {
   @Column({ name: 'amount' })
   private amount: number;
 
-  @Column({ name: 'money' })
+  @Column(() => Money)
   private money: Money;
 
   @Column({ name: 'datetime' })

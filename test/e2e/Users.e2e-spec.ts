@@ -4,7 +4,7 @@ import createAppToTest from './config/e2e-app-creator';
 import { Repository } from 'typeorm';
 import { User } from '../../src/Users/Entities/User';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import Helpers from "./Helpers";
+import Helpers from './Helpers';
 
 describe('Users (e2e)', () => {
   let app: INestApplication;
@@ -54,6 +54,8 @@ describe('Users (e2e)', () => {
     const users = await userRepository.find();
 
     expect(users[users.length - 1].getEmail()).toBe('user@gmail.com');
+    //Check if account is saved
+    expect(false).toBe(true);
   });
 
   it('fails if user has registered previously', async () => {

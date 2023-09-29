@@ -46,10 +46,10 @@ describe('Money', () => {
       expect(result).toStrictEqual(Money.newFromString('300', 'ARS'));
     });
 
-    it('raise an error if currencies are different', async () => {
-      await expect(() =>
-        initialMoney.add(Money.newFromString('200', 'USD')),
-      ).toThrow(new Error("Parameter's currency must be ARS"));
+    it('raise an error if currencies are different', () => {
+      expect(() => initialMoney.add(Money.newFromString('200', 'USD'))).toThrow(
+        new Error("Parameter's currency must be ARS"),
+      );
     });
   });
 
@@ -60,10 +60,22 @@ describe('Money', () => {
       initialMoney = Money.newFromString('100', 'USD');
     });
 
-    it('divide by two', () => {
+    it('even number divide by two', () => {
       const result = initialMoney.divide(2);
 
       expect(result).toStrictEqual(Money.newFromString('50', 'USD'));
+    });
+
+    it('odd number divide by two', () => {
+      const result = Money.newFromString('25', 'USD').divide(2);
+
+      expect(result).toStrictEqual(Money.newFromString('12.5', 'USD'));
+    });
+
+    it('number division is a rational number', () => {
+      const result = Money.newFromString('7', 'USD').divide(9);
+
+      expect(result).toStrictEqual(Money.newFromString('0.78', 'USD'));
     });
   });
 

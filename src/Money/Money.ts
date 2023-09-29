@@ -1,28 +1,18 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const currency = require('currency.js');
-import currencyNamespace from 'currency.js';
-
-interface currencyLibObject {
-  add(number: currencyNamespace.Any): currencyLibObject;
-  subtract(number: currencyNamespace.Any): currencyLibObject;
-  multiply(number: currencyNamespace.Any): currencyLibObject;
-  divide(number: currencyNamespace.Any): currencyLibObject;
-  distribute(count: number): Array<currencyLibObject>;
-  dollars(): number;
-  cents(): number;
-  format(opts?: currencyNamespace.Options | currencyNamespace.Format): string;
-  toString(): string;
-  toJSON(): number;
-  readonly intValue: number;
-  readonly value: number;
-}
+import { Column } from 'typeorm';
 
 export default class Money {
-  private readonly internalMoney: currencyLibObject;
+  private readonly PRECISION = 2;
+
+  @Column({ name: 'money_cents' })
+  private readonly cents: number;
+
+  @Column({ name: 'money_currency' })
   private readonly currency: string;
 
-  constructor(internalMoney: currencyLibObject, currency: string) {
-    this.internalMoney = internalMoney;
+  private constructor(cents: number, currency: string) {
+    this.cents = cents;
     this.currency = currency;
   }
 
@@ -38,6 +28,7 @@ export default class Money {
     }
 
     const money = currency(amount, { errorOnInvalid: true, precision: 2 });
+
     if (isNaN(money.value)) {
       throw new Error('Invalid amount');
     }
@@ -46,7 +37,7 @@ export default class Money {
       throw new Error('Amount must not be negative');
     }
 
-    return new Money(money, currencySymbol);
+    return new Money(money.intValue, currencySymbol);
   }
 
   add(other: Money): Money {
@@ -54,15 +45,17 @@ export default class Money {
       throw new Error(`Parameter's currency must be ${this.currency}`);
     }
 
-    return new Money(
-      this.internalMoney.add(other.internalMoney),
-      this.currency,
-    );
+    return new Money(this.cents + other.cents, this.currency);
   }
 
   divide(number: number): Money {
-    //TODO: there's some problems when you divide 5/2, because it rounds
-    return new Money(this.internalMoney.divide(number), this.currency);
+    //TODO: there's some problems when you divide 7/8, because it rounds
+    const internalMoney = currency(this.cents, {
+      precision: 2,
+      fromCents: true,
+    });
+
+    return new Money(internalMoney.divide(number).intValue, this.currency);
   }
 
   serialize(): {
@@ -71,9 +64,9 @@ export default class Money {
     floatValue: number;
   } {
     return {
-      cents: this.internalMoney.intValue,
+      cents: this.cents,
       currency: this.currency,
-      floatValue: this.internalMoney.value,
+      floatValue: this.cents / Math.pow(10, this.PRECISION),
     };
   }
 }
