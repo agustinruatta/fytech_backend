@@ -73,7 +73,7 @@ describe('UsersService', () => {
       );
 
       expect(user.getEmail()).toBe('email@gmail.com');
-      expect(user.accounts[0].getName()).toBe('John Williams');
+      expect((await user.accounts)[0].getName()).toBe('John Williams');
     });
   });
 });
