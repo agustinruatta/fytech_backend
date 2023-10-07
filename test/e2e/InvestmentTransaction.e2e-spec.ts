@@ -9,6 +9,7 @@ import Helpers from './Helpers';
 describe('InvestmentTransaction (e2e)', () => {
   let app: INestApplication;
   let investmentTransactionRepository: Repository<InvestmentTransaction>;
+  const actions = ['buy', 'sell'];
 
   beforeAll(async () => {
     app = await createAppToTest();
@@ -17,25 +18,27 @@ describe('InvestmentTransaction (e2e)', () => {
     >(getRepositoryToken(InvestmentTransaction));
   });
 
-  it('fails if body is empty', async () => {
-    const accessToken = await Helpers.signIn(app);
+  actions.forEach((action) => {
+    it('fails if body is empty', async () => {
+      const accessToken = await Helpers.signIn(app);
 
-    return request(app.getHttpServer())
-      .post('/investment-transaction')
-      .auth(accessToken, { type: 'bearer' })
-      .send({})
-      .expect(400)
-      .expect({
-        message: [
-          'accountId should not be empty',
-          'code should not be empty',
-          'amount should not be empty',
-          'money should not be empty',
-          'datetime must be a Date instance',
-          'datetime should not be empty',
-        ],
-        error: 'Bad Request',
-        statusCode: 400,
-      });
+      return request(app.getHttpServer())
+        .post('/investment-transaction/' + action)
+        .auth(accessToken, { type: 'bearer' })
+        .send({})
+        .expect(400)
+        .expect({
+          message: [
+            'accountId should not be empty',
+            'code should not be empty',
+            'amount should not be empty',
+            'money should not be empty',
+            'datetime must be a Date instance',
+            'datetime should not be empty',
+          ],
+          error: 'Bad Request',
+          statusCode: 400,
+        });
+    });
   });
 });

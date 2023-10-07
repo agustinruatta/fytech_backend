@@ -8,8 +8,13 @@ export class InvestmentTransactionController {
     private readonly transactionService: InvestmentTransactionService,
   ) {}
 
-  @Post()
-  create(@Body() createTransactionDto: CreateInvestmentTransactionDTO) {
+  @Post('/buy')
+  buy(@Body() createTransactionDto: CreateInvestmentTransactionDTO) {
+    return this.transactionService.create(createTransactionDto);
+  }
+
+  @Post('/sell')
+  sell(@Body() createTransactionDto: CreateInvestmentTransactionDTO) {
     return this.transactionService.create(createTransactionDto);
   }
 }
