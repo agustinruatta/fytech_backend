@@ -22,6 +22,7 @@ export class CreateInvestmentTransactionDTO {
   @Type(() => Money)
   private money: Money;
 
+  @Type(() => Date)
   @IsNotEmpty()
   @IsDate()
   @ApiProperty()

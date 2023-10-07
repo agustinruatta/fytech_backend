@@ -20,11 +20,11 @@ describe('InvestmentTransaction (e2e)', () => {
 
   actions.forEach((action) => {
     it('fails if body is empty', async () => {
-      const accessToken = await Helpers.signIn(app);
+      const signInData = await Helpers.signIn(app);
 
       return request(app.getHttpServer())
         .post('/investment-transaction/' + action)
-        .auth(accessToken, { type: 'bearer' })
+        .auth(signInData.accessToken, { type: 'bearer' })
         .send({})
         .expect(400)
         .expect({
@@ -39,6 +39,26 @@ describe('InvestmentTransaction (e2e)', () => {
           error: 'Bad Request',
           statusCode: 400,
         });
+    });
+
+    it('creates it', async () => {
+      const signInData = await Helpers.signIn(app);
+
+      return request(app.getHttpServer())
+        .post('/investment-transaction/' + action)
+        .auth(signInData.accessToken, { type: 'bearer' })
+        .send({
+          accountId: (await signInData.user.accounts)[0].getId(),
+          code: 'BTC',
+          amount: 150,
+          money: {
+            cents: 10000,
+            currency: 'USD',
+          },
+          datetime: '2023-10-07T11:00:00.000Z',
+        })
+        .expect({})
+        .expect(200);
     });
   });
 });

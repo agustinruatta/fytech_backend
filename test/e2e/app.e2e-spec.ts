@@ -33,11 +33,11 @@ describe('AppController (e2e)', () => {
 
   it('does a logged in ping', async () => {
     //Create user
-    const accessToken = await Helpers.signIn(app);
+    const signInData = await Helpers.signIn(app);
 
     return request(app.getHttpServer())
       .get('/logged-in-ping')
-      .auth(accessToken, { type: 'bearer' })
+      .auth(signInData.accessToken, { type: 'bearer' })
       .expect(200)
       .expect({ status: 'OK' });
   });
