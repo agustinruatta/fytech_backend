@@ -58,7 +58,7 @@ describe('Users (e2e)', () => {
     expect(lastUser.getEmail()).toBe('user@gmail.com');
 
     //Check if account is saved
-    expect(lastUser.accounts[0].getName()).toBe('John Williams');
+    expect((await lastUser.accounts)[0].getName()).toBe('John Williams');
   });
 
   it('fails if user has registered previously', async () => {

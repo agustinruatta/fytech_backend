@@ -51,11 +51,11 @@ describe('User', () => {
   });
 
   describe('addAccount', () => {
-    it('adds a new account', () => {
+    it('adds a new account', async () => {
       const account = new Account('Some Name');
 
       const user = new User('test@gmail.com', 'password');
-      user.addAccount(account);
+      await user.addAccount(account);
 
       expect(user.accounts).toStrictEqual([account]);
     });

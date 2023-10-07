@@ -26,7 +26,7 @@ export class User implements Serializable {
   private hashedPassword: string;
 
   @OneToMany(() => Account, (account) => account.user, { cascade: true })
-  accounts: Account[] = [];
+  accounts: Promise<Account[]>;
 
   @CreateDateColumn({ name: 'created_at' })
   private createdAt: Date | undefined;
@@ -64,8 +64,8 @@ export class User implements Serializable {
     return bcrypt.compareSync(password, this.hashedPassword);
   }
 
-  public addAccount(account: Account) {
-    this.accounts.push(account);
+  public async addAccount(account: Account) {
+    (await this.accounts).push(account);
   }
 
   public getEmail(): string {

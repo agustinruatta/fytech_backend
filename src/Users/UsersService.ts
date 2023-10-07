@@ -25,7 +25,7 @@ export class UsersService {
     }
 
     const user = new User(email, password);
-    user.addAccount(new Account(defaultAccountName));
+    await user.addAccount(new Account(defaultAccountName));
 
     return this.userRepository.save(user);
   }
