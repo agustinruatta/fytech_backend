@@ -13,6 +13,7 @@ export class CreateInvestmentTransaction1695952348361
            amount         float                                                         NOT NULL,
            money_cents    int                                                           NOT NULL,
            money_currency character varying                                             NOT NULL,
+           type           character varying                                             NOT NULL,
            datetime       timestamp without time zone                                   NOT NULL,
            created_at     timestamp without time zone DEFAULT now()                     NOT NULL,
            updated_at     timestamp without time zone DEFAULT now()                     NOT NULL,

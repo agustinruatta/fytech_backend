@@ -7,11 +7,13 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  TableInheritance,
   UpdateDateColumn,
 } from 'typeorm';
 import { InvalidArgumentException } from '../../Shared/Exceptions/InvalidArgumentException';
 
 @Entity({ name: 'investment_transactions' })
+@TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export abstract class InvestmentTransaction implements Serializable {
   @PrimaryGeneratedColumn('uuid')
   private id: string | undefined;
