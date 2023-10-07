@@ -25,7 +25,7 @@ export class User implements Serializable {
   @Column({ name: 'hashed_password' })
   private hashedPassword: string;
 
-  @OneToMany(() => Account, (account) => account.user)
+  @OneToMany(() => Account, (account) => account.user, { cascade: true })
   accounts: Account[] = [];
 
   @CreateDateColumn({ name: 'created_at' })

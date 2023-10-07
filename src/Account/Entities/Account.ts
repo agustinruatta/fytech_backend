@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -23,6 +24,7 @@ export class Account implements Serializable {
   public name: string;
 
   @ManyToOne(() => User, (user) => user.accounts)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @OneToMany(
