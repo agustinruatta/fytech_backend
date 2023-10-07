@@ -26,7 +26,7 @@ export class User implements Serializable {
   private hashedPassword: string;
 
   @OneToMany(() => Account, (account) => account.user, { cascade: true })
-  accounts: Promise<Account[]>;
+  accounts: Promise<Account[]> = Promise.resolve([]);
 
   @CreateDateColumn({ name: 'created_at' })
   private createdAt: Date | undefined;

@@ -57,7 +57,7 @@ describe('User', () => {
       const user = new User('test@gmail.com', 'password');
       await user.addAccount(account);
 
-      expect(user.accounts).toStrictEqual([account]);
+      expect(await user.accounts).toStrictEqual([account]);
     });
   });
 });
