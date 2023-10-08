@@ -9,6 +9,10 @@ import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './PublicRouteDecorator';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../Users/Entities/User';
+import { Repository } from 'typeorm';
+import { CurrentUserService } from './CurrentUserService';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,6 +20,8 @@ export class AuthGuard implements CanActivate {
     private jwtService: JwtService,
     private reflector: Reflector,
     private configService: ConfigService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -34,9 +40,17 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      request['user'] = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get<string>('JWT_SECRET'),
-      });
+      const userData: { email: string } = await this.jwtService.verifyAsync(
+        token,
+        {
+          secret: this.configService.get<string>('JWT_SECRET'),
+        },
+      );
+
+      //TODO: There is a possible vulnerability if in the middle another user set this email as own
+      CurrentUserService.init(
+        await this.userRepository.findOneByOrFail({ email: userData.email }),
+      );
     } catch {
       throw new UnauthorizedException();
     }

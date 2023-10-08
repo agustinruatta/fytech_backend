@@ -3,10 +3,11 @@ import { InvestmentTransactionController } from './InvestmentTransactionControll
 import { InvestmentTransactionService } from './InvestmentTransactionService';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InvestmentTransaction } from './Entities/InvestmentTransaction';
+import { CurrentUserService } from '../Auth/CurrentUserService';
 
 @Module({
   imports: [TypeOrmModule.forFeature([InvestmentTransaction])],
   controllers: [InvestmentTransactionController],
-  providers: [InvestmentTransactionService],
+  providers: [InvestmentTransactionService, CurrentUserService],
 })
 export class InvestmentTransactionModule {}

@@ -10,11 +10,11 @@ export class InvestmentTransactionController {
 
   @Post('/buy')
   buy(@Body() createTransactionDto: CreateInvestmentTransactionDTO) {
-    return this.transactionService.create(createTransactionDto);
+    return this.transactionService.buy(createTransactionDto);
   }
 
   @Post('/sell')
   sell(@Body() createTransactionDto: CreateInvestmentTransactionDTO) {
-    return this.transactionService.create(createTransactionDto);
+    return this.transactionService.sell(createTransactionDto);
   }
 }
