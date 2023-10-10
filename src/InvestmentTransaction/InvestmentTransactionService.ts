@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InvestmentTransaction } from './Entities/InvestmentTransaction';
 import { CurrentUserService } from '../Auth/CurrentUserService';
+import { InvalidArgumentException } from '../Shared/Exceptions/InvalidArgumentException';
 
 @Injectable()
 export class InvestmentTransactionService {
@@ -14,10 +15,16 @@ export class InvestmentTransactionService {
   ) {}
 
   buy(createTransactionDto: CreateInvestmentTransactionDTO) {
-    return 'This action buys a new transaction';
+    throw new InvalidArgumentException(
+      'Account id ' + createTransactionDto.accountId + 'not found',
+      "You don't have permissions to use sent account id",
+    );
   }
 
   sell(createTransactionDto: CreateInvestmentTransactionDTO) {
-    return 'This action sells a new transaction';
+    throw new InvalidArgumentException(
+      'Account id ' + createTransactionDto.accountId + 'not found',
+      "You don't have permissions to use sent account id",
+    );
   }
 }

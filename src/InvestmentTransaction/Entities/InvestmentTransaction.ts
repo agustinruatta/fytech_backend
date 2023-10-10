@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   TableInheritance,
@@ -19,6 +20,7 @@ export abstract class InvestmentTransaction implements Serializable {
   private id: string | undefined;
 
   @ManyToOne(() => Account, (account) => account.investmentTransactions)
+  @JoinColumn({ name: 'account_id' })
   account: Account;
 
   @Column({ name: 'code' })
@@ -27,14 +29,14 @@ export abstract class InvestmentTransaction implements Serializable {
   @Column({ name: 'amount' })
   private amount: number;
 
-  @Column(() => Money)
+  @Column(() => Money, { prefix: '' })
   private money: Money;
 
   @Column({ name: 'datetime' })
   private readonly datetime: Date;
 
   @CreateDateColumn({ name: 'created_at' })
-  private createdAt: Date | undefined;
+  public createdAt: Date | undefined;
 
   @UpdateDateColumn({ name: 'updated_at' })
   private updatedAt: Date | undefined;
@@ -77,6 +79,7 @@ export abstract class InvestmentTransaction implements Serializable {
 
   serialize(): object {
     return {
+      accountId: this.account.getId(),
       code: this.code,
       amount: this.amount,
       money: this.money.serialize(),
