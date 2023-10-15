@@ -6,7 +6,6 @@ import { InvestmentTransaction } from '../../src/InvestmentTransaction/Entities/
 import { getRepositoryToken } from '@nestjs/typeorm';
 import Helpers from './Helpers';
 import BuyInvestmentTransaction from '../../src/InvestmentTransaction/Entities/BuyInvestmentTransaction';
-import Money from '../../src/Money/Money';
 import SellInvestmentTransaction from '../../src/InvestmentTransaction/Entities/SellInvestmentTransaction';
 
 describe('InvestmentTransaction (e2e)', () => {
