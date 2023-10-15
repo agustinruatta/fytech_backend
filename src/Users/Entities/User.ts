@@ -17,7 +17,7 @@ export class User implements Serializable {
   private readonly SALT_ROUNDS = 10;
 
   @PrimaryGeneratedColumn('uuid')
-  private id: string | undefined;
+  public id: string | undefined;
 
   @Column({ name: 'email' })
   public email: string;

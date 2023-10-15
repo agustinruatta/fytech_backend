@@ -1,7 +1,11 @@
 import { IsNotEmpty, ValidateNested, IsDate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import Money from '../../Money/Money';
 import { Type } from 'class-transformer';
+
+class Money {
+  amount: string;
+  currency: string;
+}
 
 export class CreateInvestmentTransactionDTO {
   @IsNotEmpty()
@@ -20,11 +24,11 @@ export class CreateInvestmentTransactionDTO {
   @ApiProperty()
   @ValidateNested()
   @Type(() => Money)
-  private money: Money;
+  public readonly money: Money;
 
   @Type(() => Date)
   @IsNotEmpty()
   @IsDate()
   @ApiProperty()
-  private readonly datetime: Date;
+  readonly datetime: Date;
 }

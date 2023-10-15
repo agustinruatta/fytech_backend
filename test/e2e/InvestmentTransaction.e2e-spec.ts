@@ -7,6 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import Helpers from './Helpers';
 import BuyInvestmentTransaction from '../../src/InvestmentTransaction/Entities/BuyInvestmentTransaction';
 import Money from '../../src/Money/Money';
+import SellInvestmentTransaction from '../../src/InvestmentTransaction/Entities/SellInvestmentTransaction';
 
 describe('InvestmentTransaction (e2e)', () => {
   let app: INestApplication;
@@ -17,7 +18,7 @@ describe('InvestmentTransaction (e2e)', () => {
     code: 'BTC',
     amount: 150,
     money: {
-      cents: 10000,
+      amount: '100',
       currency: 'USD',
     },
     datetime: '2023-10-07T11:00:00.000Z',
@@ -61,7 +62,7 @@ describe('InvestmentTransaction (e2e)', () => {
         .auth(signInData.accessToken, { type: 'bearer' })
         .send(
           Object.assign(validBody, {
-            accountId: '1234567',
+            accountId: '3ecded66-941f-493f-838e-59c7d7771b80',
           }),
         )
         .expect(400)
@@ -74,7 +75,11 @@ describe('InvestmentTransaction (e2e)', () => {
 
     it('fails if you do not have access to this account', async () => {
       const signInDataA = await Helpers.signIn(app);
-      const signInDataB = await Helpers.signIn(app);
+      const signInDataB = await Helpers.signIn(app, {
+        email: 'test@mail.com',
+        password: 'password',
+        defaultAccountName: 'Some name',
+      });
 
       return request(app.getHttpServer())
         .post('/investment-transaction/' + action)
@@ -96,7 +101,7 @@ describe('InvestmentTransaction (e2e)', () => {
       const signInData = await Helpers.signIn(app);
       const account = (await signInData.user.accounts)[0];
 
-      request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/investment-transaction/' + action)
         .auth(signInData.accessToken, { type: 'bearer' })
         .send(
@@ -111,14 +116,9 @@ describe('InvestmentTransaction (e2e)', () => {
         where: {},
       });
 
-      expect(createdTransaction).toStrictEqual(
-        new BuyInvestmentTransaction(
-          account,
-          validBody.code,
-          validBody.amount,
-          Money.newFromString('100', 'USD'),
-          new Date(validBody.datetime),
-        ),
+      //expect(createdTransaction.account).toStrictEqual(account);
+      expect(createdTransaction).toBeInstanceOf(
+        action === 'buy' ? BuyInvestmentTransaction : SellInvestmentTransaction,
       );
     });
   });

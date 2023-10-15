@@ -5,28 +5,36 @@ import { User } from '../../src/Users/Entities/User';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 export default class Helpers {
-  static async registerUser(app: INestApplication) {
-    await request(app.getHttpServer()).post('/users').send({
+  static async registerUser(
+    app: INestApplication,
+    defaultData = {
       email: 'user@gmail.com',
       password: 'password',
       defaultAccountName: 'John Williams',
-    });
+    },
+  ) {
+    await request(app.getHttpServer()).post('/users').send(defaultData);
   }
 
   static async signIn(
     app: INestApplication,
+    defaultData = {
+      email: 'user@gmail.com',
+      password: 'password',
+      defaultAccountName: 'John Williams',
+    },
   ): Promise<{ accessToken: string; user: User }> {
-    await this.registerUser(app);
+    await this.registerUser(app, defaultData);
 
     return {
       accessToken: (
         await request(app.getHttpServer())
           .post('/auth/login')
-          .send({ email: 'user@gmail.com', password: 'password' })
+          .send({ email: defaultData.email, password: defaultData.password })
       ).body.access_token,
       user: await app
         .get<Repository<User>>(getRepositoryToken(User))
-        .findOneBy({ email: 'user@gmail.com' }),
+        .findOneBy({ email: defaultData.email }),
     };
   }
 }

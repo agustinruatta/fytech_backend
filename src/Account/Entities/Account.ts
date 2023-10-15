@@ -15,7 +15,7 @@ import { InvestmentTransaction } from '../../InvestmentTransaction/Entities/Inve
 @Entity({ name: 'accounts' })
 export class Account implements Serializable {
   @PrimaryGeneratedColumn('uuid')
-  private id: string | undefined;
+  public id: string | undefined;
 
   /**
    * This is the account name. It could be a person's name, or maybe a legal/company person
@@ -25,7 +25,7 @@ export class Account implements Serializable {
 
   @ManyToOne(() => User, (user) => user.accounts)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  public user: User;
 
   @OneToMany(
     () => InvestmentTransaction,
