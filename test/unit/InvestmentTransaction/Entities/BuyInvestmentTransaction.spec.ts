@@ -41,8 +41,8 @@ describe('BuyInvestmentTransaction', () => {
       now,
     );
 
-    it('serializes correctly', () => {
-      expect(buyInvestmentTransaction.serialize()).toStrictEqual({
+    it('serializes correctly', async () => {
+      expect(await buyInvestmentTransaction.serialize()).toStrictEqual({
         code: 'META',
         amount: 1,
         money: money.serialize(),

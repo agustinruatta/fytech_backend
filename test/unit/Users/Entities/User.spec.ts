@@ -43,10 +43,10 @@ describe('User', () => {
   });
 
   describe('serialize', () => {
-    it('serializes an user object', () => {
+    it('serializes an user object', async () => {
       const user = new User('test@gmail.com', 'password');
 
-      expect(user.serialize()).toStrictEqual({ email: 'test@gmail.com' });
+      expect(await user.serialize()).toStrictEqual({ email: 'test@gmail.com' });
     });
   });
 

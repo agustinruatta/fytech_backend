@@ -14,10 +14,12 @@ describe('Account', () => {
   });
 
   describe('serialize', () => {
-    it('serializes an user object', () => {
+    it('serializes an user object', async () => {
       const account = new Account('Peter Johnson');
 
-      expect(account.serialize()).toStrictEqual({ name: 'Peter Johnson' });
+      expect(await account.serialize()).toStrictEqual({
+        name: 'Peter Johnson',
+      });
     });
   });
 });

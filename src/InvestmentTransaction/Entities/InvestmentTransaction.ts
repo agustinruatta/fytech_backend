@@ -21,7 +21,7 @@ export abstract class InvestmentTransaction implements Serializable {
 
   @ManyToOne(() => Account, (account) => account.investmentTransactions)
   @JoinColumn({ name: 'account_id' })
-  account: Account;
+  account: Promise<Account>;
 
   @Column({ name: 'code' })
   private code: string;
@@ -48,7 +48,7 @@ export abstract class InvestmentTransaction implements Serializable {
     money: Money,
     datetime: Date,
   ) {
-    this.account = account;
+    this.account = Promise.resolve(account);
     this.setCode(code);
     this.setAmount(amount);
     this.money = money;
@@ -77,9 +77,9 @@ export abstract class InvestmentTransaction implements Serializable {
     this.amount = amount;
   }
 
-  serialize(): object {
+  async serialize(): Promise<object> {
     return {
-      accountId: this.account.getId(),
+      accountId: (await this.account).getId(),
       code: this.code,
       amount: this.amount,
       money: this.money.serialize(),

@@ -51,7 +51,7 @@ export class Account implements Serializable {
     return this.name;
   }
 
-  public serialize(): object {
+  public async serialize(): Promise<object> {
     return {
       name: this.getName(),
     };

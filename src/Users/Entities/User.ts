@@ -72,7 +72,7 @@ export class User implements Serializable {
     return this.email;
   }
 
-  serialize(): object {
+  async serialize(): Promise<object> {
     return {
       email: this.email,
     };
