@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import createAppToTest from './config/e2e-app-creator';
 import { Repository } from 'typeorm';
-import { InvestmentTransaction } from '../../src/InvestmentTransaction/Entities/InvestmentTransaction';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import Helpers from './Helpers';
 import BuyInvestmentTransaction from '../../src/InvestmentTransaction/Entities/BuyInvestmentTransaction';
@@ -10,7 +9,8 @@ import SellInvestmentTransaction from '../../src/InvestmentTransaction/Entities/
 
 describe('InvestmentTransaction (e2e)', () => {
   let app: INestApplication;
-  let investmentTransactionRepository: Repository<InvestmentTransaction>;
+  let buyInvestmentTransactionRepository: Repository<BuyInvestmentTransaction>;
+  let sellInvestmentTransactionRepository: Repository<SellInvestmentTransaction>;
   const actions = ['buy', 'sell'];
 
   const validBody = {
@@ -25,9 +25,13 @@ describe('InvestmentTransaction (e2e)', () => {
 
   beforeAll(async () => {
     app = await createAppToTest();
-    investmentTransactionRepository = app.get<
-      Repository<InvestmentTransaction>
-    >(getRepositoryToken(InvestmentTransaction));
+
+    buyInvestmentTransactionRepository = app.get<
+      Repository<BuyInvestmentTransaction>
+    >(getRepositoryToken(BuyInvestmentTransaction));
+    sellInvestmentTransactionRepository = app.get<
+      Repository<SellInvestmentTransaction>
+    >(getRepositoryToken(SellInvestmentTransaction));
   });
 
   actions.forEach((action) => {
@@ -110,12 +114,17 @@ describe('InvestmentTransaction (e2e)', () => {
         )
         .expect(201);
 
-      const createdTransaction = await investmentTransactionRepository.findOne({
+      const repository =
+        action === 'buy'
+          ? buyInvestmentTransactionRepository
+          : sellInvestmentTransactionRepository;
+
+      const createdTransaction = await repository.findOne({
         order: { createdAt: 'DESC' },
         where: {},
       });
 
-      //expect(createdTransaction.account).toStrictEqual(account);
+      expect(createdTransaction.account).toStrictEqual(account);
       expect(createdTransaction).toBeInstanceOf(
         action === 'buy' ? BuyInvestmentTransaction : SellInvestmentTransaction,
       );
