@@ -124,7 +124,7 @@ describe('InvestmentTransaction (e2e)', () => {
         where: {},
       });
 
-      expect(createdTransaction.account).toStrictEqual(account);
+      expect(await createdTransaction.account).toStrictEqual(account);
       expect(createdTransaction).toBeInstanceOf(
         action === 'buy' ? BuyInvestmentTransaction : SellInvestmentTransaction,
       );

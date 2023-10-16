@@ -35,7 +35,7 @@ export class GetCurrentMarketDataResponse implements Serializable {
     return this.ask.add(this.bid).divide(2);
   }
 
-  serialize(): object {
+  async serialize(): Promise<object> {
     if (this.ask) {
       return {
         ask: this.ask.serialize(),
