@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './Account/AccountModule';
 import { InvestmentTransactionModule } from './InvestmentTransaction/InvestmentTransactionModule';
+import { BalanceModule } from './Balance/balance.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { InvestmentTransactionModule } from './InvestmentTransaction/InvestmentT
     UsersModule,
     AccountModule,
     InvestmentTransactionModule,
+    BalanceModule,
   ],
   controllers: [AppController],
 })
