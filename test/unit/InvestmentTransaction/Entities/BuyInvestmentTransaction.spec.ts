@@ -43,6 +43,7 @@ describe('BuyInvestmentTransaction', () => {
 
     it('serializes correctly', async () => {
       expect(await buyInvestmentTransaction.serialize()).toStrictEqual({
+        accountId: undefined,
         code: 'META',
         amount: 1,
         money: money.serialize(),
