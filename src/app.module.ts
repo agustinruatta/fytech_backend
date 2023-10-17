@@ -9,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './Account/AccountModule';
 import { InvestmentTransactionModule } from './InvestmentTransaction/InvestmentTransactionModule';
-import { BalanceModule } from './Balance/balance.module';
+import { BalanceModule } from './Balance/BalanceModule';
 
 @Module({
   imports: [
