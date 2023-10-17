@@ -7,6 +7,6 @@ export class BalanceController {
 
   @Get('/:accountId')
   findAll(@Param('accountId') accountId: string) {
-    return this.balanceService.getAllAssetsBalance();
+    return this.balanceService.getAllAssetsBalance(accountId);
   }
 }

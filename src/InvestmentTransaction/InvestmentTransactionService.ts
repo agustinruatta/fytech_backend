@@ -87,9 +87,9 @@ export class InvestmentTransactionService {
             'not found',
           "You don't have permissions to use sent account id",
         );
-      } else {
-        throw exception;
       }
+
+      throw exception;
     }
   }
 }
