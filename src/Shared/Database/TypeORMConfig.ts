@@ -6,19 +6,21 @@ import { InvestmentTransaction } from '../../InvestmentTransaction/Entities/Inve
 import BuyInvestmentTransaction from '../../InvestmentTransaction/Entities/BuyInvestmentTransaction';
 import SellInvestmentTransaction from '../../InvestmentTransaction/Entities/SellInvestmentTransaction';
 
+export const allEntities = [
+  User,
+  Account,
+  InvestmentTransaction,
+  BuyInvestmentTransaction,
+  SellInvestmentTransaction,
+];
+
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (configService: ConfigService) => ({
     type: 'postgres',
     url: configService.get('DB_URL'),
-    entities: [
-      User,
-      Account,
-      InvestmentTransaction,
-      BuyInvestmentTransaction,
-      SellInvestmentTransaction,
-    ],
+    entities: allEntities,
     entitySkipConstructor: true,
     synchronize: false,
   }),

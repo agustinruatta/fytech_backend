@@ -1,11 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import createAppToTest from './config/e2e-app-creator';
-import { Repository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import Helpers from './Helpers';
-import BuyInvestmentTransaction from '../../src/InvestmentTransaction/Entities/BuyInvestmentTransaction';
-import SellInvestmentTransaction from '../../src/InvestmentTransaction/Entities/SellInvestmentTransaction';
 
 describe('Balance (e2e)', () => {
   let app: INestApplication;
