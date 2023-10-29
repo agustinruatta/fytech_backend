@@ -55,6 +55,10 @@ export abstract class InvestmentTransaction implements Serializable {
     this.datetime = datetime;
   }
 
+  public getCode(): string {
+    return this.code;
+  }
+
   private setCode(code: string) {
     if (code.trim() === '') {
       throw new InvalidArgumentException(
@@ -64,6 +68,10 @@ export abstract class InvestmentTransaction implements Serializable {
     }
 
     this.code = code;
+  }
+
+  public getAmount(): number {
+    return this.amount;
   }
 
   private setAmount(amount: number) {

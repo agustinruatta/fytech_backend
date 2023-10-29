@@ -37,4 +37,52 @@ export default class Helpers {
         .findOneBy({ email: defaultData.email }),
     };
   }
+
+  static async buyTransaction(
+    app: INestApplication,
+    accessToken: string,
+    accountId: string,
+    code: string,
+    amount: number,
+    moneyAmount: string,
+    currency: string,
+  ) {
+    await request(app.getHttpServer())
+      .post('/investment-transaction/buy')
+      .auth(accessToken, { type: 'bearer' })
+      .send({
+        accountId: accountId,
+        code: code,
+        amount: amount,
+        money: {
+          amount: moneyAmount,
+          currency: currency,
+        },
+        datetime: '2023-10-05T11:00:00.000Z',
+      });
+  }
+
+  static async sellTransaction(
+    app: INestApplication,
+    accessToken: string,
+    accountId: string,
+    code: string,
+    amount: number,
+    moneyAmount: string,
+    currency: string,
+  ) {
+    await request(app.getHttpServer())
+      .post('/investment-transaction/buy')
+      .auth(accessToken, { type: 'bearer' })
+      .send({
+        accountId: accountId,
+        code: code,
+        amount: amount,
+        money: {
+          amount: moneyAmount,
+          currency: currency,
+        },
+        datetime: '2023-10-05T11:00:00.000Z',
+      });
+  }
 }
