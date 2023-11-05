@@ -5,6 +5,9 @@ import BuyInvestmentTransaction from '../InvestmentTransaction/Entities/BuyInves
 import SellInvestmentTransaction from '../InvestmentTransaction/Entities/SellInvestmentTransaction';
 import { CurrentAccountService } from '../Auth/CurrentAccountService';
 import AssetBalance from './AssetBalance';
+import { AvailableCurrenciesList } from '../Money/AvailableCurrenciesList';
+import { MarketDataService } from '../MarketData/MarketDataService';
+import GetCurrentMarketDataRequest from '../MarketData/DTO/GetCurrentMarketDataRequest';
 
 @Injectable()
 export class BalanceService {
@@ -14,15 +17,18 @@ export class BalanceService {
     @InjectRepository(SellInvestmentTransaction)
     private readonly sellInvestmentTransactionRepository: Repository<SellInvestmentTransaction>,
     public readonly currentAccountService: CurrentAccountService,
+    private readonly marketDataService: MarketDataService,
   ) {}
 
-  async getAllAssetsBalance(): Promise<AssetBalance[]> {
+  async getAllAssetsBalance(
+    currency: AvailableCurrenciesList,
+  ): Promise<AssetBalance[]> {
     const amountOfInstruments = {};
 
     await this.sumAllBuys(amountOfInstruments);
     await this.subtractAllSells(amountOfInstruments);
 
-    return this.getAssetsBalance(amountOfInstruments);
+    return this.getAssetsBalance(amountOfInstruments, currency);
   }
 
   private async sumAllBuys(amountOfInstruments: object) {
@@ -58,18 +64,23 @@ export class BalanceService {
     );
   }
 
-  private getAssetsBalance(amountOfInstruments: object) {
+  private async getAssetsBalance(
+    amountOfInstruments: object,
+    currency: AvailableCurrenciesList,
+  ) {
     const result: AssetBalance[] = [];
 
     for (const instrumentCode in amountOfInstruments) {
+      const currentMarketData =
+        await this.marketDataService.getCurrentMarketData(
+          GetCurrentMarketDataRequest.new(instrumentCode, currency),
+        );
+
       result.push({
         type: 'stock',
         code: instrumentCode,
         amount: amountOfInstruments[instrumentCode],
-        balance: {
-          currency: 'USD',
-          floatValue: 100,
-        },
+        balance: currentMarketData.getMidPrice().serialize(),
       });
     }
 

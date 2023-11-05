@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import createAppToTest from './config/e2e-app-creator';
 import Helpers from './Helpers';
+import { AvailableCurrenciesList } from '../../src/Money/AvailableCurrenciesList';
 
 describe('Balance (e2e)', () => {
   let app: INestApplication;
@@ -53,74 +54,76 @@ describe('Balance (e2e)', () => {
       const signInDataB = await Helpers.signIn(app);
       const accountIdB = (await signInDataB.user.accounts)[0].getId();
 
-      //Buy 200 AMZN
+      //Buy 20 AMZN at 100 USD
       await Helpers.buyTransaction(
         app,
         signInDataA.accessToken,
         accountIdA,
         'AMZN',
-        200,
-        '150',
+        20,
+        String(20 * 100),
         'USD',
       );
 
-      //Sell 100 AMZN
+      //Sell 10 AMZN at 150 USD
       await Helpers.sellTransaction(
         app,
         signInDataA.accessToken,
         accountIdA,
         'AMZN',
-        100,
-        '100',
+        10,
+        String(10 * 150),
         'USD',
       );
 
-      //Buy 0.5 BTC
+      //Buy 0.5 BTC at 20000 USD
       await Helpers.sellTransaction(
         app,
         signInDataA.accessToken,
         accountIdA,
         'BTC',
         0.5,
-        '25',
+        String(0.5 * 20000),
         'USD',
       );
 
-      //Another account Buy 1000 AMZN. This is to check that it only calculates on specified account
+      //Another account Buy 100 AMZN at 120 USD. This is to check that it only calculates on specified account
       await Helpers.buyTransaction(
         app,
         signInDataB.accessToken,
         accountIdB,
         'AMZN',
-        1000,
-        '700',
+        100,
+        String(100 * 120),
         'USD',
       );
 
       return request(app.getHttpServer())
-        .get('/balance/' + accountIdA)
+        .get('/balance/' + accountIdA + '/' + AvailableCurrenciesList.USD)
         .auth(signInDataA.accessToken, { type: 'bearer' })
         .send()
         .expect(200)
         .expect([
+          //1 AMZN is 138.60
           {
             type: 'stock',
             code: 'AMZN',
             amount: 100,
-            money: {
-              cents: 50000,
-              currency: 'USD',
-              floatValue: 50,
+            balance: {
+              cents: 138.6 * 100 * 100,
+              currency: AvailableCurrenciesList.USD,
+              floatValue: 138.6 * 100,
             },
           },
+          //1 BTC is 34940.10
           {
             type: 'crypto',
             code: 'BTC',
             amount: 0.5,
-            money: {
-              cents: 25000,
-              currency: 'USD',
-              floatValue: 25,
+            balance: {
+              cents: 34940.1 * 0.5 * 100,
+              currency: AvailableCurrenciesList.USD,
+              floatValue: 34940.1 * 0.5,
             },
           },
         ]);

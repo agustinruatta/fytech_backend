@@ -14,9 +14,8 @@ export class MarketDataController {
     @Param('code') code: string,
     @Query('currency') currency: string | undefined,
   ): Promise<GetCurrentMarketDataResponse> {
-    const request = new GetCurrentMarketDataRequest(code);
-    request.currency = currency;
-
-    return this.marketDataService.getCurrentMarketData(request);
+    return this.marketDataService.getCurrentMarketData(
+      GetCurrentMarketDataRequest.new(code, currency),
+    );
   }
 }

@@ -3,19 +3,16 @@ export default class GetCurrentMarketDataRequest {
 
   private _currency: string | undefined;
 
-  constructor(code: string) {
+  private constructor(code: string, currency: string) {
     this._code = code.toLocaleUpperCase();
+    this.setCurrency(currency);
   }
 
-  public static new(code: string): GetCurrentMarketDataRequest {
-    return new GetCurrentMarketDataRequest(code);
-  }
-
-  public withCurrency(
-    currency: string | undefined,
+  public static new(
+    code: string,
+    currency: string,
   ): GetCurrentMarketDataRequest {
-    this.currency = currency;
-    return this;
+    return new GetCurrentMarketDataRequest(code, currency);
   }
 
   get code(): string {
@@ -26,10 +23,11 @@ export default class GetCurrentMarketDataRequest {
     return this._currency;
   }
 
-  set currency(value: string | undefined) {
+  private setCurrency(value: string | undefined) {
     if (typeof value === 'string') {
       value = value.toLocaleUpperCase();
     }
+
     this._currency = value;
   }
 }
