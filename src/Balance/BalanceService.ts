@@ -80,7 +80,10 @@ export class BalanceService {
         instrument_type: currentMarketData.getInstrumentType(),
         code: instrumentCode,
         amount: amountOfInstruments[instrumentCode],
-        balance: currentMarketData.getMidPrice().serialize(),
+        balance: currentMarketData
+          .getMidPrice()
+          .multiply(amountOfInstruments[instrumentCode])
+          .serialize(),
       });
     }
 

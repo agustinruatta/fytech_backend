@@ -51,7 +51,11 @@ describe('Balance (e2e)', () => {
       const signInDataA = await Helpers.signIn(app);
       const accountIdA = (await signInDataA.user.accounts)[0].getId();
 
-      const signInDataB = await Helpers.signIn(app);
+      const signInDataB = await Helpers.signIn(app, {
+        email: 'test@mail.com',
+        password: 'password',
+        defaultAccountName: 'Some Name',
+      });
       const accountIdB = (await signInDataB.user.accounts)[0].getId();
 
       //Buy 20 AMZN at 100 USD
@@ -62,7 +66,7 @@ describe('Balance (e2e)', () => {
         'AMZN',
         20,
         String(20 * 100),
-        'USD',
+        AvailableCurrencies.USD,
       );
 
       //Sell 10 AMZN at 150 USD
@@ -73,18 +77,18 @@ describe('Balance (e2e)', () => {
         'AMZN',
         10,
         String(10 * 150),
-        'USD',
+        AvailableCurrencies.USD,
       );
 
       //Buy 0.5 BTC at 20000 USD
-      await Helpers.sellTransaction(
+      await Helpers.buyTransaction(
         app,
         signInDataA.accessToken,
         accountIdA,
         'BTC',
         0.5,
         String(0.5 * 20000),
-        'USD',
+        AvailableCurrencies.USD,
       );
 
       //Another account Buy 100 AMZN at 120 USD. This is to check that it only calculates on specified account
@@ -95,7 +99,7 @@ describe('Balance (e2e)', () => {
         'AMZN',
         100,
         String(100 * 120),
-        'USD',
+        AvailableCurrencies.USD,
       );
 
       return request(app.getHttpServer())

@@ -14,6 +14,10 @@ export default class Money {
   private readonly currency: AvailableCurrencies;
 
   private constructor(cents: number, currency: AvailableCurrencies) {
+    if (cents < 0) {
+      throw new Error('Amount must not be negative');
+    }
+
     this.cents = cents;
     this.currency = currency;
   }
@@ -38,10 +42,6 @@ export default class Money {
       throw new Error('Invalid amount');
     }
 
-    if (money.value < 0) {
-      throw new Error('Amount must not be negative');
-    }
-
     return new Money(money.intValue, currencySymbol);
   }
 
@@ -51,6 +51,15 @@ export default class Money {
     }
 
     return new Money(this.cents + other.cents, this.currency);
+  }
+
+  multiply(number: number): Money {
+    const internalMoney = currency(this.cents, {
+      precision: 2,
+      fromCents: true,
+    });
+
+    return new Money(internalMoney.multiply(number).intValue, this.currency);
   }
 
   divide(number: number): Money {

@@ -59,6 +59,36 @@ describe('Money', () => {
     });
   });
 
+  describe('multiply', () => {
+    let initialMoney: Money;
+
+    beforeEach(() => {
+      initialMoney = Money.newFromString('100', AvailableCurrencies.USD);
+    });
+
+    it('multiplies by positive integer', () => {
+      const result = initialMoney.multiply(2);
+
+      expect(result).toStrictEqual(
+        Money.newFromString('200', AvailableCurrencies.USD),
+      );
+    });
+
+    it('multiplies by positive float', () => {
+      const result = initialMoney.multiply(2.5);
+
+      expect(result).toStrictEqual(
+        Money.newFromString('250', AvailableCurrencies.USD),
+      );
+    });
+
+    it('multiplies by negative number', () => {
+      expect(() => initialMoney.multiply(-2)).toThrow(
+        new Error('Amount must not be negative'),
+      );
+    });
+  });
+
   describe('divide', () => {
     let initialMoney: Money;
 

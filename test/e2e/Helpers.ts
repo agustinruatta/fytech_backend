@@ -59,7 +59,8 @@ export default class Helpers {
           currency: currency,
         },
         datetime: '2023-10-05T11:00:00.000Z',
-      });
+      })
+      .expect(201);
   }
 
   static async sellTransaction(
@@ -83,6 +84,7 @@ export default class Helpers {
           currency: currency,
         },
         datetime: '2023-10-05T11:00:00.000Z',
-      });
+      })
+      .expect(201);
   }
 }
