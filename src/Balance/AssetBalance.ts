@@ -1,7 +1,8 @@
 import { AvailableCurrencies } from '../Money/AvailableCurrencies';
+import { InstrumentTypes } from '../MarketData/InstrumentTypes';
 
 export default interface AssetBalance {
-  type: 'stock' | 'crypto';
+  instrument_type: InstrumentTypes;
   code: string;
   amount: number;
   balance: {

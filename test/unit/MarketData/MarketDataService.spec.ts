@@ -4,6 +4,7 @@ import { MarketDataProvider } from '../../../src/MarketData/MarketDataProviders/
 import { GetCurrentMarketDataResponse } from '../../../src/MarketData/DTO/GetCurrentMarketDataResponse';
 import GetCurrentMarketDataRequest from '../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
 import { AvailableCurrencies } from '../../../src/Money/AvailableCurrencies';
+import { InstrumentTypes } from '../../../src/MarketData/InstrumentTypes';
 
 describe('MarketDataService', () => {
   let marketDataService: MarketDataService;
@@ -12,7 +13,11 @@ describe('MarketDataService', () => {
   const marketDataProvider: MarketDataProvider = {
     getCurrentMarketData(): Promise<GetCurrentMarketDataResponse> {
       return Promise.resolve(
-        GetCurrentMarketDataResponse.newWithValue(100, now),
+        GetCurrentMarketDataResponse.newWithValue(
+          100,
+          InstrumentTypes.CRYPTO,
+          now,
+        ),
       );
     },
 
@@ -46,7 +51,11 @@ describe('MarketDataService', () => {
     );
 
     expect(response).toStrictEqual(
-      GetCurrentMarketDataResponse.newWithValue(100, now),
+      GetCurrentMarketDataResponse.newWithValue(
+        100,
+        InstrumentTypes.CRYPTO,
+        now,
+      ),
     );
   });
 

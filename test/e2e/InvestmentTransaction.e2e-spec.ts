@@ -64,11 +64,10 @@ describe('InvestmentTransaction (e2e)', () => {
       return request(app.getHttpServer())
         .post('/investment-transaction/' + action)
         .auth(signInData.accessToken, { type: 'bearer' })
-        .send(
-          Object.assign(validBody, {
-            accountId: '3ecded66-941f-493f-838e-59c7d7771b80',
-          }),
-        )
+        .send({
+          ...validBody,
+          accountId: '3ecded66-941f-493f-838e-59c7d7771b80',
+        })
         .expect(400)
         .expect({
           message: ["You don't have permissions to use sent account id"],
@@ -88,11 +87,10 @@ describe('InvestmentTransaction (e2e)', () => {
       return request(app.getHttpServer())
         .post('/investment-transaction/' + action)
         .auth(signInDataB.accessToken, { type: 'bearer' })
-        .send(
-          Object.assign(validBody, {
-            accountId: (await signInDataA.user.accounts)[0].getId(),
-          }),
-        )
+        .send({
+          ...validBody,
+          accountId: (await signInDataA.user.accounts)[0].getId(),
+        })
         .expect(400)
         .expect({
           message: ["You don't have permissions to use sent account id"],
@@ -108,15 +106,14 @@ describe('InvestmentTransaction (e2e)', () => {
       return request(app.getHttpServer())
         .post('/investment-transaction/' + action)
         .auth(signInData.accessToken, { type: 'bearer' })
-        .send(
-          Object.assign(validBody, {
-            accountId: account.getId(),
-            money: {
-              amount: '100',
-              currency: 'usd',
-            },
-          }),
-        )
+        .send({
+          ...validBody,
+          accountId: account.getId(),
+          money: {
+            amount: '100',
+            currency: 'usd',
+          },
+        })
         .expect(400)
         .expect({
           message: [
@@ -135,11 +132,10 @@ describe('InvestmentTransaction (e2e)', () => {
       await request(app.getHttpServer())
         .post('/investment-transaction/' + action)
         .auth(signInData.accessToken, { type: 'bearer' })
-        .send(
-          Object.assign(validBody, {
-            accountId: account.getId(),
-          }),
-        )
+        .send({
+          ...validBody,
+          accountId: account.getId(),
+        })
         .expect(201);
 
       const repository =

@@ -77,7 +77,7 @@ export class BalanceService {
         );
 
       result.push({
-        type: 'stock',
+        instrument_type: currentMarketData.getInstrumentType(),
         code: instrumentCode,
         amount: amountOfInstruments[instrumentCode],
         balance: currentMarketData.getMidPrice().serialize(),

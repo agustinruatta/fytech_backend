@@ -1,11 +1,11 @@
-import { Test } from "@nestjs/testing";
-import ArgentinianCryptoPricesProvider
-  from "../../../../src/MarketData/MarketDataProviders/ArgentinianCryptoPricesProvider";
-import GetCurrentMarketDataRequest from "../../../../src/MarketData/DTO/GetCurrentMarketDataRequest";
-import { HttpService } from "@nestjs/axios";
-import { GetCurrentMarketDataResponse } from "../../../../src/MarketData/DTO/GetCurrentMarketDataResponse";
-import Money from "../../../../src/Money/Money";
-import { AvailableCurrencies } from "../../../../src/Money/AvailableCurrencies";
+import { Test } from '@nestjs/testing';
+import ArgentinianCryptoPricesProvider from '../../../../src/MarketData/MarketDataProviders/ArgentinianCryptoPricesProvider';
+import GetCurrentMarketDataRequest from '../../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
+import { HttpService } from '@nestjs/axios';
+import { GetCurrentMarketDataResponse } from '../../../../src/MarketData/DTO/GetCurrentMarketDataResponse';
+import Money from '../../../../src/Money/Money';
+import { AvailableCurrencies } from '../../../../src/Money/AvailableCurrencies';
+import { InstrumentTypes } from '../../../../src/MarketData/InstrumentTypes';
 
 describe('ArgentinianCryptoPricesProvider', () => {
   let argentinianCryptoPricesProvider: ArgentinianCryptoPricesProvider;
@@ -77,6 +77,7 @@ describe('ArgentinianCryptoPricesProvider', () => {
       GetCurrentMarketDataResponse.newWithMoney(
         Money.newFromString('539.3602', AvailableCurrencies.ARS),
         Money.newFromString('506.3157', AvailableCurrencies.ARS),
+        InstrumentTypes.CRYPTO,
         new Date('2023-07-12 21:00:00Z'),
       ),
     );

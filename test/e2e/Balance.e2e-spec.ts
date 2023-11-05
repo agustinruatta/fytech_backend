@@ -104,7 +104,7 @@ describe('Balance (e2e)', () => {
         .send()
         .expect(200)
         .expect([
-          //1 AMZN is 138.60
+          //1 AMZN is USD 138.60
           {
             type: 'stock',
             code: 'AMZN',
@@ -115,7 +115,7 @@ describe('Balance (e2e)', () => {
               floatValue: 138.6 * 100,
             },
           },
-          //1 BTC is 34940.10
+          //1 BTC is USD 34940.10
           {
             type: 'crypto',
             code: 'BTC',
