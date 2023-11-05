@@ -1,23 +1,23 @@
 import Money from '../../../src/Money/Money';
-import { AvailableCurrenciesList } from '../../../src/Money/AvailableCurrenciesList';
+import { AvailableCurrencies } from '../../../src/Money/AvailableCurrencies';
 
 describe('Money', () => {
   describe('newFromString', () => {
     it('should create it', () => {
-      const money = Money.newFromString('$123', AvailableCurrenciesList.USD);
+      const money = Money.newFromString('$123', AvailableCurrencies.USD);
 
       expect(money).toBeDefined();
     });
 
     it('raises exception if invalid string because has two decimal points', () => {
       expect(() =>
-        Money.newFromString('255.365.6', AvailableCurrenciesList.USD),
+        Money.newFromString('255.365.6', AvailableCurrencies.USD),
       ).toThrow(new Error('Invalid amount'));
     });
 
     it('raises exception if empty string', () => {
       expect(() =>
-        Money.newFromString('', AvailableCurrenciesList.USD),
+        Money.newFromString('', AvailableCurrencies.USD),
       ).toThrow(new Error('Amount must not be an empty string'));
     });
 
@@ -29,7 +29,7 @@ describe('Money', () => {
 
     it('raises exception if amount is negative', () => {
       expect(() =>
-        Money.newFromString('-100', AvailableCurrenciesList.USD),
+        Money.newFromString('-100', AvailableCurrencies.USD),
       ).toThrow(new Error('Amount must not be negative'));
     });
   });
@@ -38,23 +38,23 @@ describe('Money', () => {
     let initialMoney: Money;
 
     beforeEach(() => {
-      initialMoney = Money.newFromString('100', AvailableCurrenciesList.ARS);
+      initialMoney = Money.newFromString('100', AvailableCurrencies.ARS);
     });
 
     it('adds two money', () => {
       const result = initialMoney.add(
-        Money.newFromString('200', AvailableCurrenciesList.ARS),
+        Money.newFromString('200', AvailableCurrencies.ARS),
       );
 
       expect(result).toStrictEqual(
-        Money.newFromString('300', AvailableCurrenciesList.ARS),
+        Money.newFromString('300', AvailableCurrencies.ARS),
       );
     });
 
     it('raise an error if currencies are different', () => {
       expect(() =>
         initialMoney.add(
-          Money.newFromString('200', AvailableCurrenciesList.USD),
+          Money.newFromString('200', AvailableCurrencies.USD),
         ),
       ).toThrow(new Error("Parameter's currency must be ARS"));
     });
@@ -64,36 +64,36 @@ describe('Money', () => {
     let initialMoney: Money;
 
     beforeEach(() => {
-      initialMoney = Money.newFromString('100', AvailableCurrenciesList.USD);
+      initialMoney = Money.newFromString('100', AvailableCurrencies.USD);
     });
 
     it('even number divide by two', () => {
       const result = initialMoney.divide(2);
 
       expect(result).toStrictEqual(
-        Money.newFromString('50', AvailableCurrenciesList.USD),
+        Money.newFromString('50', AvailableCurrencies.USD),
       );
     });
 
     it('odd number divide by two', () => {
       const result = Money.newFromString(
         '25',
-        AvailableCurrenciesList.USD,
+        AvailableCurrencies.USD,
       ).divide(2);
 
       expect(result).toStrictEqual(
-        Money.newFromString('12.5', AvailableCurrenciesList.USD),
+        Money.newFromString('12.5', AvailableCurrencies.USD),
       );
     });
 
     it('number division is a rational number', () => {
       const result = Money.newFromString(
         '7',
-        AvailableCurrenciesList.USD,
+        AvailableCurrencies.USD,
       ).divide(9);
 
       expect(result).toStrictEqual(
-        Money.newFromString('0.78', AvailableCurrenciesList.USD),
+        Money.newFromString('0.78', AvailableCurrencies.USD),
       );
     });
   });
@@ -101,7 +101,7 @@ describe('Money', () => {
   describe('serialize', () => {
     it('serializes correctly', () => {
       expect(
-        Money.newFromString('200', AvailableCurrenciesList.USD).serialize(),
+        Money.newFromString('200', AvailableCurrencies.USD).serialize(),
       ).toStrictEqual({
         cents: 20000,
         currency: 'USD',

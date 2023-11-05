@@ -4,7 +4,7 @@ import GetCurrentMarketDataRequest from '../../../../src/MarketData/DTO/GetCurre
 import { HttpService } from '@nestjs/axios';
 import { GetCurrentMarketDataResponse } from '../../../../src/MarketData/DTO/GetCurrentMarketDataResponse';
 import Money from '../../../../src/Money/Money';
-import { AvailableCurrenciesList } from '../../../../src/Money/AvailableCurrenciesList';
+import { AvailableCurrencies } from '../../../../src/Money/AvailableCurrencies';
 
 describe('ArgentinianCryptoPricesProvider', () => {
   let argentinianCryptoPricesProvider: ArgentinianCryptoPricesProvider;
@@ -63,7 +63,7 @@ describe('ArgentinianCryptoPricesProvider', () => {
     expect(
       argentinianCryptoPricesProvider.doesSupportCode(
         GetCurrentMarketDataRequest.new('USDC').withCurrency(
-          AvailableCurrenciesList.ARS,
+          AvailableCurrencies.ARS,
         ),
       ),
     ).toBe(true);
@@ -73,13 +73,13 @@ describe('ArgentinianCryptoPricesProvider', () => {
     expect(
       await argentinianCryptoPricesProvider.getCurrentMarketData(
         GetCurrentMarketDataRequest.new('USDC').withCurrency(
-          AvailableCurrenciesList.ARS,
+          AvailableCurrencies.ARS,
         ),
       ),
     ).toStrictEqual(
       GetCurrentMarketDataResponse.newWithMoney(
-        Money.newFromString('539.3602', AvailableCurrenciesList.ARS),
-        Money.newFromString('506.3157', AvailableCurrenciesList.ARS),
+        Money.newFromString('539.3602', AvailableCurrencies.ARS),
+        Money.newFromString('506.3157', AvailableCurrencies.ARS),
         new Date('2023-07-12 21:00:00Z'),
       ),
     );

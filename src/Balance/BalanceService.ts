@@ -5,7 +5,7 @@ import BuyInvestmentTransaction from '../InvestmentTransaction/Entities/BuyInves
 import SellInvestmentTransaction from '../InvestmentTransaction/Entities/SellInvestmentTransaction';
 import { CurrentAccountService } from '../Auth/CurrentAccountService';
 import AssetBalance from './AssetBalance';
-import { AvailableCurrenciesList } from '../Money/AvailableCurrenciesList';
+import { AvailableCurrencies } from '../Money/AvailableCurrencies';
 import { MarketDataService } from '../MarketData/MarketDataService';
 import GetCurrentMarketDataRequest from '../MarketData/DTO/GetCurrentMarketDataRequest';
 
@@ -21,7 +21,7 @@ export class BalanceService {
   ) {}
 
   async getAllAssetsBalance(
-    currency: AvailableCurrenciesList,
+    currency: AvailableCurrencies,
   ): Promise<AssetBalance[]> {
     const amountOfInstruments = {};
 
@@ -66,7 +66,7 @@ export class BalanceService {
 
   private async getAssetsBalance(
     amountOfInstruments: object,
-    currency: AvailableCurrenciesList,
+    currency: AvailableCurrencies,
   ) {
     const result: AssetBalance[] = [];
 

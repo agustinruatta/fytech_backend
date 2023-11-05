@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { BalanceService } from './BalanceService';
 import AssetBalance from './AssetBalance';
-import { AvailableCurrenciesList } from '../Money/AvailableCurrenciesList';
+import { AvailableCurrencies } from '../Money/AvailableCurrencies';
 
 @Controller('balance')
 export class BalanceController {
@@ -11,7 +11,7 @@ export class BalanceController {
   findAll(
     //This param is used to set it in CurrentAccountService
     @Param('accountId') accountId: string,
-    @Param('currency') currency: AvailableCurrenciesList,
+    @Param('currency') currency: AvailableCurrencies,
   ): Promise<AssetBalance[]> {
     return this.balanceService.getAllAssetsBalance(currency);
   }

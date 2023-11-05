@@ -26,5 +26,6 @@ import PortfolioPersonalProvider from './MarketDataProviders/PortfolioPersonalPr
     },
   ],
   imports: [HttpModule],
+  exports: [MarketDataService],
 })
 export class MarketDataModule {}

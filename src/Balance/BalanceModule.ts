@@ -6,17 +6,18 @@ import BuyInvestmentTransaction from '../InvestmentTransaction/Entities/BuyInves
 import SellInvestmentTransaction from '../InvestmentTransaction/Entities/SellInvestmentTransaction';
 import { Account } from '../Account/Entities/Account';
 import { CurrentAccountService } from '../Auth/CurrentAccountService';
-import { MarketDataService } from '../MarketData/MarketDataService';
+import { MarketDataModule } from '../MarketData/MarketDataModule';
 
 @Module({
   controllers: [BalanceController],
-  providers: [BalanceService, CurrentAccountService, MarketDataService],
+  providers: [BalanceService, CurrentAccountService],
   imports: [
     TypeOrmModule.forFeature([
       BuyInvestmentTransaction,
       SellInvestmentTransaction,
       Account,
     ]),
+    MarketDataModule,
   ],
 })
 export class BalanceModule {}

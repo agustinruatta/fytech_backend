@@ -3,6 +3,7 @@ import { MarketDataProvider } from './MarketDataProvider';
 import GetCurrentMarketDataRequest from '../DTO/GetCurrentMarketDataRequest';
 import { GetCurrentMarketDataResponse } from '../DTO/GetCurrentMarketDataResponse';
 import Money from '../../Money/Money';
+import { AvailableCurrencies } from '../../Money/AvailableCurrencies';
 
 @Injectable()
 export default class PortfolioPersonalProvider implements MarketDataProvider {
@@ -18,16 +19,16 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     if (request.code === 'AMZN') {
       return Promise.resolve(
         GetCurrentMarketDataResponse.newWithMoney(
-          Money.newFromString('138.60', 'USD_MEP'),
-          Money.newFromString('138.60', 'USD_MEP'),
+          Money.newFromString('138.60', AvailableCurrencies.USD),
+          Money.newFromString('138.60', AvailableCurrencies.USD),
           new Date(),
         ),
       );
     } else if (request.code === 'BTC') {
       return Promise.resolve(
         GetCurrentMarketDataResponse.newWithMoney(
-          Money.newFromString('34940.10', 'USD_MEP'),
-          Money.newFromString('34940.10', 'USD_MEP'),
+          Money.newFromString('34940.10', AvailableCurrencies.USD),
+          Money.newFromString('34940.10', AvailableCurrencies.USD),
           new Date(),
         ),
       );

@@ -1,6 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-import { AvailableCurrenciesList } from './AvailableCurrenciesList';
+import { AvailableCurrencies } from './AvailableCurrencies';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const currency = require('currency.js');
 import { Column } from 'typeorm';
 
@@ -11,15 +11,18 @@ export default class Money {
   private readonly cents: number;
 
   @Column({ name: 'money_currency' })
-  private readonly currency: string;
+  private readonly currency: AvailableCurrencies;
 
-  private constructor(cents: number, currency: string) {
+  private constructor(cents: number, currency: AvailableCurrencies) {
     this.cents = cents;
     this.currency = currency;
   }
 
-  public static newFromString(amount: string, currencySymbol: string): Money {
-    if (!(currencySymbol.trim() in AvailableCurrenciesList)) {
+  public static newFromString(
+    amount: string,
+    currencySymbol: AvailableCurrencies,
+  ): Money {
+    if (!(currencySymbol.trim() in AvailableCurrencies)) {
       throw new Error('Currency must not be empty');
     }
 
@@ -62,7 +65,7 @@ export default class Money {
 
   serialize(): {
     cents: number;
-    currency: string;
+    currency: AvailableCurrencies;
     floatValue: number;
   } {
     return {

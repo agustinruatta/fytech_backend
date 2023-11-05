@@ -6,6 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import Helpers from './Helpers';
 import BuyInvestmentTransaction from '../../src/InvestmentTransaction/Entities/BuyInvestmentTransaction';
 import SellInvestmentTransaction from '../../src/InvestmentTransaction/Entities/SellInvestmentTransaction';
+import { AvailableCurrencies } from '../../src/Money/AvailableCurrencies';
 
 describe('InvestmentTransaction (e2e)', () => {
   let app: INestApplication;
@@ -95,6 +96,30 @@ describe('InvestmentTransaction (e2e)', () => {
         .expect(400)
         .expect({
           message: ["You don't have permissions to use sent account id"],
+          error: 'Bad Request',
+          statusCode: 400,
+        });
+    });
+
+    it('fails if currency is not supported', async () => {
+      const signInData = await Helpers.signIn(app);
+      const account = (await signInData.user.accounts)[0];
+
+      return request(app.getHttpServer())
+        .post('/investment-transaction/' + action)
+        .auth(signInData.accessToken, { type: 'bearer' })
+        .send(
+          Object.assign(validBody, {
+            accountId: account.getId(),
+            currency: 'usd',
+          }),
+        )
+        .expect(400)
+        .expect({
+          message: [
+            'money.currency must be one of the following values: ' +
+              Object.values(AvailableCurrencies).join(', '),
+          ],
           error: 'Bad Request',
           statusCode: 400,
         });

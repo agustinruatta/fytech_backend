@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import createAppToTest from './config/e2e-app-creator';
 import Helpers from './Helpers';
-import { AvailableCurrenciesList } from '../../src/Money/AvailableCurrenciesList';
+import { AvailableCurrencies } from '../../src/Money/AvailableCurrencies';
 
 describe('Balance (e2e)', () => {
   let app: INestApplication;
@@ -99,7 +99,7 @@ describe('Balance (e2e)', () => {
       );
 
       return request(app.getHttpServer())
-        .get('/balance/' + accountIdA + '/' + AvailableCurrenciesList.USD)
+        .get('/balance/' + accountIdA + '/' + AvailableCurrencies.USD)
         .auth(signInDataA.accessToken, { type: 'bearer' })
         .send()
         .expect(200)
@@ -111,7 +111,7 @@ describe('Balance (e2e)', () => {
             amount: 100,
             balance: {
               cents: 138.6 * 100 * 100,
-              currency: AvailableCurrenciesList.USD,
+              currency: AvailableCurrencies.USD,
               floatValue: 138.6 * 100,
             },
           },
@@ -122,7 +122,7 @@ describe('Balance (e2e)', () => {
             amount: 0.5,
             balance: {
               cents: 34940.1 * 0.5 * 100,
-              currency: AvailableCurrenciesList.USD,
+              currency: AvailableCurrencies.USD,
               floatValue: 34940.1 * 0.5,
             },
           },

@@ -3,6 +3,7 @@ import { MarketDataService } from './MarketDataService';
 import { GetCurrentMarketDataResponse } from './DTO/GetCurrentMarketDataResponse';
 import GetCurrentMarketDataRequest from './DTO/GetCurrentMarketDataRequest';
 import { Public } from '../Auth/PublicRouteDecorator';
+import { AvailableCurrencies } from '../Money/AvailableCurrencies';
 
 @Controller('market-data')
 export class MarketDataController {
@@ -12,7 +13,7 @@ export class MarketDataController {
   @Get('/current/:code')
   findOne(
     @Param('code') code: string,
-    @Query('currency') currency: string | undefined,
+    @Query('currency') currency: AvailableCurrencies,
   ): Promise<GetCurrentMarketDataResponse> {
     return this.marketDataService.getCurrentMarketData(
       GetCurrentMarketDataRequest.new(code, currency),

@@ -2,12 +2,12 @@ import BuyInvestmentTransaction from '../../../../src/InvestmentTransaction/Enti
 import { Account } from '../../../../src/Account/Entities/Account';
 import Money from '../../../../src/Money/Money';
 import { InvalidArgumentException } from '../../../../src/Shared/Exceptions/InvalidArgumentException';
-import { AvailableCurrenciesList } from '../../../../src/Money/AvailableCurrenciesList';
+import { AvailableCurrencies } from '../../../../src/Money/AvailableCurrencies';
 
 describe('BuyInvestmentTransaction', () => {
   const account = new Account('Some name');
   const now = new Date();
-  const money = Money.newFromString('100', AvailableCurrenciesList.USD);
+  const money = Money.newFromString('100', AvailableCurrencies.USD);
 
   describe('constructor', () => {
     it('throws an exception if code is empty', () => {
