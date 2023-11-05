@@ -50,4 +50,34 @@ describe('Auth (e2e)', () => {
       expect(typeof response.body.access_token).toBe('string');
     });
   });
+
+  describe('Get current user data', () => {
+    it('returns current user data', async () => {
+      const signInData = await Helpers.signIn(app);
+
+      return request(app.getHttpServer())
+        .get('/auth/current-user-data')
+        .auth(signInData.accessToken, { type: 'bearer' })
+        .send({})
+        .expect(200)
+        .expect(await signInData.user.serialize());
+    });
+
+    it('does not save state between requests', async () => {
+      const signInData = await Helpers.signIn(app);
+
+      await request(app.getHttpServer())
+        .get('/auth/current-user-data')
+        .auth(signInData.accessToken, { type: 'bearer' })
+        .send({})
+        .expect(200)
+        .expect(await signInData.user.serialize());
+
+      return request(app.getHttpServer())
+        .get('/auth/current-user-data')
+        .send({})
+        .expect(200)
+        .expect({});
+    });
+  });
 });
