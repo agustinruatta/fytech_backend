@@ -59,9 +59,12 @@ export class AuthGuard implements CanActivate {
       CurrentUserService.init(currentUser);
 
       //If there is an accountId parameter, try to set current account
-      if (typeof request.body.accountId !== 'undefined') {
+      if (
+        typeof request.body.accountId !== 'undefined' ||
+        typeof request.params.accountId !== 'undefined'
+      ) {
         const account = await this.accountRepository.findOneBy({
-          id: request.body.accountId,
+          id: request.body.accountId || request.params.accountId,
           user: {
             id: currentUser.getId(),
           },

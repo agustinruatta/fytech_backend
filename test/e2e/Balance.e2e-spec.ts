@@ -69,14 +69,25 @@ describe('Balance (e2e)', () => {
         AvailableCurrencies.USD,
       );
 
-      //Sell 10 AMZN at 150 USD
-      await Helpers.sellTransaction(
+      //Buy another 10 AMZN at 150 USD
+      await Helpers.buyTransaction(
         app,
         signInDataA.accessToken,
         accountIdA,
         'AMZN',
         10,
         String(10 * 150),
+        AvailableCurrencies.USD,
+      );
+
+      //Sell 15 AMZN at 140 USD
+      await Helpers.sellTransaction(
+        app,
+        signInDataA.accessToken,
+        accountIdA,
+        'AMZN',
+        15,
+        String(15 * 140),
         AvailableCurrencies.USD,
       );
 
