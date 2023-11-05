@@ -1,4 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
+import { AvailableCurrenciesList } from './AvailableCurrenciesList';
+
 const currency = require('currency.js');
 import { Column } from 'typeorm';
 
@@ -17,11 +19,11 @@ export default class Money {
   }
 
   public static newFromString(amount: string, currencySymbol: string): Money {
-    //TODO: If amount is "USD" it does not throw an error
-
-    if (currencySymbol.trim() === '') {
+    if (!(currencySymbol.trim() in AvailableCurrenciesList)) {
       throw new Error('Currency must not be empty');
     }
+
+    //TODO: If amount is "USD" it does not throw an error
 
     if (amount.trim() === '') {
       throw new Error('Amount must not be an empty string');

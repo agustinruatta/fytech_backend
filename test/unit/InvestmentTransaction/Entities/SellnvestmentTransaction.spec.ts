@@ -2,10 +2,11 @@ import SellInvestmentTransaction from '../../../../src/InvestmentTransaction/Ent
 import { Account } from '../../../../src/Account/Entities/Account';
 import Money from '../../../../src/Money/Money';
 import { InvalidArgumentException } from '../../../../src/Shared/Exceptions/InvalidArgumentException';
+import { AvailableCurrenciesList } from '../../../../src/Money/AvailableCurrenciesList';
 
 describe('BuyInvestmentTransaction', () => {
   const now = new Date();
-  const money = Money.newFromString('100', 'USD');
+  const money = Money.newFromString('100', AvailableCurrenciesList.USD);
   const account = new Account('Some name');
 
   describe('constructor', () => {
