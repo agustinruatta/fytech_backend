@@ -34,7 +34,7 @@ describe('MarketData (e2e)', () => {
     });
 
     return request(app.getHttpServer())
-      .get('/market-data/current/usdc?currency=ars')
+      .get('/market-data/current/usdc/ARS')
       .expect(200)
       .expect({
         ask: {

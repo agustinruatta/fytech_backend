@@ -7,9 +7,9 @@ import { AvailableCurrencies } from '../Money/AvailableCurrencies';
 export class BalanceController {
   constructor(private readonly balanceService: BalanceService) {}
 
-  @Get('/:accountId')
+  @Get('/:accountId/:currency')
   findAll(
-    //This param is used to set it in CurrentAccountService
+    //Don't delete this param because it is used to set it in CurrentAccountService
     @Param('accountId') accountId: string,
     @Param('currency') currency: AvailableCurrencies,
   ): Promise<AssetBalance[]> {

@@ -46,7 +46,6 @@ export class GetCurrentMarketDataResponse implements Serializable {
     } else {
       return {
         value: this.value,
-        mid_price: this.value,
         date: this.date,
       };
     }

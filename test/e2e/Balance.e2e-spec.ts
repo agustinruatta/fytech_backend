@@ -16,7 +16,7 @@ describe('Balance (e2e)', () => {
       const signInDataA = await Helpers.signIn(app);
 
       return request(app.getHttpServer())
-        .get('/balance/3ecded66-941f-493f-838e-59c7d7771b80')
+        .get('/balance/3ecded66-941f-493f-838e-59c7d7771b80/ARS')
         .auth(signInDataA.accessToken, { type: 'bearer' })
         .send()
         .expect(400)
@@ -36,7 +36,7 @@ describe('Balance (e2e)', () => {
       });
 
       return request(app.getHttpServer())
-        .get('/balance/' + (await signInDataA.user.accounts)[0].getId())
+        .get(`/balance/${(await signInDataA.user.accounts)[0].getId()}/ARS`)
         .auth(signInDataB.accessToken, { type: 'bearer' })
         .send()
         .expect(400)
@@ -47,7 +47,7 @@ describe('Balance (e2e)', () => {
         });
     });
 
-    it('returns your balance', async () => {
+    it('returns the balance', async () => {
       const signInDataA = await Helpers.signIn(app);
       const accountIdA = (await signInDataA.user.accounts)[0].getId();
 
@@ -99,7 +99,7 @@ describe('Balance (e2e)', () => {
       );
 
       return request(app.getHttpServer())
-        .get('/balance/' + accountIdA + '/' + AvailableCurrencies.USD)
+        .get(`/balance/${accountIdA}/${AvailableCurrencies.USD}`)
         .auth(signInDataA.accessToken, { type: 'bearer' })
         .send()
         .expect(200)

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { MarketDataService } from './MarketDataService';
 import { GetCurrentMarketDataResponse } from './DTO/GetCurrentMarketDataResponse';
 import GetCurrentMarketDataRequest from './DTO/GetCurrentMarketDataRequest';
@@ -10,10 +10,10 @@ export class MarketDataController {
   constructor(private readonly marketDataService: MarketDataService) {}
 
   @Public()
-  @Get('/current/:code')
+  @Get('/current/:code/:currency')
   findOne(
     @Param('code') code: string,
-    @Query('currency') currency: AvailableCurrencies,
+    @Param('currency') currency: AvailableCurrencies,
   ): Promise<GetCurrentMarketDataResponse> {
     return this.marketDataService.getCurrentMarketData(
       GetCurrentMarketDataRequest.new(code, currency),

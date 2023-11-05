@@ -19,7 +19,7 @@ describe('InvestmentTransaction (e2e)', () => {
     amount: 150,
     money: {
       amount: '100',
-      currency: 'USD',
+      currency: 'USD_MEP',
     },
     datetime: '2023-10-07T11:00:00.000Z',
   };
