@@ -1,10 +1,11 @@
-import { Test } from '@nestjs/testing';
-import ArgentinianCryptoPricesProvider from '../../../../src/MarketData/MarketDataProviders/ArgentinianCryptoPricesProvider';
-import GetCurrentMarketDataRequest from '../../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
-import { HttpService } from '@nestjs/axios';
-import { GetCurrentMarketDataResponse } from '../../../../src/MarketData/DTO/GetCurrentMarketDataResponse';
-import Money from '../../../../src/Money/Money';
-import { AvailableCurrencies } from '../../../../src/Money/AvailableCurrencies';
+import { Test } from "@nestjs/testing";
+import ArgentinianCryptoPricesProvider
+  from "../../../../src/MarketData/MarketDataProviders/ArgentinianCryptoPricesProvider";
+import GetCurrentMarketDataRequest from "../../../../src/MarketData/DTO/GetCurrentMarketDataRequest";
+import { HttpService } from "@nestjs/axios";
+import { GetCurrentMarketDataResponse } from "../../../../src/MarketData/DTO/GetCurrentMarketDataResponse";
+import Money from "../../../../src/Money/Money";
+import { AvailableCurrencies } from "../../../../src/Money/AvailableCurrencies";
 
 describe('ArgentinianCryptoPricesProvider', () => {
   let argentinianCryptoPricesProvider: ArgentinianCryptoPricesProvider;
@@ -46,7 +47,7 @@ describe('ArgentinianCryptoPricesProvider', () => {
   it('should not support if currency is not ARS', () => {
     expect(
       argentinianCryptoPricesProvider.doesSupportCode(
-        GetCurrentMarketDataRequest.new('USDC').withCurrency('BRL'),
+        GetCurrentMarketDataRequest.new('USDC', AvailableCurrencies.USD),
       ),
     ).toBe(false);
   });
@@ -54,7 +55,7 @@ describe('ArgentinianCryptoPricesProvider', () => {
   it('should not support if code is not a crypto', () => {
     expect(
       argentinianCryptoPricesProvider.doesSupportCode(
-        GetCurrentMarketDataRequest.new('AMZN').withCurrency('USD'),
+        GetCurrentMarketDataRequest.new('AMZN', AvailableCurrencies.ARS),
       ),
     ).toBe(false);
   });
@@ -62,9 +63,7 @@ describe('ArgentinianCryptoPricesProvider', () => {
   it('should support if code is crypto and currency is ARS', () => {
     expect(
       argentinianCryptoPricesProvider.doesSupportCode(
-        GetCurrentMarketDataRequest.new('USDC').withCurrency(
-          AvailableCurrencies.ARS,
-        ),
+        GetCurrentMarketDataRequest.new('USDC', AvailableCurrencies.ARS),
       ),
     ).toBe(true);
   });
@@ -72,9 +71,7 @@ describe('ArgentinianCryptoPricesProvider', () => {
   it('should return USDC price', async () => {
     expect(
       await argentinianCryptoPricesProvider.getCurrentMarketData(
-        GetCurrentMarketDataRequest.new('USDC').withCurrency(
-          AvailableCurrencies.ARS,
-        ),
+        GetCurrentMarketDataRequest.new('USDC', AvailableCurrencies.ARS),
       ),
     ).toStrictEqual(
       GetCurrentMarketDataResponse.newWithMoney(

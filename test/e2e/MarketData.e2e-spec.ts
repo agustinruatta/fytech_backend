@@ -16,7 +16,7 @@ describe('MarketData (e2e)', () => {
       .reply(200, [{ v: 278.28, d: '2023-07-09' }]);
 
     return request(app.getHttpServer())
-      .get('/market-data/current/UVA_AR')
+      .get('/market-data/current/UVA_AR/ARS')
       .expect(200)
       .expect({
         value: 278.28,

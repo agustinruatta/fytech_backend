@@ -16,13 +16,14 @@ describe('Money', () => {
     });
 
     it('raises exception if empty string', () => {
-      expect(() =>
-        Money.newFromString('', AvailableCurrencies.USD),
-      ).toThrow(new Error('Amount must not be an empty string'));
+      expect(() => Money.newFromString('', AvailableCurrencies.USD)).toThrow(
+        new Error('Amount must not be an empty string'),
+      );
     });
 
-    it('raises exception if empty currency', () => {
-      expect(() => Money.newFromString('100', '')).toThrow(
+    it('raises exception if currency is invalid', () => {
+      // @ts-ignore
+      expect(() => Money.newFromString('100', 'invalid')).toThrow(
         new Error('Currency must not be empty'),
       );
     });
@@ -53,9 +54,7 @@ describe('Money', () => {
 
     it('raise an error if currencies are different', () => {
       expect(() =>
-        initialMoney.add(
-          Money.newFromString('200', AvailableCurrencies.USD),
-        ),
+        initialMoney.add(Money.newFromString('200', AvailableCurrencies.USD)),
       ).toThrow(new Error("Parameter's currency must be ARS"));
     });
   });
@@ -76,10 +75,9 @@ describe('Money', () => {
     });
 
     it('odd number divide by two', () => {
-      const result = Money.newFromString(
-        '25',
-        AvailableCurrencies.USD,
-      ).divide(2);
+      const result = Money.newFromString('25', AvailableCurrencies.USD).divide(
+        2,
+      );
 
       expect(result).toStrictEqual(
         Money.newFromString('12.5', AvailableCurrencies.USD),
@@ -87,10 +85,9 @@ describe('Money', () => {
     });
 
     it('number division is a rational number', () => {
-      const result = Money.newFromString(
-        '7',
-        AvailableCurrencies.USD,
-      ).divide(9);
+      const result = Money.newFromString('7', AvailableCurrencies.USD).divide(
+        9,
+      );
 
       expect(result).toStrictEqual(
         Money.newFromString('0.78', AvailableCurrencies.USD),
@@ -104,7 +101,7 @@ describe('Money', () => {
         Money.newFromString('200', AvailableCurrencies.USD).serialize(),
       ).toStrictEqual({
         cents: 20000,
-        currency: 'USD',
+        currency: AvailableCurrencies.USD,
         floatValue: 200.0,
       });
     });
