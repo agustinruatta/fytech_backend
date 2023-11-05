@@ -13,6 +13,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../Users/Entities/User';
 import { Repository } from 'typeorm';
 import { CurrentUserService } from './CurrentUserService';
+import { Account } from '../Account/Entities/Account';
+import { CurrentAccountService } from './CurrentAccountService';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -20,6 +22,8 @@ export class AuthGuard implements CanActivate {
     private jwtService: JwtService,
     private reflector: Reflector,
     private configService: ConfigService,
+    @InjectRepository(Account)
+    public readonly accountRepository: Repository<Account>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
@@ -48,12 +52,29 @@ export class AuthGuard implements CanActivate {
       );
 
       //TODO: There is a possible vulnerability if in the middle another user set this email as own
-      CurrentUserService.init(
-        await this.userRepository.findOneByOrFail({ email: userData.email }),
-      );
+      const currentUser = await this.userRepository.findOneByOrFail({
+        email: userData.email,
+      });
+
+      CurrentUserService.init(currentUser);
+
+      //If there is an accountId parameter, try to set current account
+      if (typeof request.body.accountId !== 'undefined') {
+        const account = await this.accountRepository.findOneBy({
+          id: request.body.accountId,
+          user: {
+            id: currentUser.getId(),
+          },
+        });
+
+        if (account) {
+          CurrentAccountService.init(account);
+        }
+      }
     } catch {
       throw new UnauthorizedException();
     }
+
     return true;
   }
 
