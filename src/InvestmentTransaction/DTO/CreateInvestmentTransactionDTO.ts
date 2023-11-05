@@ -1,11 +1,16 @@
-import { IsNotEmpty, ValidateNested, IsDate, IsEnum } from "class-validator";
+import { IsNotEmpty, ValidateNested, IsDate, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { AvailableCurrencies } from '../../Money/AvailableCurrencies';
 
 class Money {
+  @IsNotEmpty()
+  @ApiProperty()
   amount: string;
+
+  @IsNotEmpty()
   @IsEnum(AvailableCurrencies)
+  @ApiProperty()
   currency: AvailableCurrencies;
 }
 

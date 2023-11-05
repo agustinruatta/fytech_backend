@@ -19,7 +19,7 @@ describe('InvestmentTransaction (e2e)', () => {
     amount: 150,
     money: {
       amount: '100',
-      currency: 'USD_MEP',
+      currency: AvailableCurrencies.USD,
     },
     datetime: '2023-10-07T11:00:00.000Z',
   };
@@ -111,7 +111,10 @@ describe('InvestmentTransaction (e2e)', () => {
         .send(
           Object.assign(validBody, {
             accountId: account.getId(),
-            currency: 'usd',
+            money: {
+              amount: '100',
+              currency: 'usd',
+            },
           }),
         )
         .expect(400)
