@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Account } from '../Account/Entities/Account';
 import { CurrentUserService } from './CurrentUserService';
+import { CurrentAccountService } from './CurrentAccountService';
 
 function throwNoJwtKeyException(): any {
   throw new Error('JWT_SECRET environment variable not found');
@@ -22,6 +23,7 @@ function throwNoJwtKeyException(): any {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    CurrentAccountService,
     CurrentUserService,
   ],
   imports: [
