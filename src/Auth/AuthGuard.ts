@@ -19,8 +19,10 @@ import { CurrentAccountService } from './CurrentAccountService';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private jwtService: JwtService,
-    private reflector: Reflector,
+    private readonly currentAccountService: CurrentAccountService,
+    private readonly currentUserService: CurrentUserService,
+    private readonly jwtService: JwtService,
+    private readonly reflector: Reflector,
     private configService: ConfigService,
     @InjectRepository(Account)
     public readonly accountRepository: Repository<Account>,
@@ -56,7 +58,7 @@ export class AuthGuard implements CanActivate {
         email: userData.email,
       });
 
-      CurrentUserService.init(currentUser);
+      this.currentUserService.setCurrentUser(currentUser);
 
       //If there is an accountId parameter, try to set current account
       if (
@@ -71,7 +73,7 @@ export class AuthGuard implements CanActivate {
         });
 
         if (account) {
-          CurrentAccountService.init(account);
+          this.currentAccountService.setCurrentAccount(account);
         }
       }
     } catch {

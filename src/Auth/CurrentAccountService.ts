@@ -4,15 +4,19 @@ import { InvalidArgumentException } from '../Shared/Exceptions/InvalidArgumentEx
 
 @Injectable({ scope: Scope.REQUEST })
 export class CurrentAccountService {
-  private static currentAccount: Account = null;
+  private currentAccount: Account = null;
 
-  static init(currentAccount: Account) {
-    CurrentAccountService.currentAccount = currentAccount;
+  setCurrentAccount(currentAccount: Account) {
+    if (this.currentAccount !== null) {
+      throw new Error('Trying to re-set current account');
+    }
+
+    this.currentAccount = currentAccount;
   }
 
   getCurrentAccountOrFail(): Account {
-    if (CurrentAccountService.currentAccount) {
-      return CurrentAccountService.currentAccount;
+    if (this.currentAccount) {
+      return this.currentAccount;
     } else {
       throw new InvalidArgumentException(
         'Trying to get current account but is not provided',

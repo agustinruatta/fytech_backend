@@ -3,13 +3,17 @@ import { User } from '../Users/Entities/User';
 
 @Injectable({ scope: Scope.REQUEST })
 export class CurrentUserService {
-  private static currentUser: User = null;
+  private currentUser: User = null;
 
-  static init(currentUser: User) {
-    CurrentUserService.currentUser = currentUser;
+  public setCurrentUser(user: User) {
+    if (this.currentUser !== null) {
+      throw new Error('Trying to re-set current account');
+    }
+
+    this.currentUser = user;
   }
 
   getCurrentUser(): User | null {
-    return CurrentUserService.currentUser;
+    return this.currentUser;
   }
 }
