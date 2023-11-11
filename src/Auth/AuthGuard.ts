@@ -2,7 +2,6 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  Scope,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -17,7 +16,7 @@ import { CurrentUserService } from './CurrentUserService';
 import { Account } from '../Account/Entities/Account';
 import { CurrentAccountService } from './CurrentAccountService';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly currentAccountService: CurrentAccountService,
