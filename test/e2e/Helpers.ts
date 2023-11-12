@@ -73,7 +73,7 @@ export default class Helpers {
     currency: string,
   ) {
     await request(app.getHttpServer())
-      .post('/investment-transaction/buy')
+      .post('/investment-transaction/sell')
       .auth(accessToken, { type: 'bearer' })
       .send({
         accountId: accountId,
