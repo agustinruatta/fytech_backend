@@ -41,16 +41,20 @@ export default class CurrentUserService {
   async getCurrentUser(): Promise<User | null> {
     //If current user has not been calculated yet
     if (this.currentUser === undefined) {
-      const userData: { email: string } = this.jwtService.verify(
-        this.extractTokenFromHeader(this.request),
-        {
-          secret: this.configService.get<string>('JWT_SECRET'),
-        },
-      );
+      try {
+        const userData: { email: string } = this.jwtService.verify(
+          this.extractTokenFromHeader(this.request),
+          {
+            secret: this.configService.get<string>('JWT_SECRET'),
+          },
+        );
 
-      this.currentUser = await this.userRepository.findOneBy({
-        email: userData.email,
-      });
+        this.currentUser = await this.userRepository.findOneBy({
+          email: userData.email,
+        });
+      } catch (e) {
+        this.currentUser = null;
+      }
     }
 
     return this.currentUser;
