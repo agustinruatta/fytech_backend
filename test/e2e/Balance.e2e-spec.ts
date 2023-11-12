@@ -123,11 +123,11 @@ describe('Balance (e2e)', () => {
           {
             type: 'stock',
             code: 'AMZN',
-            amount: 100,
+            amount: 15,
             balance: {
-              cents: 138.6 * 100 * 100,
+              cents: 138.6 * 15 * 100,
               currency: AvailableCurrencies.USD,
-              floatValue: 138.6 * 100,
+              floatValue: 138.6 * 15,
             },
           },
           //1 BTC is USD 34940.10
