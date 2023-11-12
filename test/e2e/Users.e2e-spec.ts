@@ -49,7 +49,14 @@ describe('Users (e2e)', () => {
   });
 
   it('creates new user', async () => {
-    await Helpers.registerUser(app);
+    const response = await request(app.getHttpServer())
+      .post('/users')
+      .send({
+        email: 'user@gmail.com',
+        password: 'password',
+        defaultAccountName: 'John Williams',
+      })
+      .expect(201);
 
     const users = await userRepository.find();
     const lastUser = users[users.length - 1];
@@ -57,8 +64,15 @@ describe('Users (e2e)', () => {
     //Check user is saved
     expect(lastUser.getEmail()).toBe('user@gmail.com');
 
+    const userAccount = (await lastUser.accounts)[0];
+
     //Check if account is saved
-    expect((await lastUser.accounts)[0].getName()).toBe('John Williams');
+    expect(userAccount.getName()).toBe('John Williams');
+
+    expect(response.body).toBe({
+      email: 'user@gmail.com',
+      accountId: userAccount.getId(),
+    });
   });
 
   it('fails if user has registered previously', async () => {
