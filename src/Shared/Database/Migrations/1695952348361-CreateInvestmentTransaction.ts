@@ -10,7 +10,7 @@ export class CreateInvestmentTransaction1695952348361
            id             uuid                        DEFAULT public.uuid_generate_v4() NOT NULL UNIQUE,
            account_id     uuid                                                          NOT NULL,
            code           character varying                                             NOT NULL,
-           amount         float                                                         NOT NULL,
+           amount         numeric                                                       NOT NULL,
            money_cents    int                                                           NOT NULL,
            money_currency character varying                                             NOT NULL,
            type           character varying                                             NOT NULL,

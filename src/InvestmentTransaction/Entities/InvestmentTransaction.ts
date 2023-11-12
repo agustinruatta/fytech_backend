@@ -26,7 +26,7 @@ export abstract class InvestmentTransaction implements Serializable {
   @Column({ name: 'code' })
   private code: string;
 
-  @Column({ name: 'amount' })
+  @Column({ name: 'amount', type: 'numeric' })
   private amount: number;
 
   @Column(() => Money, { prefix: '' })
