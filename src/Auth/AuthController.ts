@@ -9,7 +9,7 @@ import {
 import { AuthService } from './AuthService';
 import SignInDTO from './DTO/SignInDTO';
 import { Public } from './PublicRouteDecorator';
-import { CurrentUserService } from './CurrentUserService';
+import CurrentUserService from './CurrentUserService';
 
 @Controller('auth')
 export class AuthController {
@@ -33,7 +33,7 @@ export class AuthController {
 
   @Public()
   @Get('/current-user-data')
-  currentUserData() {
-    return this.currentUserService.getCurrentUser() || {};
+  async currentUserData() {
+    return (await this.currentUserService.getCurrentUser()) || {};
   }
 }

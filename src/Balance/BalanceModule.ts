@@ -5,18 +5,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import BuyInvestmentTransaction from '../InvestmentTransaction/Entities/BuyInvestmentTransaction';
 import SellInvestmentTransaction from '../InvestmentTransaction/Entities/SellInvestmentTransaction';
 import { Account } from '../Account/Entities/Account';
-import { CurrentAccountService } from '../Auth/CurrentAccountService';
 import { MarketDataModule } from '../MarketData/MarketDataModule';
+import { AuthModule } from '../Auth/AuthModule';
 
 @Module({
   controllers: [BalanceController],
-  providers: [BalanceService, CurrentAccountService],
+  providers: [BalanceService],
   imports: [
     TypeOrmModule.forFeature([
       BuyInvestmentTransaction,
       SellInvestmentTransaction,
       Account,
     ]),
+    AuthModule,
     MarketDataModule,
   ],
 })

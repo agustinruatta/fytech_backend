@@ -9,7 +9,7 @@ export class BalanceController {
 
   @Get('/:accountId/:currency')
   findAll(
-    //Don't delete this param because it is used to set it in CurrentAccountService
+    //Don't delete this param because it is used to set it in CurrentUserService
     @Param('accountId') accountId: string,
     @Param('currency') currency: AvailableCurrencies,
   ): Promise<AssetBalance[]> {

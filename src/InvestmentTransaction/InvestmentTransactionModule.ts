@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { InvestmentTransactionController } from './InvestmentTransactionController';
 import { InvestmentTransactionService } from './InvestmentTransactionService';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CurrentUserService } from '../Auth/CurrentUserService';
 import { Account } from '../Account/Entities/Account';
 import BuyInvestmentTransaction from './Entities/BuyInvestmentTransaction';
 import SellInvestmentTransaction from './Entities/SellInvestmentTransaction';
 import { InvestmentTransaction } from './Entities/InvestmentTransaction';
+import { AuthModule } from '../Auth/AuthModule';
 
 @Module({
   imports: [
@@ -16,8 +16,9 @@ import { InvestmentTransaction } from './Entities/InvestmentTransaction';
       InvestmentTransaction,
       Account,
     ]),
+    AuthModule,
   ],
   controllers: [InvestmentTransactionController],
-  providers: [InvestmentTransactionService, CurrentUserService],
+  providers: [InvestmentTransactionService],
 })
 export class InvestmentTransactionModule {}

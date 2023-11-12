@@ -3,7 +3,7 @@ import { CreateInvestmentTransactionDTO } from './DTO/CreateInvestmentTransactio
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityNotFoundError, Repository } from 'typeorm';
 import { InvestmentTransaction } from './Entities/InvestmentTransaction';
-import { CurrentUserService } from '../Auth/CurrentUserService';
+import CurrentUserService from '../Auth/CurrentUserService';
 import { InvalidArgumentException } from '../Shared/Exceptions/InvalidArgumentException';
 import SellInvestmentTransaction from './Entities/SellInvestmentTransaction';
 import BuyInvestmentTransaction from './Entities/BuyInvestmentTransaction';
@@ -46,7 +46,7 @@ export class InvestmentTransactionService {
       const account = await this.accountRepository.findOneByOrFail({
         id: createTransactionDto.accountId,
         user: {
-          id: this.currentUserService.getCurrentUser().getId(),
+          id: (await this.currentUserService.getCurrentUserOrFail()).getId(),
         },
       });
 
@@ -83,7 +83,7 @@ export class InvestmentTransactionService {
           'Account id ' +
             createTransactionDto.accountId +
             ' and user ' +
-            this.currentUserService.getCurrentUser().getId() +
+            (await this.currentUserService.getCurrentUserOrFail()).getId() +
             'not found',
           "You don't have permissions to use sent account id",
         );

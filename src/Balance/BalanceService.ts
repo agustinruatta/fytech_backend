@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import BuyInvestmentTransaction from '../InvestmentTransaction/Entities/BuyInvestmentTransaction';
 import SellInvestmentTransaction from '../InvestmentTransaction/Entities/SellInvestmentTransaction';
-import { CurrentAccountService } from '../Auth/CurrentAccountService';
 import AssetBalance from './AssetBalance';
 import { AvailableCurrencies } from '../Money/AvailableCurrencies';
 import { MarketDataService } from '../MarketData/MarketDataService';
 import GetCurrentMarketDataRequest from '../MarketData/DTO/GetCurrentMarketDataRequest';
+import CurrentUserService from '../Auth/CurrentUserService';
+import { Account } from '../Account/Entities/Account';
 
 @Injectable()
 export class BalanceService {
@@ -16,7 +17,7 @@ export class BalanceService {
     private readonly buyInvestmentTransactionRepository: Repository<BuyInvestmentTransaction>,
     @InjectRepository(SellInvestmentTransaction)
     private readonly sellInvestmentTransactionRepository: Repository<SellInvestmentTransaction>,
-    public readonly currentAccountService: CurrentAccountService,
+    public readonly currentUserService: CurrentUserService,
     private readonly marketDataService: MarketDataService,
   ) {}
 
@@ -24,18 +25,23 @@ export class BalanceService {
     currency: AvailableCurrencies,
   ): Promise<AssetBalance[]> {
     const amountOfInstruments = {};
+    const currentAccount =
+      await this.currentUserService.getCurrentAccountOrFail();
 
-    await this.sumAllBuys(amountOfInstruments);
-    await this.subtractAllSells(amountOfInstruments);
+    await this.sumAllBuys(amountOfInstruments, currentAccount);
+    await this.subtractAllSells(amountOfInstruments, currentAccount);
 
     return this.getAssetsBalance(amountOfInstruments, currency);
   }
 
-  private async sumAllBuys(amountOfInstruments: object) {
+  private async sumAllBuys(
+    amountOfInstruments: object,
+    currentAccount: Account,
+  ) {
     const buyTransactions =
       await this.buyInvestmentTransactionRepository.findBy({
         account: {
-          id: this.currentAccountService.getCurrentAccountOrFail().getId(),
+          id: currentAccount.getId(),
         },
       });
 
@@ -49,11 +55,14 @@ export class BalanceService {
     });
   }
 
-  private async subtractAllSells(amountOfInstruments: object) {
+  private async subtractAllSells(
+    amountOfInstruments: object,
+    currentAccount: Account,
+  ) {
     const sellTransactions =
       await this.sellInvestmentTransactionRepository.findBy({
         account: {
-          id: this.currentAccountService.getCurrentAccountOrFail().getId(),
+          id: currentAccount.getId(),
         },
       });
 
