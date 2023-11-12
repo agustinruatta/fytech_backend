@@ -62,7 +62,7 @@ export default class CurrentUserService {
   }
 
   async getCurrentAccountOrFail(): Promise<Account> {
-    const currentAccount = this.getCurrentAccount();
+    const currentAccount = await this.getCurrentAccount();
 
     if (!currentAccount) {
       throw new InvalidArgumentException(
