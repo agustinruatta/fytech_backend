@@ -53,6 +53,7 @@ export class Account implements Serializable {
 
   public async serialize(): Promise<object> {
     return {
+      id: this.id,
       name: this.getName(),
     };
   }

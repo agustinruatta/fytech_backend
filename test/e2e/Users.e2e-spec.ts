@@ -69,9 +69,9 @@ describe('Users (e2e)', () => {
     //Check if account is saved
     expect(userAccount.getName()).toBe('John Williams');
 
-    expect(response.body).toBe({
-      email: 'user@gmail.com',
-      accountId: userAccount.getId(),
+    expect(response.body).toStrictEqual({
+      user: await lastUser.serialize(),
+      defaultAccount: await userAccount.serialize(),
     });
   });
 

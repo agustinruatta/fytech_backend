@@ -9,11 +9,16 @@ export class UsersController {
 
   @Public()
   @Post()
-  create(@Body() createUserDTO: CreateUserDTO) {
-    return this.userService.createUser(
+  async create(@Body() createUserDTO: CreateUserDTO) {
+    const user = await this.userService.createUser(
       createUserDTO.email,
       createUserDTO.password,
       createUserDTO.defaultAccountName,
     );
+
+    return {
+      user: await user.serialize(),
+      defaultAccount: await (await user.accounts)[0].serialize(),
+    };
   }
 }

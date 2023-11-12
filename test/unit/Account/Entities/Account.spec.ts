@@ -18,6 +18,7 @@ describe('Account', () => {
       const account = new Account('Peter Johnson');
 
       expect(await account.serialize()).toStrictEqual({
+        id: undefined,
         name: 'Peter Johnson',
       });
     });
