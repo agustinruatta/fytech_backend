@@ -121,7 +121,7 @@ describe('Balance (e2e)', () => {
         .expect([
           //1 AMZN is USD 138.60
           {
-            type: 'stock',
+            instrument_type: 'stock',
             code: 'AMZN',
             amount: 15,
             balance: {
@@ -132,13 +132,59 @@ describe('Balance (e2e)', () => {
           },
           //1 BTC is USD 34940.10
           {
-            type: 'crypto',
+            instrument_type: 'crypto',
             code: 'BTC',
             amount: 0.5,
             balance: {
               cents: 34940.1 * 0.5 * 100,
               currency: AvailableCurrencies.USD,
               floatValue: 34940.1 * 0.5,
+            },
+          },
+        ]);
+    });
+
+    it('returns a balance with lot of decimals', async () => {
+      const signInDataA = await Helpers.signIn(app);
+      const accountIdA = (await signInDataA.user.accounts)[0].getId();
+
+      //Buy 0.513 BTC at 20568.99 USD
+      await Helpers.buyTransaction(
+        app,
+        signInDataA.accessToken,
+        accountIdA,
+        'BTC',
+        0.513,
+        String(0.513 * 20568.99),
+        AvailableCurrencies.USD,
+      );
+
+      //Sell 0.2157 BTC at 14021.87 USD
+      await Helpers.sellTransaction(
+        app,
+        signInDataA.accessToken,
+        accountIdA,
+        'BTC',
+        0.2157,
+        String(0.2157 * 14021.87),
+        AvailableCurrencies.USD,
+      );
+
+      return request(app.getHttpServer())
+        .get(`/balance/${accountIdA}/${AvailableCurrencies.USD}`)
+        .auth(signInDataA.accessToken, { type: 'bearer' })
+        .send()
+        .expect(200)
+        .expect([
+          //1 BTC is USD 34940.10
+          {
+            instrument_type: 'crypto',
+            code: 'BTC',
+            amount: 0.513 - 0.2157,
+            balance: {
+              cents: (0.513 - 0.2157) * 34940.1 * 0.5 * 100,
+              currency: AvailableCurrencies.USD,
+              floatValue: (0.513 - 0.2157) * 34940.1 * 0.5,
             },
           },
         ]);
