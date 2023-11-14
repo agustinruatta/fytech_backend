@@ -19,6 +19,7 @@ import PortfolioPersonalProvider from './MarketDataProviders/PortfolioPersonalPr
         return new MarketDataService(params);
       },
       inject: [
+        //It is very important this order, because this is how is going to be asked if it can handle the instrument code
         ArgentinianCryptoPricesProvider,
         EstadisticasBCRAProvider,
         PortfolioPersonalProvider,
