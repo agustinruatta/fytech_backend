@@ -154,4 +154,29 @@ describe('InvestmentTransaction (e2e)', () => {
       );
     });
   });
+
+  it('fails if is trying to sell something that does not have', async () => {
+    const signInData = await Helpers.signIn(app);
+    const account = (await signInData.user.accounts)[0];
+
+    return request(app.getHttpServer())
+      .post('/investment-transaction/sell')
+      .auth(signInData.accessToken, { type: 'bearer' })
+      .send({
+        ...validBody,
+        accountId: account.getId(),
+        money: {
+          amount: '100',
+          currency: AvailableCurrencies.USD_MEP,
+        },
+      })
+      .expect(422)
+      .expect({
+        message: [
+          'Insufficient quantity for sale. Please check your portfolio and enter a valid quantity.',
+        ],
+        error: 'Bad Request',
+        statusCode: 400,
+      });
+  });
 });

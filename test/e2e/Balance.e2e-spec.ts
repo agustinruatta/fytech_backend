@@ -47,6 +47,18 @@ describe('Balance (e2e)', () => {
         });
     });
 
+    it('returns the balance of empty account', async () => {
+      const signInData = await Helpers.signIn(app);
+      const accountId = (await signInData.user.accounts)[0].getId();
+
+      return request(app.getHttpServer())
+        .get(`/balance/${accountId}/${AvailableCurrencies.USD}`)
+        .auth(signInData.accessToken, { type: 'bearer' })
+        .send()
+        .expect(200)
+        .expect([]);
+    });
+
     it('returns the balance', async () => {
       const signInDataA = await Helpers.signIn(app);
       const accountIdA = (await signInDataA.user.accounts)[0].getId();
