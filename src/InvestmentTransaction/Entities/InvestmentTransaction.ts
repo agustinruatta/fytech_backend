@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { InvalidArgumentException } from '../../Shared/Exceptions/InvalidArgumentException';
+import ColumnNumericTransformer from '../../Shared/Database/Transformers/ColumnNumericTransformer';
 
 @Entity({ name: 'investment_transactions' })
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -26,7 +27,12 @@ export abstract class InvestmentTransaction implements Serializable {
   @Column({ name: 'code' })
   private code: string;
 
-  @Column({ name: 'amount', type: 'numeric' })
+  @Column({
+    name: 'amount',
+    type: 'numeric',
+    //Typeorm map "numeric" type to string. So we need to apply this transformer
+    transformer: new ColumnNumericTransformer(),
+  })
   private amount: number;
 
   @Column(() => Money, { prefix: '' })

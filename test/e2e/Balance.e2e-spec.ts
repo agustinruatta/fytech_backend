@@ -194,9 +194,9 @@ describe('Balance (e2e)', () => {
             code: 'BTC',
             amount: 0.513 - 0.2157,
             balance: {
-              cents: (0.513 - 0.2157) * 34940.1 * 0.5 * 100,
+              cents: 1038769,
               currency: AvailableCurrencies.USD,
-              floatValue: (0.513 - 0.2157) * 34940.1 * 0.5,
+              floatValue: 10387.69,
             },
           },
         ]);
