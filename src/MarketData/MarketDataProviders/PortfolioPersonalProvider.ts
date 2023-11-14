@@ -31,7 +31,7 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
         GetCurrentMarketDataResponse.newWithMoney(
           Money.newFromString('34940.10', AvailableCurrencies.USD),
           Money.newFromString('34940.10', AvailableCurrencies.USD),
-          InstrumentTypes.STOCK,
+          InstrumentTypes.CRYPTO,
           new Date(),
         ),
       );
