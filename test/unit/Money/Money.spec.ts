@@ -28,6 +28,14 @@ describe('Money', () => {
       );
     });
 
+    it('raises exception if currency is USD', () => {
+      // @ts-ignore
+      expect(() => Money.newFromString('100', 'USD')).toThrow(
+        new Error('Currency must not be empty'),
+      );
+    });
+
+
     it('raises exception if amount is negative', () => {
       expect(() =>
         Money.newFromString('-100', AvailableCurrencies.USD),
@@ -45,6 +53,13 @@ describe('Money', () => {
     it('raises exception if currency is invalid', () => {
       // @ts-ignore
       expect(() => new Money(100, 'invalid')).toThrow(
+        new Error('Currency must not be empty'),
+      );
+    });
+
+    it('raises exception if currency is USD', () => {
+      // @ts-ignore
+      expect(() => new Money(100, 'USD')).toThrow(
         new Error('Currency must not be empty'),
       );
     });

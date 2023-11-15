@@ -18,6 +18,10 @@ export default class Money {
       throw new Error('Amount must not be negative');
     }
 
+    if (!Object.values(AvailableCurrencies).includes(currency)) {
+      throw new Error('Currency must not be empty');
+    }
+
     this.cents = cents;
     this.currency = currency;
   }
@@ -26,10 +30,6 @@ export default class Money {
     amount: string,
     currencySymbol: AvailableCurrencies,
   ): Money {
-    if (!(currencySymbol.trim() in AvailableCurrencies)) {
-      throw new Error('Currency must not be empty');
-    }
-
     //TODO: If amount is "USD" it does not throw an error
 
     if (amount.trim() === '') {
