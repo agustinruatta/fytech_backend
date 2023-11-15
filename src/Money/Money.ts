@@ -13,7 +13,7 @@ export default class Money {
   @Column({ name: 'money_currency' })
   private readonly currency: AvailableCurrencies;
 
-  private constructor(cents: number, currency: AvailableCurrencies) {
+  public constructor(cents: number, currency: AvailableCurrencies) {
     if (cents < 0) {
       throw new Error('Amount must not be negative');
     }

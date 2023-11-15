@@ -35,6 +35,27 @@ describe('Money', () => {
     });
   });
 
+  describe('new from constructor', () => {
+    it('should create it', () => {
+      const money = new Money(12345, AvailableCurrencies.USD);
+
+      expect(money).toBeDefined();
+    });
+
+    it('raises exception if currency is invalid', () => {
+      // @ts-ignore
+      expect(() => new Money(100, 'invalid')).toThrow(
+        new Error('Currency must not be empty'),
+      );
+    });
+
+    it('raises exception if amount is negative', () => {
+      expect(() => new Money(-100, AvailableCurrencies.USD)).toThrow(
+        new Error('Amount must not be negative'),
+      );
+    });
+  });
+
   describe('add', () => {
     let initialMoney: Money;
 
