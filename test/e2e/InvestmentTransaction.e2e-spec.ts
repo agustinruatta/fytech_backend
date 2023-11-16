@@ -124,35 +124,64 @@ describe('InvestmentTransaction (e2e)', () => {
           statusCode: 400,
         });
     });
+  });
 
-    it('creates it', async () => {
-      const signInData = await Helpers.signIn(app);
-      const account = (await signInData.user.accounts)[0];
+  it('buys ', async () => {
+    const signInData = await Helpers.signIn(app);
+    const account = (await signInData.user.accounts)[0];
 
-      await request(app.getHttpServer())
-        .post('/investment-transaction/' + action)
-        .auth(signInData.accessToken, { type: 'bearer' })
-        .send({
-          ...validBody,
-          accountId: account.getId(),
-        })
-        .expect(201);
+    await request(app.getHttpServer())
+      .post('/investment-transaction/buy')
+      .auth(signInData.accessToken, { type: 'bearer' })
+      .send({
+        ...validBody,
+        accountId: account.getId(),
+      })
+      .expect(201);
 
-      const repository =
-        action === 'buy'
-          ? buyInvestmentTransactionRepository
-          : sellInvestmentTransactionRepository;
+    const createdTransaction = await buyInvestmentTransactionRepository.findOne(
+      {
+        order: { createdAt: 'DESC' },
+        where: {},
+      },
+    );
 
-      const createdTransaction = await repository.findOne({
+    expect(await createdTransaction.account).toStrictEqual(account);
+    expect(createdTransaction).toBeInstanceOf(BuyInvestmentTransaction);
+  });
+
+  it('sells', async () => {
+    const signInData = await Helpers.signIn(app);
+    const account = (await signInData.user.accounts)[0];
+
+    //Buy before sell
+    await Helpers.buyTransaction(
+      app,
+      signInData.accessToken,
+      account.getId(),
+      validBody.code,
+      1000,
+      '1000',
+      AvailableCurrencies.USD_MEP,
+    );
+
+    await request(app.getHttpServer())
+      .post('/investment-transaction/sell')
+      .auth(signInData.accessToken, { type: 'bearer' })
+      .send({
+        ...validBody,
+        accountId: account.getId(),
+      })
+      .expect(201);
+
+    const createdTransaction =
+      await sellInvestmentTransactionRepository.findOne({
         order: { createdAt: 'DESC' },
         where: {},
       });
 
-      expect(await createdTransaction.account).toStrictEqual(account);
-      expect(createdTransaction).toBeInstanceOf(
-        action === 'buy' ? BuyInvestmentTransaction : SellInvestmentTransaction,
-      );
-    });
+    expect(await createdTransaction.account).toStrictEqual(account);
+    expect(createdTransaction).toBeInstanceOf(SellInvestmentTransaction);
   });
 
   it('fails if is trying to sell something that does not have', async () => {
