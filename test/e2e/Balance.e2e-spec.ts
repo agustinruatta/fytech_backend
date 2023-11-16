@@ -182,7 +182,11 @@ describe('Balance (e2e)', () => {
       );
 
       return request(app.getHttpServer())
-        .get(`/balance/${signInData.defaultAccount.getId()}/${AvailableCurrencies.USD}`)
+        .get(
+          `/balance/${signInData.defaultAccount.getId()}/${
+            AvailableCurrencies.USD
+          }`,
+        )
         .auth(signInData.accessToken, { type: 'bearer' })
         .send()
         .expect(200)
