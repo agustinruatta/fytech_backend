@@ -30,8 +30,6 @@ export default class Money {
     amount: string,
     currencySymbol: AvailableCurrencies,
   ): Money {
-    //TODO: If amount is "USD" it does not throw an error
-
     if (amount.trim() === '') {
       throw new Error('Amount must not be an empty string');
     }
