@@ -156,15 +156,34 @@ describe('InvestmentTransaction (e2e)', () => {
   });
 
   it('fails if is trying to sell something that does not have', async () => {
-    const signInData = await Helpers.signIn(app);
-    const account = (await signInData.user.accounts)[0];
+    const signInDataA = await Helpers.signIn(app);
+    const accountA = (await signInDataA.user.accounts)[0];
 
+    const signInDataB = await Helpers.signIn(app, {
+      email: 'test@mail.com',
+      password: 'password',
+      defaultAccountName: 'Some name',
+    });
+    const accountB = (await signInDataB.user.accounts)[0];
+
+    //Another account buy same
+    await Helpers.buyTransaction(
+      app,
+      signInDataB.accessToken,
+      accountB.getId(),
+      validBody.code,
+      1000,
+      '1000',
+      AvailableCurrencies.USD_MEP,
+    );
+
+    //Try to sell
     return request(app.getHttpServer())
       .post('/investment-transaction/sell')
-      .auth(signInData.accessToken, { type: 'bearer' })
+      .auth(signInDataA.accessToken, { type: 'bearer' })
       .send({
         ...validBody,
-        accountId: account.getId(),
+        accountId: accountA.getId(),
         money: {
           amount: '100',
           currency: AvailableCurrencies.USD_MEP,
