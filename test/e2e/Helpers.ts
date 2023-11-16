@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../../src/Users/Entities/User';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Account } from '../../src/Account/Entities/Account';
 
 export default class Helpers {
   static async registerUser(
@@ -23,8 +24,12 @@ export default class Helpers {
       password: 'password',
       defaultAccountName: 'John Williams',
     },
-  ): Promise<{ accessToken: string; user: User }> {
+  ): Promise<{ accessToken: string; user: User; defaultAccount: Account }> {
     await this.registerUser(app, defaultData);
+
+    const user = await app
+      .get<Repository<User>>(getRepositoryToken(User))
+      .findOneBy({ email: defaultData.email });
 
     return {
       accessToken: (
@@ -32,9 +37,8 @@ export default class Helpers {
           .post('/auth/login')
           .send({ email: defaultData.email, password: defaultData.password })
       ).body.access_token,
-      user: await app
-        .get<Repository<User>>(getRepositoryToken(User))
-        .findOneBy({ email: defaultData.email }),
+      user: user,
+      defaultAccount: (await user.accounts)[0],
     };
   }
 

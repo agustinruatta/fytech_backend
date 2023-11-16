@@ -101,14 +101,13 @@ describe('InvestmentTransaction (e2e)', () => {
 
     it('fails if currency is not supported', async () => {
       const signInData = await Helpers.signIn(app);
-      const account = (await signInData.user.accounts)[0];
 
       return request(app.getHttpServer())
         .post('/investment-transaction/' + action)
         .auth(signInData.accessToken, { type: 'bearer' })
         .send({
           ...validBody,
-          accountId: account.getId(),
+          accountId: signInData.defaultAccount.getId(),
           money: {
             amount: '100',
             currency: 'usd',
@@ -128,14 +127,13 @@ describe('InvestmentTransaction (e2e)', () => {
 
   it('buys ', async () => {
     const signInData = await Helpers.signIn(app);
-    const account = (await signInData.user.accounts)[0];
 
     await request(app.getHttpServer())
       .post('/investment-transaction/buy')
       .auth(signInData.accessToken, { type: 'bearer' })
       .send({
         ...validBody,
-        accountId: account.getId(),
+        accountId: signInData.defaultAccount.getId(),
       })
       .expect(201);
 
@@ -146,19 +144,20 @@ describe('InvestmentTransaction (e2e)', () => {
       },
     );
 
-    expect(await createdTransaction.account).toStrictEqual(account);
+    expect(await createdTransaction.account).toStrictEqual(
+      signInData.defaultAccount,
+    );
     expect(createdTransaction).toBeInstanceOf(BuyInvestmentTransaction);
   });
 
   it('sells', async () => {
     const signInData = await Helpers.signIn(app);
-    const account = (await signInData.user.accounts)[0];
 
     //Buy before sell
     await Helpers.buyTransaction(
       app,
       signInData.accessToken,
-      account.getId(),
+      signInData.defaultAccount.getId(),
       validBody.code,
       1000,
       '1000',
@@ -170,7 +169,7 @@ describe('InvestmentTransaction (e2e)', () => {
       .auth(signInData.accessToken, { type: 'bearer' })
       .send({
         ...validBody,
-        accountId: account.getId(),
+        accountId: signInData.defaultAccount.getId(),
       })
       .expect(201);
 
@@ -180,26 +179,26 @@ describe('InvestmentTransaction (e2e)', () => {
         where: {},
       });
 
-    expect(await createdTransaction.account).toStrictEqual(account);
+    expect(await createdTransaction.account).toStrictEqual(
+      signInData.defaultAccount,
+    );
     expect(createdTransaction).toBeInstanceOf(SellInvestmentTransaction);
   });
 
   it('fails if is trying to sell something that does not have', async () => {
     const signInDataA = await Helpers.signIn(app);
-    const accountA = (await signInDataA.user.accounts)[0];
 
     const signInDataB = await Helpers.signIn(app, {
       email: 'test@mail.com',
       password: 'password',
       defaultAccountName: 'Some name',
     });
-    const accountB = (await signInDataB.user.accounts)[0];
 
     //Another account buy same
     await Helpers.buyTransaction(
       app,
       signInDataB.accessToken,
-      accountB.getId(),
+      signInDataB.defaultAccount.getId(),
       validBody.code,
       1000,
       '1000',
@@ -212,7 +211,7 @@ describe('InvestmentTransaction (e2e)', () => {
       .auth(signInDataA.accessToken, { type: 'bearer' })
       .send({
         ...validBody,
-        accountId: accountA.getId(),
+        accountId: signInDataA.defaultAccount.getId(),
         money: {
           amount: '100',
           currency: AvailableCurrencies.USD_MEP,

@@ -49,7 +49,7 @@ describe('Balance (e2e)', () => {
 
     it('returns the balance of empty account', async () => {
       const signInData = await Helpers.signIn(app);
-      const accountId = (await signInData.user.accounts)[0].getId();
+      const accountId = signInData.defaultAccount.getId();
 
       return request(app.getHttpServer())
         .get(`/balance/${accountId}/${AvailableCurrencies.USD}`)
@@ -61,14 +61,14 @@ describe('Balance (e2e)', () => {
 
     it('returns the balance', async () => {
       const signInDataA = await Helpers.signIn(app);
-      const accountIdA = (await signInDataA.user.accounts)[0].getId();
+      const accountIdA = signInDataA.defaultAccount.getId();
 
       const signInDataB = await Helpers.signIn(app, {
         email: 'test@mail.com',
         password: 'password',
         defaultAccountName: 'Some Name',
       });
-      const accountIdB = (await signInDataB.user.accounts)[0].getId();
+      const accountIdB = signInDataB.defaultAccount.getId();
 
       //Buy 20 AMZN at 100 USD
       await Helpers.buyTransaction(
@@ -157,14 +157,13 @@ describe('Balance (e2e)', () => {
     });
 
     it('returns a balance with lot of decimals', async () => {
-      const signInDataA = await Helpers.signIn(app);
-      const accountIdA = (await signInDataA.user.accounts)[0].getId();
+      const signInData = await Helpers.signIn(app);
 
       //Buy 0.513 BTC at 20568.99 USD
       await Helpers.buyTransaction(
         app,
-        signInDataA.accessToken,
-        accountIdA,
+        signInData.accessToken,
+        signInData.defaultAccount.getId(),
         'BTC',
         0.513,
         String(0.513 * 20568.99),
@@ -174,8 +173,8 @@ describe('Balance (e2e)', () => {
       //Sell 0.2157 BTC at 14021.87 USD
       await Helpers.sellTransaction(
         app,
-        signInDataA.accessToken,
-        accountIdA,
+        signInData.accessToken,
+        signInData.defaultAccount.getId(),
         'BTC',
         0.2157,
         String(0.2157 * 14021.87),
@@ -183,8 +182,8 @@ describe('Balance (e2e)', () => {
       );
 
       return request(app.getHttpServer())
-        .get(`/balance/${accountIdA}/${AvailableCurrencies.USD}`)
-        .auth(signInDataA.accessToken, { type: 'bearer' })
+        .get(`/balance/${signInData.defaultAccount.getId()}/${AvailableCurrencies.USD}`)
+        .auth(signInData.accessToken, { type: 'bearer' })
         .send()
         .expect(200)
         .expect([
