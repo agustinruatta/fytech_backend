@@ -4,7 +4,8 @@ import Money from '../Money/Money';
 import { Account } from '../Account/Entities/Account';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { AvailableCurrencies } from "../Money/AvailableCurrencies";
+import { AvailableCurrencies } from '../Money/AvailableCurrencies';
+import { InstrumentBalance } from './InstrumentBalance';
 
 @Injectable()
 export default class BalanceRepository {
@@ -13,9 +14,7 @@ export default class BalanceRepository {
     private readonly investmentTransactionRepository: Repository<InvestmentTransaction>,
   ) {}
 
-  async getAccountBalance(
-    account: Account,
-  ): Promise<{ code: string; amount: number; balance: Money }[]> {
+  async getAccountBalance(account: Account): Promise<InstrumentBalance[]> {
     const queryResult: Promise<
       [
         {
@@ -45,5 +44,28 @@ export default class BalanceRepository {
         };
       }),
     );
+  }
+
+  async getInstrumentAmount(
+    account: Account,
+    instrumentCode: string,
+  ): Promise<number> {
+    const balance = await this.investmentTransactionRepository
+      .createQueryBuilder('investmentTransaction')
+      .select(
+        "sum(case when type = 'BuyInvestmentTransaction' then amount else -amount end) as amount",
+      )
+      .where(
+        'investmentTransaction.account = :currentAccount AND investmentTransaction.code = :code',
+        {
+          currentAccount: account.getId(),
+          code: instrumentCode,
+        },
+      )
+      .groupBy('code')
+      .limit(1)
+      .execute();
+
+    return balance.length === 0 ? 0 : parseFloat(balance[0].amount);
   }
 }

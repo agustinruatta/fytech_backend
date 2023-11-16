@@ -7,6 +7,7 @@ import BuyInvestmentTransaction from './Entities/BuyInvestmentTransaction';
 import SellInvestmentTransaction from './Entities/SellInvestmentTransaction';
 import { InvestmentTransaction } from './Entities/InvestmentTransaction';
 import { AuthModule } from '../Auth/AuthModule';
+import { BalanceModule } from '../Balance/BalanceModule';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from '../Auth/AuthModule';
       Account,
     ]),
     AuthModule,
+    BalanceModule,
   ],
   controllers: [InvestmentTransactionController],
   providers: [InvestmentTransactionService],

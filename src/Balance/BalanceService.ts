@@ -5,6 +5,8 @@ import { MarketDataService } from '../MarketData/MarketDataService';
 import GetCurrentMarketDataRequest from '../MarketData/DTO/GetCurrentMarketDataRequest';
 import CurrentUserService from '../Auth/CurrentUserService';
 import BalanceRepository from './BalanceRepository';
+import { Account } from '../Account/Entities/Account';
+import { InstrumentBalance } from './InstrumentBalance';
 
 @Injectable()
 export class BalanceService {
@@ -40,5 +42,12 @@ export class BalanceService {
     });
 
     return Promise.all(balance);
+  }
+
+  async getInstrumentBalance(
+    account: Account,
+    instrumentCode: string,
+  ): Promise<number> {
+    return this.balanceRepository.getInstrumentAmount(account, instrumentCode);
   }
 }

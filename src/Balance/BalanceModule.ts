@@ -16,5 +16,6 @@ import BalanceRepository from './BalanceRepository';
     AuthModule,
     MarketDataModule,
   ],
+  exports: [BalanceService],
 })
 export class BalanceModule {}

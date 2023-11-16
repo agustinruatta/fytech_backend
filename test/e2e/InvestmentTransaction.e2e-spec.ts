@@ -175,8 +175,8 @@ describe('InvestmentTransaction (e2e)', () => {
         message: [
           'Insufficient quantity for sale. Please check your portfolio and enter a valid quantity.',
         ],
-        error: 'Bad Request',
-        statusCode: 400,
+        error: 'Unprocessable Entity',
+        statusCode: 422,
       });
   });
 });

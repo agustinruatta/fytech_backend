@@ -9,6 +9,7 @@ import SellInvestmentTransaction from './Entities/SellInvestmentTransaction';
 import BuyInvestmentTransaction from './Entities/BuyInvestmentTransaction';
 import { Account } from '../Account/Entities/Account';
 import Money from '../Money/Money';
+import { BalanceService } from '../Balance/BalanceService';
 
 @Injectable()
 export class InvestmentTransactionService {
@@ -17,6 +18,7 @@ export class InvestmentTransactionService {
     private readonly accountRepository: Repository<Account>,
     @InjectRepository(InvestmentTransaction)
     private readonly investmentTransactionRepository: Repository<InvestmentTransaction>,
+    private readonly balanceService: BalanceService,
     private readonly currentUserService: CurrentUserService,
   ) {}
 
@@ -42,54 +44,62 @@ export class InvestmentTransactionService {
     action: 'buy' | 'sell',
     createTransactionDto: CreateInvestmentTransactionDTO,
   ): Promise<InvestmentTransaction> {
-    try {
-      const account = await this.accountRepository.findOneByOrFail({
-        id: createTransactionDto.accountId,
-        user: {
-          id: (await this.currentUserService.getCurrentUserOrFail()).getId(),
-        },
-      });
+    const account = await this.accountRepository.findOneBy({
+      id: createTransactionDto.accountId,
+      user: {
+        id: (await this.currentUserService.getCurrentUserOrFail()).getId(),
+      },
+    });
 
-      let entity: InvestmentTransaction;
-
-      if (action === 'buy') {
-        entity = new BuyInvestmentTransaction(
-          account,
-          createTransactionDto.code,
-          createTransactionDto.amount,
-          Money.newFromString(
-            createTransactionDto.money.amount,
-            createTransactionDto.money.currency,
-          ),
-          createTransactionDto.datetime,
-        );
-      } else {
-        entity = new SellInvestmentTransaction(
-          account,
-          createTransactionDto.code,
-          createTransactionDto.amount,
-          Money.newFromString(
-            createTransactionDto.money.amount,
-            createTransactionDto.money.currency,
-          ),
-          createTransactionDto.datetime,
-        );
-      }
-
-      return this.investmentTransactionRepository.save(entity);
-    } catch (exception) {
-      if (exception instanceof EntityNotFoundError) {
-        throw new InvalidArgumentException(
-          'Account id ' +
-            createTransactionDto.accountId +
-            ' and user ' +
-            (await this.currentUserService.getCurrentUserOrFail()).getId() +
-            'not found',
-          "You don't have permissions to use sent account id",
-        );
-      }
-
-      throw exception;
+    if (!account) {
+      throw new InvalidArgumentException(
+        'Account id ' +
+          createTransactionDto.accountId +
+          ' and user ' +
+          (await this.currentUserService.getCurrentUserOrFail()).getId() +
+          'not found',
+        "You don't have permissions to use sent account id",
+      );
     }
+
+    let entity: InvestmentTransaction;
+
+    if (action === 'buy') {
+      entity = new BuyInvestmentTransaction(
+        account,
+        createTransactionDto.code,
+        createTransactionDto.amount,
+        Money.newFromString(
+          createTransactionDto.money.amount,
+          createTransactionDto.money.currency,
+        ),
+        createTransactionDto.datetime,
+      );
+    } else {
+      const previousAmount = await this.balanceService.getInstrumentBalance(
+        account,
+        createTransactionDto.code,
+      );
+
+      if (previousAmount < createTransactionDto.amount) {
+        throw new InvalidArgumentException(
+          'Insufficient quantity for sale. Previous amount: ' + createTransactionDto.amount,
+          'Insufficient quantity for sale. Please check your portfolio and enter a valid quantity.',
+        );
+      }
+
+      entity = new SellInvestmentTransaction(
+        account,
+        createTransactionDto.code,
+        createTransactionDto.amount,
+        Money.newFromString(
+          createTransactionDto.money.amount,
+          createTransactionDto.money.currency,
+        ),
+        createTransactionDto.datetime,
+      );
+    }
+
+    return this.investmentTransactionRepository.save(entity);
   }
 }
