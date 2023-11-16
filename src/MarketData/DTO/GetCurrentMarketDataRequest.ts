@@ -1,35 +1,31 @@
+import { AvailableCurrencies } from '../../Money/AvailableCurrencies';
+
 export default class GetCurrentMarketDataRequest {
   private readonly _code: string;
 
-  private _currency: string | undefined;
+  private _currency: AvailableCurrencies;
 
-  constructor(code: string) {
+  private constructor(code: string, currency: AvailableCurrencies) {
     this._code = code.toLocaleUpperCase();
+    this.setCurrency(currency);
   }
 
-  public static new(code: string): GetCurrentMarketDataRequest {
-    return new GetCurrentMarketDataRequest(code);
-  }
-
-  public withCurrency(
-    currency: string | undefined,
+  public static new(
+    code: string,
+    currency: AvailableCurrencies,
   ): GetCurrentMarketDataRequest {
-    this.currency = currency;
-    return this;
+    return new GetCurrentMarketDataRequest(code, currency);
   }
 
   get code(): string {
     return this._code;
   }
 
-  get currency(): string | undefined {
+  get currency(): AvailableCurrencies {
     return this._currency;
   }
 
-  set currency(value: string | undefined) {
-    if (typeof value === 'string') {
-      value = value.toLocaleUpperCase();
-    }
+  private setCurrency(value: AvailableCurrencies) {
     this._currency = value;
   }
 }

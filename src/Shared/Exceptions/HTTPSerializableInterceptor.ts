@@ -4,8 +4,8 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
-  UnauthorizedException,
-} from '@nestjs/common';
+  UnauthorizedException, UnprocessableEntityException
+} from "@nestjs/common";
 import { catchError, Observable, throwError } from 'rxjs';
 import { InvalidArgumentException } from './InvalidArgumentException';
 
@@ -18,6 +18,7 @@ export class HTTPSerializableInterceptor implements NestInterceptor {
         const mapping = {
           400: BadRequestException,
           401: UnauthorizedException,
+          422: UnprocessableEntityException,
         };
 
         if (

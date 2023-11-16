@@ -5,20 +5,28 @@ import { EstadisticasBCRAProvider } from './MarketDataProviders/EstadisticasBCRA
 import { HttpModule } from '@nestjs/axios';
 import { MarketDataProvider } from './MarketDataProviders/MarketDataProvider';
 import ArgentinianCryptoPricesProvider from './MarketDataProviders/ArgentinianCryptoPricesProvider';
+import PortfolioPersonalProvider from './MarketDataProviders/PortfolioPersonalProvider';
 
 @Module({
   controllers: [MarketDataController],
   providers: [
     ArgentinianCryptoPricesProvider,
     EstadisticasBCRAProvider,
+    PortfolioPersonalProvider,
     {
       provide: MarketDataService,
       useFactory: (...params: MarketDataProvider[]) => {
         return new MarketDataService(params);
       },
-      inject: [ArgentinianCryptoPricesProvider, EstadisticasBCRAProvider],
+      inject: [
+        //It is very important this order, because this is how is going to be asked if it can handle the instrument code
+        ArgentinianCryptoPricesProvider,
+        EstadisticasBCRAProvider,
+        PortfolioPersonalProvider,
+      ],
     },
   ],
   imports: [HttpModule],
+  exports: [MarketDataService],
 })
 export class MarketDataModule {}

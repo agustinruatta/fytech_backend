@@ -1,6 +1,8 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv-flow';
 import { CreateUser1689808924143 } from './Migrations/1689808924143-CreateUser';
+import { CreateAccount1695592517229 } from './Migrations/1695592517229-CreateAccount';
+import { CreateInvestmentTransaction1695952348361 } from './Migrations/1695952348361-CreateInvestmentTransaction';
 
 config();
 const databaseUrl = process.env.DB_URL;
@@ -14,6 +16,10 @@ export default new DataSource({
   url: databaseUrl,
   migrationsRun: true,
   migrationsTableName: 'migrations',
-  migrations: [CreateUser1689808924143],
+  migrations: [
+    CreateUser1689808924143,
+    CreateAccount1695592517229,
+    CreateInvestmentTransaction1695952348361,
+  ],
   synchronize: false,
 });

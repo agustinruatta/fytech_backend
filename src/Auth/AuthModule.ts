@@ -7,6 +7,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './AuthGuard';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Account } from '../Account/Entities/Account';
+import CurrentUserService from './CurrentUserService';
 
 function throwNoJwtKeyException(): any {
   throw new Error('JWT_SECRET environment variable not found');
@@ -20,9 +22,10 @@ function throwNoJwtKeyException(): any {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    CurrentUserService,
   ],
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Account, User]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -34,5 +37,6 @@ function throwNoJwtKeyException(): any {
       inject: [ConfigService],
     }),
   ],
+  exports: [CurrentUserService],
 })
 export class AuthModule {}

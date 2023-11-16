@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import * as nock from 'nock';
 import createAppToTest from './config/e2e-app-creator';
+import { InstrumentTypes } from "../../src/MarketData/InstrumentTypes";
 
 describe('MarketData (e2e)', () => {
   let app: INestApplication;
@@ -16,10 +17,11 @@ describe('MarketData (e2e)', () => {
       .reply(200, [{ v: 278.28, d: '2023-07-09' }]);
 
     return request(app.getHttpServer())
-      .get('/market-data/current/UVA_AR')
+      .get('/market-data/current/UVA_AR/ARS')
       .expect(200)
       .expect({
         value: 278.28,
+        instrument_type: InstrumentTypes.UVA,
         date: '2023-07-09T00:00:00.000Z',
       });
   });
@@ -34,7 +36,7 @@ describe('MarketData (e2e)', () => {
     });
 
     return request(app.getHttpServer())
-      .get('/market-data/current/usdc?currency=ars')
+      .get('/market-data/current/usdc/ARS')
       .expect(200)
       .expect({
         ask: {
@@ -52,6 +54,7 @@ describe('MarketData (e2e)', () => {
           currency: 'ARS',
           floatValue: 522.84,
         },
+        instrument_type: InstrumentTypes.CRYPTO,
         date: '2023-07-12T21:00:00.000Z',
       });
   });

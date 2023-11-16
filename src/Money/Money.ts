@@ -1,47 +1,46 @@
+import { AvailableCurrencies } from './AvailableCurrencies';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const currency = require('currency.js');
-import currencyNamespace from 'currency.js';
-
-interface currencyLibObject {
-  add(number: currencyNamespace.Any): currencyLibObject;
-  subtract(number: currencyNamespace.Any): currencyLibObject;
-  multiply(number: currencyNamespace.Any): currencyLibObject;
-  divide(number: currencyNamespace.Any): currencyLibObject;
-  distribute(count: number): Array<currencyLibObject>;
-  dollars(): number;
-  cents(): number;
-  format(opts?: currencyNamespace.Options | currencyNamespace.Format): string;
-  toString(): string;
-  toJSON(): number;
-  readonly intValue: number;
-  readonly value: number;
-}
+import { Column } from 'typeorm';
 
 export default class Money {
-  private readonly internalMoney: currencyLibObject;
-  private readonly currency: string;
+  private readonly PRECISION = 2;
 
-  constructor(internalMoney: currencyLibObject, currency: string) {
-    this.internalMoney = internalMoney;
-    this.currency = currency;
-  }
+  @Column({ name: 'money_cents' })
+  private readonly cents: number;
 
-  public static newFromString(amount: string, currencySymbol: string): Money {
-    //TODO: If amount is "USD" it does not throw an error
+  @Column({ name: 'money_currency' })
+  private readonly currency: AvailableCurrencies;
 
-    if (currencySymbol.trim() === '') {
+  public constructor(cents: number, currency: AvailableCurrencies) {
+    if (cents < 0) {
+      throw new Error('Amount must not be negative');
+    }
+
+    if (!Object.values(AvailableCurrencies).includes(currency)) {
       throw new Error('Currency must not be empty');
     }
 
+    this.cents = cents;
+    this.currency = currency;
+  }
+
+  public static newFromString(
+    amount: string,
+    currencySymbol: AvailableCurrencies,
+  ): Money {
     if (amount.trim() === '') {
       throw new Error('Amount must not be an empty string');
     }
 
     const money = currency(amount, { errorOnInvalid: true, precision: 2 });
+
     if (isNaN(money.value)) {
       throw new Error('Invalid amount');
     }
-    return new Money(money, currencySymbol);
+
+    return new Money(money.intValue, currencySymbol);
   }
 
   add(other: Money): Money {
@@ -49,26 +48,37 @@ export default class Money {
       throw new Error(`Parameter's currency must be ${this.currency}`);
     }
 
-    return new Money(
-      this.internalMoney.add(other.internalMoney),
-      this.currency,
-    );
+    return new Money(this.cents + other.cents, this.currency);
+  }
+
+  multiply(number: number): Money {
+    const internalMoney = currency(this.cents, {
+      precision: 2,
+      fromCents: true,
+    });
+
+    return new Money(internalMoney.multiply(number).intValue, this.currency);
   }
 
   divide(number: number): Money {
-    //TODO: there's some problems when you divide 5/2, because it rounds
-    return new Money(this.internalMoney.divide(number), this.currency);
+    //TODO: there's some problems when you divide 7/8, because it rounds
+    const internalMoney = currency(this.cents, {
+      precision: 2,
+      fromCents: true,
+    });
+
+    return new Money(internalMoney.divide(number).intValue, this.currency);
   }
 
   serialize(): {
     cents: number;
-    currency: string;
+    currency: AvailableCurrencies;
     floatValue: number;
   } {
     return {
-      cents: this.internalMoney.intValue,
+      cents: this.cents,
       currency: this.currency,
-      floatValue: this.internalMoney.value,
+      floatValue: this.cents / Math.pow(10, this.PRECISION),
     };
   }
 }

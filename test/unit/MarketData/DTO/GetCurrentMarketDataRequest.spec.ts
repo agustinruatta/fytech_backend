@@ -1,73 +1,34 @@
 import GetCurrentMarketDataRequest from '../../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
+import { AvailableCurrencies } from '../../../../src/Money/AvailableCurrencies';
 
 describe('GetCurrentMarketDataRequest', () => {
-  it('should be defined', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      new GetCurrentMarketDataRequest('UVA_AR');
+  describe('new', () => {
+    it('should be defined', () => {
+      const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
+        GetCurrentMarketDataRequest.new('AMZN', AvailableCurrencies.ARS);
 
-    expect(getCurrentMarketDataRequest).toBeDefined();
-  });
+      expect(getCurrentMarketDataRequest).toBeDefined();
+    });
 
-  it('should set code in constructor', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      new GetCurrentMarketDataRequest('UVA_AR');
+    it('should set code using new()', () => {
+      const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
+        GetCurrentMarketDataRequest.new('AMZN', AvailableCurrencies.ARS);
 
-    expect(getCurrentMarketDataRequest.code).toBe('UVA_AR');
-  });
+      expect(getCurrentMarketDataRequest.code).toBe('AMZN');
+    });
 
-  it('should set code using new()', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      GetCurrentMarketDataRequest.new('UVA_AR');
+    it('should set currency using new', () => {
+      const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
+        GetCurrentMarketDataRequest.new('AMZN', AvailableCurrencies.ARS);
 
-    expect(getCurrentMarketDataRequest.code).toBe('UVA_AR');
-  });
+      expect(getCurrentMarketDataRequest.currency).toBe('ARS');
+    });
 
-  it('should set currency using withCurrency()', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      GetCurrentMarketDataRequest.new('UVA_AR').withCurrency('ARS');
+    it('should modify code to uppercase in new', () => {
+      const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
+        GetCurrentMarketDataRequest.new('amzn', AvailableCurrencies.ARS);
 
-    expect(getCurrentMarketDataRequest.code).toBe('UVA_AR');
-    expect(getCurrentMarketDataRequest.currency).toBe('ARS');
-  });
-
-  it('should modify code to uppercase in constructor', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      new GetCurrentMarketDataRequest('UVA_AR');
-
-    expect(getCurrentMarketDataRequest.code).toBe('UVA_AR');
-  });
-
-  it('should return currency', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      new GetCurrentMarketDataRequest('UVA_AR');
-
-    getCurrentMarketDataRequest.currency = 'ARS';
-    expect(getCurrentMarketDataRequest.currency).toBe('ARS');
-  });
-
-  it('should modify currency to uppercase when set', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      new GetCurrentMarketDataRequest('UVA_AR');
-
-    getCurrentMarketDataRequest.currency = 'ars';
-    expect(getCurrentMarketDataRequest.currency).toBe('ARS');
-  });
-
-  it('should not fail if currency is undefined when set', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      new GetCurrentMarketDataRequest('UVA_AR');
-
-    getCurrentMarketDataRequest.currency = undefined;
-    expect(getCurrentMarketDataRequest.currency).toBe(undefined);
-  });
-
-  it('allows to set undefined again', () => {
-    const getCurrentMarketDataRequest: GetCurrentMarketDataRequest =
-      new GetCurrentMarketDataRequest('UVA_AR');
-
-    getCurrentMarketDataRequest.currency = 'ars';
-    getCurrentMarketDataRequest.currency = undefined;
-
-    expect(getCurrentMarketDataRequest.currency).toBe(undefined);
+      expect(getCurrentMarketDataRequest.code).toBe('AMZN');
+    });
   });
 });

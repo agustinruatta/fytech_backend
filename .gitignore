@@ -13,6 +13,8 @@ lerna-debug.log*
 
 # Tests
 /coverage
+/test/e2e/coverage
+/test/unit/coverage
 /.nyc_output
 
 # IDEs and editors
@@ -24,5 +26,6 @@ lerna-debug.log*
 # Docker data
 /docker/redis-data
 /docker/postgresql-data/
+/docker/postgresql-test-data/
 /docker/package.json
 /docker/package-lock.json

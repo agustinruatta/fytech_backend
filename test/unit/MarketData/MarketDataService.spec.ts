@@ -3,6 +3,8 @@ import { Test } from '@nestjs/testing';
 import { MarketDataProvider } from '../../../src/MarketData/MarketDataProviders/MarketDataProvider';
 import { GetCurrentMarketDataResponse } from '../../../src/MarketData/DTO/GetCurrentMarketDataResponse';
 import GetCurrentMarketDataRequest from '../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
+import { AvailableCurrencies } from '../../../src/Money/AvailableCurrencies';
+import { InstrumentTypes } from '../../../src/MarketData/InstrumentTypes';
 
 describe('MarketDataService', () => {
   let marketDataService: MarketDataService;
@@ -11,12 +13,16 @@ describe('MarketDataService', () => {
   const marketDataProvider: MarketDataProvider = {
     getCurrentMarketData(): Promise<GetCurrentMarketDataResponse> {
       return Promise.resolve(
-        GetCurrentMarketDataResponse.newWithValue(100, now),
+        GetCurrentMarketDataResponse.newWithValue(
+          100,
+          InstrumentTypes.CRYPTO,
+          now,
+        ),
       );
     },
 
     doesSupportCode(request: GetCurrentMarketDataRequest): boolean {
-      return request.code === 'UVA_AR';
+      return request.code === 'USDC';
     },
   };
 
@@ -41,18 +47,25 @@ describe('MarketDataService', () => {
 
   it('should return correct value if code exists', async () => {
     const response = await marketDataService.getCurrentMarketData(
-      new GetCurrentMarketDataRequest('UVA_AR'),
+      GetCurrentMarketDataRequest.new('USDC', AvailableCurrencies.ARS),
     );
 
     expect(response).toStrictEqual(
-      GetCurrentMarketDataResponse.newWithValue(100, now),
+      GetCurrentMarketDataResponse.newWithValue(
+        100,
+        InstrumentTypes.CRYPTO,
+        now,
+      ),
     );
   });
 
   it('should thrown an error if code is not found', async () => {
     await expect(
       marketDataService.getCurrentMarketData(
-        new GetCurrentMarketDataRequest('invalid_code'),
+        GetCurrentMarketDataRequest.new(
+          'invalid_code',
+          AvailableCurrencies.ARS,
+        ),
       ),
     ).rejects.toThrow(new Error('Invalid code'));
   });

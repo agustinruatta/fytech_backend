@@ -41,7 +41,7 @@ services:
       POSTGRES_USER: fytech_test
       POSTGRES_PASSWORD: test
     volumes:
-      - ./postgresql-data:/var/lib/postgresql_test/data
+      - ./postgresql-test-data:/var/lib/postgresql/data
 
   redis:
     image: redis:latest

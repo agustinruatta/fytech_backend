@@ -16,7 +16,7 @@ describe('UsersService', () => {
           useFactory: () => {
             userRepository =
               jest.createMockFromModule<Repository<User>>('typeorm');
-            userRepository.save = jest.fn();
+            userRepository.save = (user) => Promise.resolve(user);
 
             return new UsersService(userRepository);
           },
@@ -40,7 +40,7 @@ describe('UsersService', () => {
       withNoPreviousUser();
 
       await expect(() =>
-        usersService.createUser('invalid', 'password'),
+        usersService.createUser('invalid', 'password', 'John Williams'),
       ).rejects.toThrow(
         new InvalidArgumentException('Invalid email', 'Invalid email'),
       );
@@ -50,7 +50,11 @@ describe('UsersService', () => {
       userRepository.countBy = () => Promise.resolve(1);
 
       await expect(() =>
-        usersService.createUser('existent_user@gmail.com', 'password'),
+        usersService.createUser(
+          'existent_user@gmail.com',
+          'password',
+          'John Williams',
+        ),
       ).rejects.toThrow(
         new InvalidArgumentException(
           'This email is already associated with another account',
@@ -59,11 +63,17 @@ describe('UsersService', () => {
       );
     });
 
-    it('calls repository when user is created', async () => {
+    it('creates a new user', async () => {
       withNoPreviousUser();
 
-      await usersService.createUser('email@gmail.com', 'password');
-      expect(userRepository.save).toBeCalledTimes(1);
+      const user = await usersService.createUser(
+        'email@gmail.com',
+        'password',
+        'John Williams',
+      );
+
+      expect(user.getEmail()).toBe('email@gmail.com');
+      expect((await user.accounts)[0].getName()).toBe('John Williams');
     });
   });
 });

@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import createAppToTest from './config/e2e-app-creator';
+import Helpers from './Helpers';
 
 describe('Auth (e2e)', () => {
   let app: INestApplication;
@@ -39,9 +40,7 @@ describe('Auth (e2e)', () => {
     });
 
     it('signs in because password credentials are correct', async () => {
-      await request(app.getHttpServer())
-        .post('/users')
-        .send({ email: 'user@gmail.com', password: 'password' });
+      await Helpers.registerUser(app);
 
       const response = await request(app.getHttpServer())
         .post('/auth/login')
@@ -49,6 +48,36 @@ describe('Auth (e2e)', () => {
         .expect(200);
 
       expect(typeof response.body.access_token).toBe('string');
+    });
+  });
+
+  describe('Get current user data', () => {
+    it('returns current user data', async () => {
+      const signInData = await Helpers.signIn(app);
+
+      return request(app.getHttpServer())
+        .get('/auth/current-user-data')
+        .auth(signInData.accessToken, { type: 'bearer' })
+        .send({})
+        .expect(200)
+        .expect(await signInData.user.serialize());
+    });
+
+    it('does not save state between requests', async () => {
+      const signInData = await Helpers.signIn(app);
+
+      await request(app.getHttpServer())
+        .get('/auth/current-user-data')
+        .auth(signInData.accessToken, { type: 'bearer' })
+        .send({})
+        .expect(200)
+        .expect(await signInData.user.serialize());
+
+      return request(app.getHttpServer())
+        .get('/auth/current-user-data')
+        .send({})
+        .expect(200)
+        .expect({});
     });
   });
 });

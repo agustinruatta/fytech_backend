@@ -1,5 +1,6 @@
 import { User } from '../../../../src/Users/Entities/User';
 import { InvalidArgumentException } from '../../../../src/Shared/Exceptions/InvalidArgumentException';
+import { Account } from '../../../../src/Account/Entities/Account';
 
 describe('User', () => {
   describe('constructor', () => {
@@ -42,10 +43,21 @@ describe('User', () => {
   });
 
   describe('serialize', () => {
-    it('serializes an user object', () => {
+    it('serializes an user object', async () => {
       const user = new User('test@gmail.com', 'password');
 
-      expect(user.serialize()).toStrictEqual({ email: 'test@gmail.com' });
+      expect(await user.serialize()).toStrictEqual({ email: 'test@gmail.com' });
+    });
+  });
+
+  describe('addAccount', () => {
+    it('adds a new account', async () => {
+      const account = new Account('Some Name');
+
+      const user = new User('test@gmail.com', 'password');
+      await user.addAccount(account);
+
+      expect(await user.accounts).toStrictEqual([account]);
     });
   });
 });

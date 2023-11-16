@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import GetCurrentMarketDataRequest from '../DTO/GetCurrentMarketDataRequest';
+import { InstrumentTypes } from '../InstrumentTypes';
 
 @Injectable()
 export class EstadisticasBCRAProvider implements MarketDataProvider {
@@ -31,6 +32,7 @@ export class EstadisticasBCRAProvider implements MarketDataProvider {
 
     return GetCurrentMarketDataResponse.newWithValue(
       lastData.v,
+      InstrumentTypes.UVA,
       new Date(lastData.d),
     );
   }
