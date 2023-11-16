@@ -12,7 +12,7 @@ export class InvalidArgumentException
   }
 
   getHttpCode(): number {
-    return 422;
+    return 400;
   }
 
   getErrorMessages(): string[] {

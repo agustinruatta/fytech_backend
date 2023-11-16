@@ -170,13 +170,13 @@ describe('InvestmentTransaction (e2e)', () => {
           currency: AvailableCurrencies.USD_MEP,
         },
       })
-      .expect(422)
+      .expect(400)
       .expect({
         message: [
           'Insufficient quantity for sale. Please check your portfolio and enter a valid quantity.',
         ],
-        error: 'Unprocessable Entity',
-        statusCode: 422,
+        error: 'Bad Request',
+        statusCode: 400,
       });
   });
 });
