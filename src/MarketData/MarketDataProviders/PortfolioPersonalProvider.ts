@@ -6,7 +6,7 @@ import Money from '../../Money/Money';
 import { AvailableCurrencies } from '../../Money/AvailableCurrencies';
 import { InstrumentTypes } from '../InstrumentTypes';
 import { HttpService } from '@nestjs/axios';
-import moment from 'moment';
+import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

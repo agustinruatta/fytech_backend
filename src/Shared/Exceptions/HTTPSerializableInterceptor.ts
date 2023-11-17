@@ -4,8 +4,9 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
-  UnauthorizedException, UnprocessableEntityException
-} from "@nestjs/common";
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { catchError, Observable, throwError } from 'rxjs';
 import { InvalidArgumentException } from './InvalidArgumentException';
 
