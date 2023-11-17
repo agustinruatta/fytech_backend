@@ -66,6 +66,7 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     const responseBody: { accessToken: string; expirationDate: string } = (
       await this.httpService.axiosRef.post(
         this.configService.getOrThrow('PPI_BASE_URL') + '/Account/LoginApi',
+        {},
         { headers: this.getBasicHeaders() },
       )
     ).data;
