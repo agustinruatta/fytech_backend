@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GetCurrentMarketDataResponse } from './DTO/GetCurrentMarketDataResponse';
 import { MarketDataProvider } from './MarketDataProviders/MarketDataProvider';
 import GetCurrentMarketDataRequest from './DTO/GetCurrentMarketDataRequest';
+import InstrumentNotFoundException from '../Shared/Exceptions/InstrumentNotFoundException';
 
 @Injectable()
 export class MarketDataService {
@@ -18,6 +19,6 @@ export class MarketDataService {
       }
     }
 
-    throw new Error('Invalid code');
+    throw new InstrumentNotFoundException(request.code, request.currency);
   }
 }

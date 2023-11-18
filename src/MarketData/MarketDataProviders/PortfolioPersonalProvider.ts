@@ -8,6 +8,7 @@ import { InstrumentTypes } from '../InstrumentTypes';
 import { HttpService } from '@nestjs/axios';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
+import InstrumentNotFoundException from '../../Shared/Exceptions/InstrumentNotFoundException';
 
 @Injectable()
 export default class PortfolioPersonalProvider implements MarketDataProvider {
@@ -28,6 +29,8 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     request: GetCurrentMarketDataRequest,
   ): Promise<GetCurrentMarketDataResponse> {
     await this.getTokenIfNeeded();
+
+    const instrumentInfo = await this.getMostProbableInstrument(request);
 
     //TODO: Use real API
     if (request.code === 'AMZN') {
@@ -67,7 +70,15 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
       await this.httpService.axiosRef.post(
         this.configService.getOrThrow('PPI_BASE_URL') + '/Account/LoginApi',
         {},
-        { headers: this.getBasicHeaders() },
+        {
+          headers: {
+            ...this.getBasicHeaders(),
+            ...{
+              ApiKey: this.configService.getOrThrow('PPI_API_KEY'),
+              ApiSecret: this.configService.getOrThrow('PPI_API_SECRET'),
+            },
+          },
+        },
       )
     ).data;
 
@@ -82,8 +93,71 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
       AuthorizedClient: 'API_CLI_REST',
       ClientKey: this.configService.getOrThrow('PPI_CLIENT_KEY'),
       'Content-Type': 'application/json',
-      ApiKey: this.configService.getOrThrow('PPI_API_KEY'),
-      ApiSecret: this.configService.getOrThrow('PPI_API_SECRET'),
     };
+  }
+
+  private async getMostProbableInstrument(
+    request: GetCurrentMarketDataRequest,
+  ) {
+    //TODO: handle error. For example when code is less than 3 char
+    const responseBody: {
+      ticker: string;
+      description: string;
+      currency: 'Pesos' | 'Dolares divisa | CCL' | 'Dolares billete | MEP';
+      type:
+        | 'BONOS'
+        | 'ACCIONES'
+        | 'ACCIONES-USA'
+        | 'CEDEARS'
+        | 'OBLIGACIONES-NEGOCIABLES'
+        | 'OPCIONES';
+      market: 'BYMA' | 'NYSE' | 'NASDAQ';
+    }[] = (
+      await this.httpService.axiosRef.get(
+        this.configService.getOrThrow('PPI_BASE_URL') +
+          //TODO: Possible inject. Filter only letters
+          '/MarketData/SearchInstrument?ticker=' +
+          request.code,
+        { headers: this.getRequestHeaders() },
+      )
+    ).data;
+
+    //Get first who currency
+    for (const instrumentData of responseBody) {
+      if (
+        request.currency ===
+        this.mapPPICurrencyToOurCurrency(instrumentData.currency)
+      ) {
+        return instrumentData;
+      }
+    }
+
+    throw new InstrumentNotFoundException(request.code, request.currency);
+  }
+
+  private getRequestHeaders() {
+    return {
+      ...this.getBasicHeaders(),
+      ...{
+        Authorization:
+          'Bearer ' + PortfolioPersonalProvider.loginData.accessToken,
+      },
+    };
+  }
+
+  private mapPPICurrencyToOurCurrency(ppiCurrency: string) {
+    const mapping = {
+      Pesos: AvailableCurrencies.ARS,
+      'Dolares divisa': AvailableCurrencies.USD_CCL,
+      CCL: AvailableCurrencies.USD_CCL,
+      'Dolares billete': AvailableCurrencies.USD_MEP,
+      MEP: AvailableCurrencies.USD_MEP,
+    };
+
+    if (mapping[ppiCurrency] === undefined) {
+      throw Error('PPI currency not found: ' + ppiCurrency);
+    }
+
+    return mapping[ppiCurrency];
   }
 }

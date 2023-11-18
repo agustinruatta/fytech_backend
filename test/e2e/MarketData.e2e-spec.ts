@@ -74,8 +74,34 @@ describe('MarketData (e2e)', () => {
         tokenType: 'bearer',
       });
 
+    nock(configService.getOrThrow('PPI_BASE_URL'))
+      .get('/MarketData/SearchInstrument?ticker=GGAL')
+      .reply(200, [
+        {
+          ticker: 'GGALC',
+          description: 'Grupo Financiero Galicia',
+          currency: 'Dolares divisa | CCL',
+          type: 'ACCIONES',
+          market: 'BYMA',
+        },
+        {
+          ticker: 'GGALD',
+          description: 'Grupo Financiero Galicia',
+          currency: 'Dolares billete | MEP',
+          type: 'ACCIONES',
+          market: 'BYMA',
+        },
+        {
+          ticker: 'GGAL',
+          description: 'Grupo Financiero Galicia',
+          currency: 'Pesos',
+          type: 'ACCIONES',
+          market: 'BYMA',
+        },
+      ]);
+
     return request(app.getHttpServer())
-      .get('/market-data/current/pamp/ARS')
+      .get('/market-data/current/GGAL/ARS')
       .expect(200)
       .expect({
         ask: {
