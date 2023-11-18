@@ -148,10 +148,8 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
   private mapPPICurrencyToOurCurrency(ppiCurrency: string) {
     const mapping = {
       Pesos: AvailableCurrencies.ARS,
-      'Dolares divisa': AvailableCurrencies.USD_CCL,
-      CCL: AvailableCurrencies.USD_CCL,
-      'Dolares billete': AvailableCurrencies.USD_MEP,
-      MEP: AvailableCurrencies.USD_MEP,
+      'Dolares divisa | CCL': AvailableCurrencies.USD_CCL,
+      'Dolares billete | MEP': AvailableCurrencies.USD_MEP,
     };
 
     if (mapping[ppiCurrency] === undefined) {

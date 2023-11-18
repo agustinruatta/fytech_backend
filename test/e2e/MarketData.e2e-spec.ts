@@ -76,6 +76,7 @@ describe('MarketData (e2e)', () => {
 
     nock(configService.getOrThrow('PPI_BASE_URL'))
       .get('/MarketData/SearchInstrument?ticker=GGAL')
+      .matchHeader('Authorization', 'Bearer some_access_token')
       .reply(200, [
         {
           ticker: 'GGALC',
