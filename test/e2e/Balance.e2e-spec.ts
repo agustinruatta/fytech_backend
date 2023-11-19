@@ -153,30 +153,34 @@ describe('Balance (e2e)', () => {
         .auth(signInDataA.accessToken, { type: 'bearer' })
         .send()
         .expect(200)
-        .expect([
-          //1 AMZN is USD 138.60
-          {
-            instrumentType: InstrumentTypes.STOCK,
-            code: 'AMZN',
-            amount: 15,
-            balance: {
-              cents: 138.6 * 15 * 100,
-              currency: AvailableCurrencies.USD_CCL,
-              floatValue: 138.6 * 15,
+        .expect((response) => {
+          const expectedResponse = [
+            //1 AMZN is USD 138.60
+            {
+              instrumentType: InstrumentTypes.STOCK,
+              code: 'AMZN',
+              amount: 15,
+              balance: {
+                cents: 138.6 * 15 * 100,
+                currency: AvailableCurrencies.USD_CCL,
+                floatValue: 138.6 * 15,
+              },
             },
-          },
-          //1 AL30D is USD 28.54
-          {
-            instrumentType: InstrumentTypes.BONDS,
-            code: 'AL30C',
-            amount: 0.5,
-            balance: {
-              cents: 28.54 * 0.5 * 100,
-              currency: AvailableCurrencies.USD_CCL,
-              floatValue: 28.54 * 0.5,
+            //1 AL30D is USD 28.54
+            {
+              instrumentType: InstrumentTypes.BONDS,
+              code: 'AL30C',
+              amount: 0.5,
+              balance: {
+                cents: 28.54 * 0.5 * 100,
+                currency: AvailableCurrencies.USD_CCL,
+                floatValue: 28.54 * 0.5,
+              },
             },
-          },
-        ]);
+          ];
+
+          expect(response.body.sort()).toStrictEqual(expectedResponse.sort());
+        });
     });
 
     it('returns a balance with lot of decimals', async () => {
