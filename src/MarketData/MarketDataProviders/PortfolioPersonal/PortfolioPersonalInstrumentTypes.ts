@@ -3,9 +3,9 @@ import { InstrumentTypes } from '../../InstrumentTypes';
 export enum PortfolioPersonalInstrumentTypes {
   BONOS = 'BONOS',
   ACCIONES = 'ACCIONES',
-  'ACCIONES-USA' = 'ACCIONES-USA',
+  ACCIONES_USA = 'ACCIONES-USA',
   CEDEARS = 'CEDEARS',
-  'OBLIGACIONES-NEGOCIABLES' = 'OBLIGACIONES-NEGOCIABLES',
+  OBLIGACIONES_NEGOCIABLES = 'OBLIGACIONES-NEGOCIABLES',
   OPCIONES = 'OPCIONES',
 }
 

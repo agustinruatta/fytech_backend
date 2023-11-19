@@ -14,7 +14,7 @@ describe('PortfolioPersonalInstrumentTypes', () => {
     it('maps ACCIONES-USA', () => {
       expect(
         PortfolioPersonalInstrumentTypes.mapToInstrumentTypes(
-          PortfolioPersonalInstrumentTypes['ACCIONES-USA'],
+          PortfolioPersonalInstrumentTypes.ACCIONES_USA,
         ),
       ).toBe(InstrumentTypes.STOCK);
     });
@@ -38,7 +38,7 @@ describe('PortfolioPersonalInstrumentTypes', () => {
     it('maps OBLIGACIONES-NEGOCIABLES', () => {
       expect(
         PortfolioPersonalInstrumentTypes.mapToInstrumentTypes(
-          PortfolioPersonalInstrumentTypes['OBLIGACIONES-NEGOCIABLES'],
+          PortfolioPersonalInstrumentTypes.OBLIGACIONES_NEGOCIABLES,
         ),
       ).toBe(InstrumentTypes.CORPORATE_BONDS);
     });

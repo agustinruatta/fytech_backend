@@ -1,9 +1,9 @@
 import { AvailableCurrencies } from '../../../Money/AvailableCurrencies';
 
 export enum PortfolioPersonalCurrencies {
-  'Pesos' = 'Pesos',
-  'Dolares divisa | CCL' = 'Dolares divisa | CCL',
-  'Dolares billete | MEP' = 'Dolares billete | MEP',
+  Pesos = 'Pesos',
+  CCL = 'Dolares divisa | CCL',
+  MEP = 'Dolares billete | MEP',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace

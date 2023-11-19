@@ -14,7 +14,7 @@ describe('PortfolioPersonalCurrencies', () => {
     it('maps Dolares divisa | CCL', () => {
       expect(
         PortfolioPersonalCurrencies.mapToAvailableCurrencies(
-          PortfolioPersonalCurrencies['Dolares divisa | CCL'],
+          PortfolioPersonalCurrencies.CCL,
         ),
       ).toBe(AvailableCurrencies.USD_CCL);
     });
@@ -22,7 +22,7 @@ describe('PortfolioPersonalCurrencies', () => {
     it('maps Dolares billete | MEP', () => {
       expect(
         PortfolioPersonalCurrencies.mapToAvailableCurrencies(
-          PortfolioPersonalCurrencies['Dolares billete | MEP'],
+          PortfolioPersonalCurrencies.MEP,
         ),
       ).toBe(AvailableCurrencies.USD_MEP);
     });
