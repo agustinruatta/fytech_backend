@@ -63,7 +63,11 @@ describe('MarketData (e2e)', () => {
   });
 
   it('get PAMP current market data', () => {
-    nock(configService.getOrThrow('PPI_BASE_URL'))
+    nock(configService.get('PPI_BASE_URL'))
+      .matchHeader('AuthorizedClient', 'API_CLI_REST')
+      .matchHeader('ClientKey', configService.get('PPI_CLIENT_KEY'))
+      .matchHeader('ApiKey', configService.get('PPI_API_KEY'))
+      .matchHeader('ApiSecret', configService.get('PPI_API_SECRET'))
       .post('/Account/LoginApi')
       .reply(200, {
         creationDate: '2023-11-16T23:10:56-03:00',
@@ -74,9 +78,11 @@ describe('MarketData (e2e)', () => {
         tokenType: 'bearer',
       });
 
-    nock(configService.getOrThrow('PPI_BASE_URL'))
+    nock(configService.get('PPI_BASE_URL'))
       .get('/MarketData/SearchInstrument?ticker=GGAL')
       .matchHeader('Authorization', 'Bearer some_access_token')
+      .matchHeader('AuthorizedClient', 'API_CLI_REST')
+      .matchHeader('ClientKey', configService.get('PPI_CLIENT_KEY'))
       .reply(200, [
         {
           ticker: 'GGALC',
@@ -101,27 +107,44 @@ describe('MarketData (e2e)', () => {
         },
       ]);
 
+    nock(configService.get('PPI_BASE_URL'))
+      .get('/MarketData/Current?ticker=GGAL&type=ACCIONES&settlement=A-48HS')
+      .matchHeader('Authorization', 'Bearer some_access_token')
+      .matchHeader('AuthorizedClient', 'API_CLI_REST')
+      .matchHeader('ClientKey', configService.get('PPI_CLIENT_KEY'))
+      .reply(200, {
+        date: '2023-11-17T17:00:01.493-03:00',
+        price: 1112.9,
+        volume: 2184030696.3,
+        openingPrice: 1010,
+        max: 1118,
+        min: 1010,
+        previousClose: 1019.7,
+        marketChange: 93.2,
+        marketChangePercent: '9.13%',
+      });
+
     return request(app.getHttpServer())
       .get('/market-data/current/GGAL/ARS')
       .expect(200)
       .expect({
         ask: {
-          cents: 53936,
+          cents: 111290,
           currency: 'ARS',
-          floatValue: 539.36,
+          floatValue: 1112.9,
         },
         bid: {
-          cents: 50631,
+          cents: 111290,
           currency: 'ARS',
-          floatValue: 506.31,
+          floatValue: 1112.9,
         },
         mid_price: {
-          cents: 52284,
+          cents: 111290,
           currency: 'ARS',
-          floatValue: 522.84,
+          floatValue: 1112.9,
         },
         instrument_type: InstrumentTypes.STOCK,
-        date: '2023-07-12T21:00:00.000Z',
+        date: '2023-11-17T20:00:01.493Z',
       });
   });
 });

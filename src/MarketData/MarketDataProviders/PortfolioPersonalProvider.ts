@@ -32,28 +32,14 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
 
     const instrumentInfo = await this.getMostProbableInstrument(request);
 
-    //TODO: Use real API
-    if (request.code === 'AMZN') {
-      return Promise.resolve(
-        GetCurrentMarketDataResponse.newWithMoney(
-          Money.newFromString('138.60', AvailableCurrencies.USD),
-          Money.newFromString('138.60', AvailableCurrencies.USD),
-          InstrumentTypes.STOCK,
-          new Date(),
-        ),
-      );
-    } else if (request.code === 'BTC') {
-      return Promise.resolve(
-        GetCurrentMarketDataResponse.newWithMoney(
-          Money.newFromString('34940.10', AvailableCurrencies.USD),
-          Money.newFromString('34940.10', AvailableCurrencies.USD),
-          InstrumentTypes.CRYPTO,
-          new Date(),
-        ),
-      );
-    } else {
-      throw new Error('Not supported yet');
-    }
+    const currentMarketData = await this.getInstrumentInfo(instrumentInfo);
+
+    return GetCurrentMarketDataResponse.newWithMoney(
+      Money.newFromString(currentMarketData.price.toString(), request.currency),
+      Money.newFromString(currentMarketData.price.toString(), request.currency),
+      this.mapPPInstrumentType(instrumentInfo.type),
+      moment(currentMarketData.date).toDate(),
+    );
   }
 
   private async getTokenIfNeeded() {
@@ -157,5 +143,49 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     }
 
     return mapping[ppiCurrency];
+  }
+
+  private async getInstrumentInfo(instrumentData: {
+    ticker: string;
+    type: string;
+  }): Promise<{
+    date: string;
+    price: number;
+    volume: number;
+    openingPrice: number;
+    max: number;
+    min: number;
+    previousClose: number;
+    marketChange: number;
+    marketChangePercent: string;
+  }> {
+    return (
+      await this.httpService.axiosRef.get(
+        //TODO: allow different settlement
+        `${this.configService.getOrThrow(
+          'PPI_BASE_URL',
+        )}/MarketData/Current?ticker=${instrumentData.ticker}&type=${
+          instrumentData.type
+        }&settlement=A-48HS`,
+        { headers: this.getRequestHeaders() },
+      )
+    ).data;
+  }
+
+  private mapPPInstrumentType(ppiType: string) {
+    const mapping = {
+      BONOS: InstrumentTypes.BONDS,
+      ACCIONES: InstrumentTypes.STOCK,
+      'ACCIONES-USA': InstrumentTypes.STOCK,
+      CEDEARS: InstrumentTypes.CEDEARS,
+      'OBLIGACIONES-NEGOCIABLES': InstrumentTypes.CORPORATE_BONDS,
+      OPCIONES: InstrumentTypes.OPTIONS,
+    };
+
+    if (mapping[ppiType] === undefined) {
+      throw Error('PPI instrument type not found: ' + ppiType);
+    }
+
+    return mapping[ppiType];
   }
 }
