@@ -3,12 +3,12 @@ import { MarketDataProvider } from './MarketDataProvider';
 import GetCurrentMarketDataRequest from '../DTO/GetCurrentMarketDataRequest';
 import { GetCurrentMarketDataResponse } from '../DTO/GetCurrentMarketDataResponse';
 import Money from '../../Money/Money';
-import { AvailableCurrencies } from '../../Money/AvailableCurrencies';
-import { InstrumentTypes } from '../InstrumentTypes';
 import { HttpService } from '@nestjs/axios';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
 import InstrumentNotFoundException from '../../Shared/Exceptions/InstrumentNotFoundException';
+import { PortfolioPersonalInstrumentTypes } from './PortfolioPersonal/PortfolioPersonalInstrumentTypes';
+import { PortfolioPersonalCurrencies } from './PortfolioPersonal/PortofolioPersonalCurrencies';
 
 @Injectable()
 export default class PortfolioPersonalProvider implements MarketDataProvider {
@@ -20,6 +20,7 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     private readonly httpService: HttpService,
   ) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   doesSupportCode(request: GetCurrentMarketDataRequest): boolean {
     //This is the provider who cover all left cases, so this is why is true
     return true;
@@ -37,7 +38,9 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     return GetCurrentMarketDataResponse.newWithMoney(
       Money.newFromString(currentMarketData.price.toString(), request.currency),
       Money.newFromString(currentMarketData.price.toString(), request.currency),
-      this.mapPPInstrumentType(instrumentInfo.type),
+      PortfolioPersonalInstrumentTypes.mapToInstrumentTypes(
+        instrumentInfo.type,
+      ),
       moment(currentMarketData.date).toDate(),
     );
   }
@@ -89,14 +92,8 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     const responseBody: {
       ticker: string;
       description: string;
-      currency: 'Pesos' | 'Dolares divisa | CCL' | 'Dolares billete | MEP';
-      type:
-        | 'BONOS'
-        | 'ACCIONES'
-        | 'ACCIONES-USA'
-        | 'CEDEARS'
-        | 'OBLIGACIONES-NEGOCIABLES'
-        | 'OPCIONES';
+      currency: PortfolioPersonalCurrencies;
+      type: PortfolioPersonalInstrumentTypes;
       market: 'BYMA' | 'NYSE' | 'NASDAQ';
     }[] = (
       await this.httpService.axiosRef.get(
@@ -112,7 +109,9 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     for (const instrumentData of responseBody) {
       if (
         request.currency ===
-        this.mapPPICurrencyToOurCurrency(instrumentData.currency)
+        PortfolioPersonalCurrencies.mapToAvailableCurrencies(
+          instrumentData.currency,
+        )
       ) {
         return instrumentData;
       }
@@ -129,20 +128,6 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
           'Bearer ' + PortfolioPersonalProvider.loginData.accessToken,
       },
     };
-  }
-
-  private mapPPICurrencyToOurCurrency(ppiCurrency: string) {
-    const mapping = {
-      Pesos: AvailableCurrencies.ARS,
-      'Dolares divisa | CCL': AvailableCurrencies.USD_CCL,
-      'Dolares billete | MEP': AvailableCurrencies.USD_MEP,
-    };
-
-    if (mapping[ppiCurrency] === undefined) {
-      throw Error('PPI currency not found: ' + ppiCurrency);
-    }
-
-    return mapping[ppiCurrency];
   }
 
   private async getInstrumentInfo(instrumentData: {
@@ -170,22 +155,5 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
         { headers: this.getRequestHeaders() },
       )
     ).data;
-  }
-
-  private mapPPInstrumentType(ppiType: string) {
-    const mapping = {
-      BONOS: InstrumentTypes.BONDS,
-      ACCIONES: InstrumentTypes.STOCK,
-      'ACCIONES-USA': InstrumentTypes.STOCK,
-      CEDEARS: InstrumentTypes.CEDEARS,
-      'OBLIGACIONES-NEGOCIABLES': InstrumentTypes.CORPORATE_BONDS,
-      OPCIONES: InstrumentTypes.OPTIONS,
-    };
-
-    if (mapping[ppiType] === undefined) {
-      throw Error('PPI instrument type not found: ' + ppiType);
-    }
-
-    return mapping[ppiType];
   }
 }
