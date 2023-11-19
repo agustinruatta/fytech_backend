@@ -6,7 +6,6 @@ import GetCurrentMarketDataRequest from '../MarketData/DTO/GetCurrentMarketDataR
 import CurrentUserService from '../Auth/CurrentUserService';
 import BalanceRepository from './BalanceRepository';
 import { Account } from '../Account/Entities/Account';
-import { InstrumentBalance } from './InstrumentBalance';
 
 @Injectable()
 export class BalanceService {
@@ -31,7 +30,7 @@ export class BalanceService {
         );
 
       return {
-        instrument_type: currentMarketData.getInstrumentType(),
+        instrumentType: currentMarketData.getInstrumentType(),
         code: instrumentData.code,
         amount: instrumentData.amount,
         balance: currentMarketData

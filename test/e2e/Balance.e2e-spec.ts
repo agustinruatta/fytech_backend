@@ -3,6 +3,10 @@ import * as request from 'supertest';
 import createAppToTest from './config/e2e-app-creator';
 import Helpers from './Helpers';
 import { AvailableCurrencies } from '../../src/Money/AvailableCurrencies';
+import { ConfigService } from '@nestjs/config';
+import { PortfolioPersonalCurrencies } from '../../src/MarketData/MarketDataProviders/PortfolioPersonal/PortofolioPersonalCurrencies';
+import { PortfolioPersonalInstrumentTypes } from '../../src/MarketData/MarketDataProviders/PortfolioPersonal/PortfolioPersonalInstrumentTypes';
+import { InstrumentTypes } from '../../src/MarketData/InstrumentTypes';
 
 describe('Balance (e2e)', () => {
   let app: INestApplication;
@@ -78,7 +82,7 @@ describe('Balance (e2e)', () => {
         'AMZN',
         20,
         String(20 * 100),
-        AvailableCurrencies.USD,
+        AvailableCurrencies.USD_CCL,
       );
 
       //Buy another 10 AMZN at 150 USD
@@ -89,7 +93,7 @@ describe('Balance (e2e)', () => {
         'AMZN',
         10,
         String(10 * 150),
-        AvailableCurrencies.USD,
+        AvailableCurrencies.USD_CCL,
       );
 
       //Sell 15 AMZN at 140 USD
@@ -100,18 +104,18 @@ describe('Balance (e2e)', () => {
         'AMZN',
         15,
         String(15 * 140),
-        AvailableCurrencies.USD,
+        AvailableCurrencies.USD_CCL,
       );
 
-      //Buy 0.5 BTC at 20000 USD
+      //Buy 0.5 AL30D at 50.35 USD
       await Helpers.buyTransaction(
         app,
         signInDataA.accessToken,
         accountIdA,
-        'BTC',
+        'AL30C',
         0.5,
-        String(0.5 * 20000),
-        AvailableCurrencies.USD,
+        String(0.5 * 50.35),
+        AvailableCurrencies.USD_CCL,
       );
 
       //Another account Buy 100 AMZN at 120 USD. This is to check that it only calculates on specified account
@@ -122,84 +126,108 @@ describe('Balance (e2e)', () => {
         'AMZN',
         100,
         String(100 * 120),
-        AvailableCurrencies.USD,
+        AvailableCurrencies.USD_CCL,
+      );
+
+      //Set market data
+      Helpers.setStockMarketData(
+        app.get<ConfigService>(ConfigService),
+        'AMZN',
+        PortfolioPersonalCurrencies.CCL,
+        PortfolioPersonalInstrumentTypes.ACCIONES,
+        'BYMA',
+        138.6,
+      );
+
+      Helpers.setStockMarketData(
+        app.get<ConfigService>(ConfigService),
+        'AL30C',
+        PortfolioPersonalCurrencies.CCL,
+        PortfolioPersonalInstrumentTypes.BONOS,
+        'BYMA',
+        28.54,
       );
 
       return request(app.getHttpServer())
-        .get(`/balance/${accountIdA}/${AvailableCurrencies.USD}`)
+        .get(`/balance/${accountIdA}/${AvailableCurrencies.USD_CCL}`)
         .auth(signInDataA.accessToken, { type: 'bearer' })
         .send()
         .expect(200)
-        .expect([
-          //1 AMZN is USD 138.60
-          {
-            instrument_type: 'stock',
-            code: 'AMZN',
-            amount: 15,
-            balance: {
-              cents: 138.6 * 15 * 100,
-              currency: AvailableCurrencies.USD,
-              floatValue: 138.6 * 15,
+        .expect((response) => {
+          const expectedResponse = [
+            //1 AMZN is USD 138.60
+            {
+              instrumentType: InstrumentTypes.STOCK,
+              code: 'AMZN',
+              amount: 15,
+              balance: {
+                cents: 138.6 * 15 * 100,
+                currency: AvailableCurrencies.USD_CCL,
+                floatValue: 138.6 * 15,
+              },
             },
-          },
-          //1 BTC is USD 34940.10
-          {
-            instrument_type: 'crypto',
-            code: 'BTC',
-            amount: 0.5,
-            balance: {
-              cents: 34940.1 * 0.5 * 100,
-              currency: AvailableCurrencies.USD,
-              floatValue: 34940.1 * 0.5,
+            //1 AL30D is USD 28.54
+            {
+              instrumentType: InstrumentTypes.BONDS,
+              code: 'AL30C',
+              amount: 0.5,
+              balance: {
+                cents: 28.54 * 0.5 * 100,
+                currency: AvailableCurrencies.USD_CCL,
+                floatValue: 28.54 * 0.5,
+              },
             },
-          },
-        ]);
+          ];
+
+          expect(response.body).toEqual(
+            expect.arrayContaining(expectedResponse),
+          );
+        });
     });
 
     it('returns a balance with lot of decimals', async () => {
       const signInData = await Helpers.signIn(app);
 
-      //Buy 0.513 BTC at 20568.99 USD
       await Helpers.buyTransaction(
         app,
         signInData.accessToken,
         signInData.defaultAccount.getId(),
         'BTC',
         0.513,
-        String(0.513 * 20568.99),
-        AvailableCurrencies.USD,
+        String(0.513 * 35618217.78),
+        AvailableCurrencies.ARS,
       );
 
-      //Sell 0.2157 BTC at 14021.87 USD
       await Helpers.sellTransaction(
         app,
         signInData.accessToken,
         signInData.defaultAccount.getId(),
         'BTC',
         0.2157,
-        String(0.2157 * 14021.87),
-        AvailableCurrencies.USD,
+        String(0.2157 * 36618217.78),
+        AvailableCurrencies.ARS,
       );
+
+      Helpers.setCryptoMarketData('BTC', 'ARS', 35618217.78);
 
       return request(app.getHttpServer())
         .get(
           `/balance/${signInData.defaultAccount.getId()}/${
-            AvailableCurrencies.USD
+            AvailableCurrencies.ARS
           }`,
         )
         .auth(signInData.accessToken, { type: 'bearer' })
         .send()
         .expect(200)
         .expect([
-          //1 BTC is USD 34940.10
           {
-            instrument_type: 'crypto',
+            instrumentType: 'crypto',
             code: 'BTC',
             amount: 0.513 - 0.2157,
             balance: {
-              cents: 1038769,
-              currency: AvailableCurrencies.USD,
-              floatValue: 10387.69,
+              cents: 1058929615,
+              currency: AvailableCurrencies.ARS,
+              floatValue: 10589296.15,
             },
           },
         ]);

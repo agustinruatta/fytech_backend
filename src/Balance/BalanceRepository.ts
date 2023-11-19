@@ -5,7 +5,6 @@ import { Account } from '../Account/Entities/Account';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { AvailableCurrencies } from '../Money/AvailableCurrencies';
-import { InstrumentBalance } from './InstrumentBalance';
 
 @Injectable()
 export default class BalanceRepository {
@@ -14,7 +13,13 @@ export default class BalanceRepository {
     private readonly investmentTransactionRepository: Repository<InvestmentTransaction>,
   ) {}
 
-  async getAccountBalance(account: Account): Promise<InstrumentBalance[]> {
+  async getAccountBalance(account: Account): Promise<
+    {
+      code: string;
+      amount: number;
+      balance: Money;
+    }[]
+  > {
     const queryResult: Promise<
       [
         {

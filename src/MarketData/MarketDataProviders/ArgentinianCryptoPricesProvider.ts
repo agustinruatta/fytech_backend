@@ -15,17 +15,19 @@ export default class ArgentinianCryptoPricesProvider
   async getCurrentMarketData(
     request: GetCurrentMarketDataRequest,
   ): Promise<GetCurrentMarketDataResponse> {
-    const data: {
+    const allPricesData: {
       ask: number;
       totalAsk: number;
       bid: number;
       totalBid: number;
       time: number;
-    } = (
+    }[] = (
       await this.httpService.axiosRef.get(
-        `https://criptoya.com/api/satoshitango/${request.code.toLocaleLowerCase()}/ars`,
+        `https://criptoya.com/api/${request.code.toLocaleLowerCase()}/${request.currency.toLocaleLowerCase()}`,
       )
     ).data;
+
+    const data = Object.values(allPricesData)[0];
 
     return GetCurrentMarketDataResponse.newWithMoney(
       Money.newFromString(data.totalAsk.toString(), request.currency),

@@ -21,11 +21,13 @@ describe('ArgentinianCryptoPricesProvider', () => {
               get: jest.fn(() =>
                 Promise.resolve({
                   data: {
-                    ask: 534.02,
-                    totalAsk: 539.3602,
-                    bid: 511.43,
-                    totalBid: 506.3157,
-                    time: 1689195600,
+                    buenbit: {
+                      ask: 534.02,
+                      totalAsk: 539.3602,
+                      bid: 511.43,
+                      totalBid: 506.3157,
+                      time: 1689195600,
+                    },
                   },
                 }),
               ),

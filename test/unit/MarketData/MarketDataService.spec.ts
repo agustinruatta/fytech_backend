@@ -5,6 +5,7 @@ import { GetCurrentMarketDataResponse } from '../../../src/MarketData/DTO/GetCur
 import GetCurrentMarketDataRequest from '../../../src/MarketData/DTO/GetCurrentMarketDataRequest';
 import { AvailableCurrencies } from '../../../src/Money/AvailableCurrencies';
 import { InstrumentTypes } from '../../../src/MarketData/InstrumentTypes';
+import InstrumentNotFoundException from '../../../src/Shared/Exceptions/InstrumentNotFoundException';
 
 describe('MarketDataService', () => {
   let marketDataService: MarketDataService;
@@ -67,6 +68,8 @@ describe('MarketDataService', () => {
           AvailableCurrencies.ARS,
         ),
       ),
-    ).rejects.toThrow(new Error('Invalid code'));
+    ).rejects.toThrow(
+      new InstrumentNotFoundException('INVALID_CODE', AvailableCurrencies.ARS),
+    );
   });
 });
