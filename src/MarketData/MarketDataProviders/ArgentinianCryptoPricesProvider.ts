@@ -27,12 +27,6 @@ export default class ArgentinianCryptoPricesProvider
       )
     ).data;
 
-    /*
-    if (data.length === 0) {
-      throw new InstrumentNotFoundException(request.code, request.currency);
-    }
-    */
-
     const data = Object.values(allPricesData)[0];
 
     return GetCurrentMarketDataResponse.newWithMoney(
