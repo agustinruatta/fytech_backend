@@ -65,14 +65,14 @@ export class GetCurrentMarketDataResponse implements Serializable {
       return {
         ask: this.ask.serialize(),
         bid: this.bid.serialize(),
-        mid_price: this.getMidPrice().serialize(),
-        instrument_type: this.instrumentType,
+        midPrice: this.getMidPrice().serialize(),
+        instrumentType: this.instrumentType,
         date: this.date,
       };
     } else {
       return {
         value: this.value,
-        instrument_type: this.instrumentType,
+        instrumentType: this.instrumentType,
         date: this.date,
       };
     }

@@ -4,6 +4,9 @@ import * as nock from 'nock';
 import createAppToTest from './config/e2e-app-creator';
 import { InstrumentTypes } from '../../src/MarketData/InstrumentTypes';
 import { ConfigService } from '@nestjs/config';
+import Helpers from './Helpers';
+import { PortfolioPersonalCurrencies } from '../../src/MarketData/MarketDataProviders/PortfolioPersonal/PortofolioPersonalCurrencies';
+import { PortfolioPersonalInstrumentTypes } from '../../src/MarketData/MarketDataProviders/PortfolioPersonal/PortfolioPersonalInstrumentTypes';
 
 describe('MarketData (e2e)', () => {
   let app: INestApplication;
@@ -62,50 +65,15 @@ describe('MarketData (e2e)', () => {
       });
   });
 
-  it('get PAMP current market data', () => {
-    nock(configService.get('PPI_BASE_URL'))
-      .matchHeader('AuthorizedClient', 'API_CLI_REST')
-      .matchHeader('ClientKey', configService.get('PPI_CLIENT_KEY'))
-      .matchHeader('ApiKey', configService.get('PPI_API_KEY'))
-      .matchHeader('ApiSecret', configService.get('PPI_API_SECRET'))
-      .post('/Account/LoginApi')
-      .reply(200, {
-        creationDate: '2023-11-16T23:10:56-03:00',
-        expirationDate: '2023-11-17T00:40:56-03:00',
-        accessToken: 'some_access_token',
-        expires: 5399,
-        refreshToken: 'some_refresh_token',
-        tokenType: 'bearer',
-      });
-
-    nock(configService.get('PPI_BASE_URL'))
-      .get('/MarketData/SearchInstrument?ticker=GGAL')
-      .matchHeader('Authorization', 'Bearer some_access_token')
-      .matchHeader('AuthorizedClient', 'API_CLI_REST')
-      .matchHeader('ClientKey', configService.get('PPI_CLIENT_KEY'))
-      .reply(200, [
-        {
-          ticker: 'GGALC',
-          description: 'Grupo Financiero Galicia',
-          currency: 'Dolares divisa | CCL',
-          type: 'ACCIONES',
-          market: 'BYMA',
-        },
-        {
-          ticker: 'GGALD',
-          description: 'Grupo Financiero Galicia',
-          currency: 'Dolares billete | MEP',
-          type: 'ACCIONES',
-          market: 'BYMA',
-        },
-        {
-          ticker: 'GGAL',
-          description: 'Grupo Financiero Galicia',
-          currency: 'Pesos',
-          type: 'ACCIONES',
-          market: 'BYMA',
-        },
-      ]);
+  it('get GGAL current market data', () => {
+    const responseData = Helpers.setInstrumentTypeMarketData(
+      configService,
+      'GGAL',
+      PortfolioPersonalCurrencies.Pesos,
+      PortfolioPersonalInstrumentTypes.ACCIONES,
+      'BYMA',
+      1112.9,
+    );
 
     nock(configService.get('PPI_BASE_URL'))
       .get('/MarketData/Current?ticker=GGAL&type=ACCIONES&settlement=A-48HS')
@@ -138,13 +106,13 @@ describe('MarketData (e2e)', () => {
           currency: 'ARS',
           floatValue: 1112.9,
         },
-        mid_price: {
+        midPrice: {
           cents: 111290,
           currency: 'ARS',
           floatValue: 1112.9,
         },
-        instrument_type: InstrumentTypes.STOCK,
-        date: '2023-11-17T20:00:01.493Z',
+        instrumentType: InstrumentTypes.STOCK,
+        date: responseData.dataDate.toISOString(),
       });
   });
 });
