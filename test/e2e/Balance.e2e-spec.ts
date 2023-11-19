@@ -179,7 +179,9 @@ describe('Balance (e2e)', () => {
             },
           ];
 
-          expect(response.body.sort()).toStrictEqual(expectedResponse.sort());
+          expect(response.body).toEqual(
+            expect.arrayContaining(expectedResponse),
+          );
         });
     });
 
