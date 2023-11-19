@@ -98,9 +98,9 @@ export default class PortfolioPersonalProvider implements MarketDataProvider {
     }[] = (
       await this.httpService.axiosRef.get(
         this.configService.getOrThrow('PPI_BASE_URL') +
-          //TODO: Possible inject. Filter only letters
           '/MarketData/SearchInstrument?ticker=' +
-          request.code,
+          //Encode code in order to prevent code injection
+          encodeURIComponent(request.code),
         { headers: this.getRequestHeaders() },
       )
     ).data;
