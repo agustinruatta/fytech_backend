@@ -32,33 +32,44 @@ describe('MarketData (e2e)', () => {
       });
   });
 
-  it('get Argentinian USDC current market data', () => {
-    nock('https://criptoya.com/').get('/api/satoshitango/usdc/ars').reply(200, {
-      ask: 534.02,
-      totalAsk: 539.36,
-      bid: 511.43,
-      totalBid: 506.31,
-      time: 1689195600,
-    });
+  it('get Argentinian USDC current market data in ARS', () => {
+    nock('https://criptoya.com/')
+      .get('/api/usdc/ars')
+      .reply(200, {
+        ripio: {
+          ask: 993.33,
+          totalAsk: 998.31,
+          bid: 921.6,
+          totalBid: 916.99,
+          time: 1689195600,
+        },
+        buenbit: {
+          ask: 966.4,
+          totalAsk: 966.4,
+          bid: 905.7,
+          totalBid: 905.7,
+          time: 1689195600,
+        },
+      });
 
     return request(app.getHttpServer())
       .get('/market-data/current/usdc/ARS')
       .expect(200)
       .expect({
         ask: {
-          cents: 53936,
+          cents: 99831,
           currency: 'ARS',
-          floatValue: 539.36,
+          floatValue: 998.31,
         },
         bid: {
-          cents: 50631,
+          cents: 91699,
           currency: 'ARS',
-          floatValue: 506.31,
+          floatValue: 916.99,
         },
         midPrice: {
-          cents: 52284,
+          cents: 95765,
           currency: 'ARS',
-          floatValue: 522.84,
+          floatValue: 957.65,
         },
         instrumentType: InstrumentTypes.CRYPTO,
         date: '2023-07-12T21:00:00.000Z',
