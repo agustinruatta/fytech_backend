@@ -6,7 +6,7 @@ import { AvailableCurrencies } from '../../src/Money/AvailableCurrencies';
 import { ConfigService } from '@nestjs/config';
 import { PortfolioPersonalCurrencies } from '../../src/MarketData/MarketDataProviders/PortfolioPersonal/PortofolioPersonalCurrencies';
 import { PortfolioPersonalInstrumentTypes } from '../../src/MarketData/MarketDataProviders/PortfolioPersonal/PortfolioPersonalInstrumentTypes';
-import { InstrumentTypes } from "../../src/MarketData/InstrumentTypes";
+import { InstrumentTypes } from '../../src/MarketData/InstrumentTypes';
 
 describe('Balance (e2e)', () => {
   let app: INestApplication;
@@ -182,47 +182,46 @@ describe('Balance (e2e)', () => {
     it('returns a balance with lot of decimals', async () => {
       const signInData = await Helpers.signIn(app);
 
-      //Buy 0.513 BTC at 20568.99 USD
       await Helpers.buyTransaction(
         app,
         signInData.accessToken,
         signInData.defaultAccount.getId(),
         'BTC',
         0.513,
-        String(0.513 * 20568.99),
-        AvailableCurrencies.USD,
+        String(0.513 * 35618217.78),
+        AvailableCurrencies.ARS,
       );
 
-      //Sell 0.2157 BTC at 14021.87 USD
       await Helpers.sellTransaction(
         app,
         signInData.accessToken,
         signInData.defaultAccount.getId(),
         'BTC',
         0.2157,
-        String(0.2157 * 14021.87),
-        AvailableCurrencies.USD,
+        String(0.2157 * 36618217.78),
+        AvailableCurrencies.ARS,
       );
+
+      Helpers.setCryptoMarketData('BTC', 'ARS', 35618217.78);
 
       return request(app.getHttpServer())
         .get(
           `/balance/${signInData.defaultAccount.getId()}/${
-            AvailableCurrencies.USD
+            AvailableCurrencies.ARS
           }`,
         )
         .auth(signInData.accessToken, { type: 'bearer' })
         .send()
         .expect(200)
         .expect([
-          //1 BTC is USD 34940.10
           {
             instrumentType: 'crypto',
             code: 'BTC',
             amount: 0.513 - 0.2157,
             balance: {
-              cents: 1038769,
-              currency: AvailableCurrencies.USD,
-              floatValue: 10387.69,
+              cents: 1058929615,
+              currency: AvailableCurrencies.ARS,
+              floatValue: 10589296.15,
             },
           },
         ]);

@@ -5,7 +5,6 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import Money from '../../Money/Money';
 import { InstrumentTypes } from '../InstrumentTypes';
-import InstrumentNotFoundException from "../../Shared/Exceptions/InstrumentNotFoundException";
 
 @Injectable()
 export default class ArgentinianCryptoPricesProvider
