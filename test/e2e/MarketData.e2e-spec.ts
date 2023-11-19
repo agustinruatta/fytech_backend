@@ -27,7 +27,7 @@ describe('MarketData (e2e)', () => {
       .expect(200)
       .expect({
         value: 278.28,
-        instrument_type: InstrumentTypes.UVA,
+        instrumentYype: InstrumentTypes.UVA,
         date: '2023-07-09T00:00:00.000Z',
       });
   });
@@ -55,12 +55,12 @@ describe('MarketData (e2e)', () => {
           currency: 'ARS',
           floatValue: 506.31,
         },
-        mid_price: {
+        midPrice: {
           cents: 52284,
           currency: 'ARS',
           floatValue: 522.84,
         },
-        instrument_type: InstrumentTypes.CRYPTO,
+        instrumentType: InstrumentTypes.CRYPTO,
         date: '2023-07-12T21:00:00.000Z',
       });
   });
