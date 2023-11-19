@@ -97,7 +97,7 @@ export default class Helpers {
       .expect(201);
   }
 
-  static setInstrumentTypeMarketData(
+  static setStockMarketData(
     configService: ConfigService,
     instrumentTicker: string,
     instrumentCurrency: PortfolioPersonalCurrencies,
@@ -177,5 +177,36 @@ export default class Helpers {
       });
 
     return { dataDate: now };
+  }
+
+  static setCryptoMarketData(
+    ticker: string,
+    currency: 'ARS' | 'USD',
+    price: number,
+  ): { dataDate: Date; totalAsk: number; totalBid: number } {
+    nock('https://criptoya.com/')
+      .get(`/api/${ticker.toLocaleLowerCase()}/${currency.toLocaleLowerCase()}`)
+      .reply(200, {
+        ripio: {
+          ask: parseFloat((price * 1.01).toFixed(2)),
+          totalAsk: parseFloat((price * 1.02).toFixed(2)),
+          bid: parseFloat((price * 0.99).toFixed(2)),
+          totalBid: parseFloat((price * 0.98).toFixed(2)),
+          time: 1689195600,
+        },
+        buenbit: {
+          ask: (price * 1.02 * 1.01).toFixed(2),
+          totalAsk: (price * 1.02 * 1.02).toFixed(2),
+          bid: (price * 1.02 * 0.99).toFixed(2),
+          totalBid: (price * 1.02 * 0.98).toFixed(2),
+          time: 1689195600,
+        },
+      });
+
+    return {
+      dataDate: new Date(1689195600 * 1000),
+      totalAsk: parseFloat((price * 1.02).toFixed(2)),
+      totalBid: parseFloat((price * 0.98).toFixed(2)),
+    };
   }
 }

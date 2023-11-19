@@ -24,7 +24,7 @@ export default class ArgentinianCryptoPricesProvider
       time: number;
     }[] = (
       await this.httpService.axiosRef.get(
-        `https://criptoya.com/api/${request.code.toLocaleLowerCase()}/ars`,
+        `https://criptoya.com/api/${request.code.toLocaleLowerCase()}/${request.currency.toLocaleLowerCase()}`,
       )
     ).data;
 

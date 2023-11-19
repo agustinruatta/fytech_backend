@@ -33,38 +33,21 @@ describe('MarketData (e2e)', () => {
   });
 
   it('get Argentinian USDC current market data in ARS', () => {
-    nock('https://criptoya.com/')
-      .get('/api/usdc/ars')
-      .reply(200, {
-        ripio: {
-          ask: 993.33,
-          totalAsk: 998.31,
-          bid: 921.6,
-          totalBid: 916.99,
-          time: 1689195600,
-        },
-        buenbit: {
-          ask: 966.4,
-          totalAsk: 966.4,
-          bid: 905.7,
-          totalBid: 905.7,
-          time: 1689195600,
-        },
-      });
+    const marketData = Helpers.setCryptoMarketData('usdc', 'ARS', 957.65)
 
     return request(app.getHttpServer())
       .get('/market-data/current/usdc/ARS')
       .expect(200)
       .expect({
         ask: {
-          cents: 99831,
+          cents: marketData.totalAsk * 100,
           currency: 'ARS',
-          floatValue: 998.31,
+          floatValue: marketData.totalAsk,
         },
         bid: {
-          cents: 91699,
+          cents: marketData.totalBid * 100,
           currency: 'ARS',
-          floatValue: 916.99,
+          floatValue: marketData.totalBid,
         },
         midPrice: {
           cents: 95765,
@@ -72,12 +55,12 @@ describe('MarketData (e2e)', () => {
           floatValue: 957.65,
         },
         instrumentType: InstrumentTypes.CRYPTO,
-        date: '2023-07-12T21:00:00.000Z',
+        date: marketData.dataDate.toISOString(),
       });
   });
 
   it('get GGAL current market data', () => {
-    const responseData = Helpers.setInstrumentTypeMarketData(
+    const responseData = Helpers.setStockMarketData(
       configService,
       'GGAL',
       PortfolioPersonalCurrencies.Pesos,

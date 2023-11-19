@@ -130,7 +130,7 @@ describe('Balance (e2e)', () => {
       );
 
       //Set market data
-      Helpers.setInstrumentTypeMarketData(
+      Helpers.setStockMarketData(
         app.get<ConfigService>(ConfigService),
         'AMZN',
         PortfolioPersonalCurrencies.CCL,
@@ -139,7 +139,7 @@ describe('Balance (e2e)', () => {
         138.6,
       );
 
-      Helpers.setInstrumentTypeMarketData(
+      Helpers.setStockMarketData(
         app.get<ConfigService>(ConfigService),
         'AL30C',
         PortfolioPersonalCurrencies.CCL,
