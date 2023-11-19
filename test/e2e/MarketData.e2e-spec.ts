@@ -27,7 +27,7 @@ describe('MarketData (e2e)', () => {
       .expect(200)
       .expect({
         value: 278.28,
-        instrumentYype: InstrumentTypes.UVA,
+        instrumentType: InstrumentTypes.UVA,
         date: '2023-07-09T00:00:00.000Z',
       });
   });
