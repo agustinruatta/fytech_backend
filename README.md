@@ -4,40 +4,23 @@
 
 Software for tracking portfolios consisting of different investments.
 
-## Installation
+This is the backend part of the project.
 
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
+## SetUp and run the project
+- Install docker on your machine
+- Copy the `.env.example` file to `.env` and set the environment variables. Check the comments inside the file for more information.
+- Execute `npm run up`
+  - If you have any error related to permissions, check that all the files and folders inside "docker" have the right permissions.
 
 ## Test
+There are two kinds of tests: 
+- Unit tests (located under test/unit): this does not require the application to be running.
+- Integration tests (located under test/e2e): this requires docker to be running because it uses a test database.
 
-```bash
-# execute all tests
-$ npm run test
-
-# unit tests
-$ npm run test:unit
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
+To run the tests, you can use the following commands:
+- Unit tests: `npm run test:unit`
+- Integration tests: `npm run test:e2e`
+- Unit and integration tests: `npm run test`
 
 ## Support
 
