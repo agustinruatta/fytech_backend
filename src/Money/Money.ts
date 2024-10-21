@@ -61,6 +61,10 @@ export default class Money {
   }
 
   divide(number: number): Money {
+    if (number === 0) {
+      throw new Error('Cannot divide by zero');
+    }
+
     //TODO: there's some problems when you divide 7/8, because it rounds
     const internalMoney = currency(this.cents, {
       precision: 2,

@@ -35,7 +35,6 @@ describe('Money', () => {
       );
     });
 
-
     it('raises exception if amount is negative', () => {
       expect(() =>
         Money.newFromString('-100', AvailableCurrencies.USD),
@@ -157,6 +156,12 @@ describe('Money', () => {
 
       expect(result).toStrictEqual(
         Money.newFromString('0.78', AvailableCurrencies.USD),
+      );
+    });
+
+    it('raises an error if tries to divide by zero', () => {
+      expect(() => initialMoney.divide(0)).toThrow(
+        new Error('Cannot divide by zero'),
       );
     });
   });
